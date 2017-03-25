@@ -1,22 +1,32 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.peer.PanelPeer;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+
+import com.sun.javafx.tk.Toolkit;
 
 import main.Procesador;
 
 public class VentanaPrincipal extends JFrame implements ActionListener{
 	
 	
-	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 500;
+	
 	public static final String TITLE = "";
+	
+	JMenuBar menuBar;
+	JMenu menu;
+	JMenuItem menuItem;
 	
 	
 	private PanelProceso panelProceso;
@@ -24,9 +34,21 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 	private Procesador procesador;
 		
 	public VentanaPrincipal() {
+		int WIDTH = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;;
+		int HEIGHT = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
+		
+		menuBar = new JMenuBar();
+		menu = new JMenu("Menú");
+		
+		menuItem = new JMenuItem("Salir");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menuBar.add(menu);
+		this.setJMenuBar(menuBar);
 		
 		this.procesador = new Procesador();
 		
+		this.setUndecorated(true);
 		try{
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JDialog.setDefaultLookAndFeelDecorated(true);
@@ -51,16 +73,69 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		
 	}
 	
+	public boolean validarNumeros(String cadena){
+		char[] prohibidos = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+		
+		int cantidadValidos = 0; //Determina la cantidad de caracteres validos hay en la cadena
+		for (int i = 0; i < cadena.length(); i++) {
+			for (int j = 0; j < prohibidos.length; j++) {
+				//ystem.out.println(cadena.charAt(i));
+				if (cadena.charAt(i) == (prohibidos[j]) ) {
+					cantidadValidos ++;
+					break;
+				}
+			}
+		}
+		if (cantidadValidos == cadena.length()) { //todos los caracteres son validos
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent evento) {
 		
+		if (evento.getActionCommand().equals("Salir")) {
+			System.exit(0);
+		}
+		if (evento.getActionCommand().equals("Agregar Proceso")) {
+			this.agregarProceso();
+		}
+	}
+	
+	public void agregarProceso(){
 		String nombreProceso = this.panelProceso.getPanelNombre().getText();
-		int prioridadProceso = Integer.parseInt(this.panelProceso.getPanelPrioridad().getText());
-		int tiempo = Integer.parseInt(this.panelProceso.getPanelTiempo().getText());
+		String auxPriodad = this.panelProceso.getPanelPrioridad().getText();
+		String auxTiempo = this.panelProceso.getPanelTiempo().getText();
 		
+		// Validamos y agregamos el campo prioridd
+		if (nombreProceso.equals("") || nombreProceso.equals(" ") || auxPriodad.equals("") || auxPriodad.equals(" ")) { 
+			JOptionPane.showMessageDialog(null, "Solamente el campo 'Tiempo de ejecución' puede estar vacío");
+			return;
+		}
+		
+		// Validamos y agregamos el campo prioridd
+		if (!this.validarNumeros(auxPriodad)) { 
+			JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente números");
+			return;
+		}
+		int prioridadProceso = Integer.parseInt(auxPriodad);
+		
+		// Validamos y agregamos el campo tiempo
+		int tiempo = (int)(Math.random() * 60);
+		if (!this.validarNumeros(auxTiempo) && !auxTiempo.equals("") && !auxTiempo.equals(" ")) {			
+			JOptionPane.showMessageDialog(null, "El campo tiempo debe contener unicamente números, o estar vacío");
+			return;
+		}
+		if (!auxTiempo.equals("") && !auxTiempo.equals(" ")) {
+			tiempo = Integer.parseInt(auxTiempo);			
+		}
+		
+		// Agregamos
 		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo);
 		this.panelTabla.listarProcesos();
-		
 	}
+	
+	
 
 }

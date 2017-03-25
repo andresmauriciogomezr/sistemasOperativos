@@ -2,6 +2,8 @@ package main;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class Procesador {
 	
 	ArrayList<Proceso> procesosListos;
@@ -15,7 +17,7 @@ public class Procesador {
 	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion){
 		Proceso proceso = new Proceso(identificador, prioridad , tiempoEjecucion, null);
 		this.procesosListos.add(proceso);
-		System.out.println("Proceso " + proceso.getIdentificador()+ " añadido satisfactoriamente");
+		//JOptionPane.showMessageDialog(null, "Proceso " + proceso.getIdentificador()+ " añadido satisfactoriamente");
 	}
 
 	public ArrayList<Proceso> getProcesosListos() {

@@ -20,15 +20,15 @@ public class PanelProceso extends JPanel{
 	
 	public PanelProceso(Procesador procesador, ActionListener listener){
 		this.procesador = procesador;
-		setLayout(new GridLayout(6, 1));
+		setLayout(new GridLayout(4, 1));
 		
-		panelNombre = new PanelLayout("Nombre del proceso:", "sisas");
+		panelNombre = new PanelLayout("Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre será el identificador");
 		this.add(panelNombre);
 		
-		panelPrioridad = new PanelLayout("Prioridad del proceso: ", "sisas");
+		panelPrioridad = new PanelLayout("Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan números en un rango [1,10], donde 10 es la priodidad más alta y 1 la más baja");
 		this.add(panelPrioridad);
 		
-		panelTiempo = new PanelLayout("Tiempo de ejecución del proceso: ", "sisas");
+		panelTiempo = new PanelLayout("Tiempo de ejecución del proceso: ", "Escriba el tiempo en segundos que se demorará el proceso en ejecución, se aceptan números en el rango [1, 60]");
 		this.add(panelTiempo);
 		
 		
