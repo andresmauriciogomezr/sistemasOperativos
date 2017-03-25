@@ -68,7 +68,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		panelProceso = new PanelProceso(this.procesador, this);
 		this.add(panelProceso, BorderLayout.WEST);
 		
-		panelTabla = new PanelTabla(this.procesador);
+		panelTabla = new PanelTabla(this.procesador, this);
 		this.add(panelTabla, BorderLayout.CENTER);
 		
 	}

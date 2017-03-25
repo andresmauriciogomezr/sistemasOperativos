@@ -2,7 +2,9 @@ package GUI;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
 
 
 
@@ -24,10 +26,12 @@ public class PanelTabla extends JPanel{
 	private DefaultTableModel modeloTabla;
 	private JTable tabla;
 	private JScrollPane scroll;
+	private JButton botonProcesar;
 	
 	private Procesador procesador;
 	
-	public PanelTabla(Procesador procesador){
+	
+	public PanelTabla(Procesador procesador, ActionListener listener){
 		int width = 900;
 		int heigth = 500;
 		
@@ -43,7 +47,8 @@ public class PanelTabla extends JPanel{
 		scroll.setPreferredSize(new Dimension(width, heigth));
 		this.add(scroll);
 		
-		JButton botonProcesar= new JButton("Procesar");
+		botonProcesar = new JButton("Procesar");
+		botonProcesar.addActionListener(listener);
 		this.add(botonProcesar);		
 	}
 	
