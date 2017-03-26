@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -16,19 +17,30 @@ public class Procesador {
 	private ArrayList<Proceso> procesosListos;
 	private ArrayList<Proceso> procesosBloqueados;
         private Proceso procesoEjecucion;
-        private Random random;
 	
 	public Procesador(){
 		this.procesosListos = new ArrayList<Proceso>();
 		this.procesosBloqueados = new ArrayList<Proceso>();
-                this.random = new Random(Calendar.getInstance().getTimeInMillis());
 	}
+        
+        public void ordernarPorPrioridad(){
+            Collections.sort(procesosListos,procesosListos.get(0).comparatorPrioridad.reversed());
+        }
 	
 	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion){
-		Proceso proceso = new Proceso(identificador, prioridad , tiempoEjecucion, null, random.nextBoolean());
+		Proceso proceso = new Proceso(identificador, prioridad , tiempoEjecucion, null);
 		this.procesosListos.add(proceso);
+                ordernarPorPrioridad();
 		//JOptionPane.showMessageDialog(null, "Proceso " + proceso.getIdentificador()+ " a�adido satisfactoriamente");
 	}
+        
+        public void procesar(){
+            if (procesosListos.isEmpty() == false) { 
+                ejecutarProceso();
+            } else if (procesosBloqueados.isEmpty() == false) {
+                bloquearProceso();
+            }
+        }
         
         public void ejecutarProceso(){
             if (procesoEjecucion == null) {
@@ -39,7 +51,7 @@ public class Procesador {
                 count = 0;
             } else {
                 count++;
-                procesoEjecucion.setTiempoRestante();
+                procesoEjecucion.setTiempoFaltante();
             }
         }
         
@@ -56,15 +68,27 @@ public class Procesador {
         }
         
         public void expirarTiempo(){
-            if (procesoEjecucion.esBloqueado()){
-                
-            } else {
-                procesoEjecucion.setEstadoActual(Estado.listo);
-                procesosListos.add(procesoEjecucion);
-            }
+            procesoEjecucion.setEstadoActual(Estado.bloqueado);
+            procesosBloqueados.add(procesoEjecucion);
             procesoEjecucion = null;
         }
 
+        public void bloquearProceso(){
+            for (int i = 0; i < procesosBloqueados.size(); i++) {
+                Proceso proceso = procesosBloqueados.get(i);
+                if (proceso.getTiempoBloqueado()<TIEMPO_PROCESAMIENTO){
+                    proceso.adicionarTiempoBloqueado();
+                } else {
+                    proceso.setTiempoBloqueado(0);
+                    proceso.setEstadoActual(Estado.listo);
+                    procesosListos.add(proceso);
+                    ordernarPorPrioridad();
+                    procesosBloqueados.remove(i);
+                    i = i-1;
+                }
+            }
+        }
+        
 	public ArrayList<Proceso> getProcesosListos() {
 		return procesosListos;
 	}

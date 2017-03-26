@@ -96,7 +96,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 	
 	@Override
 	public void actionPerformed(ActionEvent evento) {
-		
+                Thread hilo = new Thread(this);
+	
 		if (evento.getActionCommand().equals("Salir")) {
 			System.exit(0);
 		}
@@ -104,8 +105,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 			this.agregarProceso();
 		}
                 if (evento.getActionCommand().equals("Procesar")){
-                    Thread hilo = new Thread(this);
-                    hilo.start();
+                    if (hilo.isAlive()==false){
+                        hilo.start();
+                    }
                 }
 	}
 	
@@ -145,7 +147,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
     @Override
     public void run() {
         while (procesador.tieneProcesos()){
-            procesador.ejecutarProceso();
+            this.procesador.procesar();
+            this.panelTabla.listarProcesos();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {

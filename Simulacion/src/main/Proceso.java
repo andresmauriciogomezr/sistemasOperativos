@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Proceso {
 	private Estado estadoActual;
@@ -10,9 +11,9 @@ public class Proceso {
 	private int prioridad;
 	private int tiempoEjecucion;
         private int tiempoFaltante;
-        private boolean esBloqueado; 
+        private int tiempoBloqueado;
 	
-	public Proceso(String identificador, int prioridad, int tiempoEjecucion, Proceso procesoPadre, boolean esBloqueado){
+	public Proceso(String identificador, int prioridad, int tiempoEjecucion, Proceso procesoPadre){
 		this.estadoActual = Estado.listo;
 		this.identificador = identificador;
 		this.procesoPadre = procesoPadre;
@@ -20,7 +21,7 @@ public class Proceso {
 		this.prioridad = prioridad;
 		this.tiempoEjecucion = tiempoEjecucion;
                 this.tiempoFaltante = tiempoEjecucion;
-                this.esBloqueado = esBloqueado;
+                this.tiempoBloqueado = 0;
 	}
 
 	public Estado getEstadoActual() {
@@ -67,15 +68,31 @@ public class Proceso {
         return tiempoEjecucion;
     }
 
-    public int getTiempoRestante() {
+    public int getTiempoFaltante() {
         return tiempoFaltante;
     }
 
-    public void setTiempoRestante() {
+    public void setTiempoFaltante() {
         this.tiempoFaltante--;
     }
 
-    public boolean esBloqueado() {
-        return esBloqueado;
-    }       
+    public void adicionarTiempoBloqueado(){
+        this.tiempoBloqueado++;
+    }
+
+    public void setTiempoBloqueado(int tiempoBloqueado) {
+        this.tiempoBloqueado = tiempoBloqueado;
+    }
+
+    public int getTiempoBloqueado() {
+        return tiempoBloqueado;
+    }
+    
+    Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {
+
+            @Override
+            public int compare(Proceso o1, Proceso o2) {
+                return o1.prioridad-o2.prioridad;
+            }
+        };
 }

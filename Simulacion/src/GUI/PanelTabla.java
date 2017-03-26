@@ -53,20 +53,35 @@ public class PanelTabla extends JPanel{
 	}
 	
 	public void listarProcesos(){
+                Proceso procesoEjecucion = this.procesador.getProcesoEjecucion();
 		ArrayList<Proceso> procesosListos = this.procesador.getProcesosListos();		
-		modeloTabla = new DefaultTableModel(procesosListos.size(), 4);
+                ArrayList<Proceso> procesosBloqueados = this.procesador.getProcesosBloqueados();
 		String[] identificadores = {"Identificador", "Estado", "Tiempo", "Transici�n"};
+		modeloTabla = new DefaultTableModel(0, identificadores.length);
 		modeloTabla.setColumnIdentifiers(identificadores);
-		
-		for (int i = 0; i < procesosListos.size(); i++) {
+                if (procesoEjecucion!=null){
+                    	agregarFila(procesoEjecucion);
+                }
+                for (int i = 0; i < procesosListos.size(); i++) {
 			Proceso proceso = procesosListos.get(i);
-			
-			modeloTabla.setValueAt(proceso.getIdentificador(), i, 0); // Sumamos 1 porque la fila 0 est� reservada para los titulos
-			modeloTabla.setValueAt(proceso.getEstadoActual(), i, 1); // Sumamos 1 porque la fila 0 est� reservada para los titulos
-			modeloTabla.setValueAt(proceso.getTiempoEjecucion(), i, 2); // Sumamos 1 porque la fila 0 est� reservada para los titulos
-		}
+			agregarFila(proceso);
+                }
+                for (int i = 0; i < procesosBloqueados.size(); i++) {
+			Proceso proceso = procesosBloqueados.get(i);
+			 agregarFila(proceso);
+                }
 		//tabla.setFont(new FontUIResource("Verdana", Font.PLAIN, 20));
-		tabla.setModel(modeloTabla);
+            tabla.setModel(modeloTabla);
 	}
+        
+        public void agregarFila(Proceso proceso){
+            System.out.println("columnas: " + modeloTabla.getColumnCount());
+            System.out.println("filas: " + modeloTabla.getRowCount());
+            int row = this.modeloTabla.getRowCount();
+            modeloTabla.setRowCount(row+1);
+            modeloTabla.setValueAt(proceso.getIdentificador(), row, 0); // Sumamos 1 porque la fila 0 est� reservada para los titulos
+            modeloTabla.setValueAt(proceso.getEstadoActual(), row, 1); // Sumamos 1 porque la fila 0 est� reservada para los titulos
+            modeloTabla.setValueAt(proceso.getTiempoEjecucion(), row, 2); // Sumamos 1 porque la fila 0 est� reservada para los titulos
+        }
 
 }
