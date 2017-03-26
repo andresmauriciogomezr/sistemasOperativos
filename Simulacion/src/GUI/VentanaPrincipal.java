@@ -18,7 +18,7 @@ import com.sun.javafx.tk.Toolkit;
 
 import main.Procesador;
 
-public class VentanaPrincipal extends JFrame implements ActionListener{
+public class VentanaPrincipal extends JFrame implements ActionListener, Runnable{
 	
 	
 	
@@ -38,7 +38,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		int HEIGHT = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
 		
 		menuBar = new JMenuBar();
-		menu = new JMenu("Menú");
+		menu = new JMenu("Menï¿½");
 		
 		menuItem = new JMenuItem("Salir");
 		menuItem.addActionListener(this);
@@ -101,6 +101,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		if (evento.getActionCommand().equals("Agregar Proceso")) {
 			this.agregarProceso();
 		}
+                if (evento.getActionCommand().equals("Procesar")){
+                    Thread hilo = new Thread(this);
+                    hilo.start();
+                }
 	}
 	
 	public void agregarProceso(){
@@ -110,13 +114,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		
 		// Validamos y agregamos el campo prioridd
 		if (nombreProceso.equals("") || nombreProceso.equals(" ") || auxPriodad.equals("") || auxPriodad.equals(" ")) { 
-			JOptionPane.showMessageDialog(null, "Solamente el campo 'Tiempo de ejecución' puede estar vacío");
+			JOptionPane.showMessageDialog(null, "Solamente el campo 'Tiempo de ejecuciï¿½n' puede estar vacï¿½o");
 			return;
 		}
 		
 		// Validamos y agregamos el campo prioridd
 		if (!this.validarNumeros(auxPriodad)) { 
-			JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente números");
+			JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente nï¿½meros");
 			return;
 		}
 		int prioridadProceso = Integer.parseInt(auxPriodad);
@@ -124,7 +128,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		// Validamos y agregamos el campo tiempo
 		int tiempo = (int)(Math.random() * 60);
 		if (!this.validarNumeros(auxTiempo) && !auxTiempo.equals("") && !auxTiempo.equals(" ")) {			
-			JOptionPane.showMessageDialog(null, "El campo tiempo debe contener unicamente números, o estar vacío");
+			JOptionPane.showMessageDialog(null, "El campo tiempo debe contener unicamente nï¿½meros, o estar vacï¿½o");
 			return;
 		}
 		if (!auxTiempo.equals("") && !auxTiempo.equals(" ")) {
@@ -135,6 +139,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo);
 		this.panelTabla.listarProcesos();
 	}
+
+    @Override
+    public void run() {
+        while (procesador.tieneProcesos()){
+            procesador.ejecutarProceso();
+        } 
+    }
 	
 	
 
