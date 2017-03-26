@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import com.sun.javafx.tk.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import main.Procesador;
 
@@ -144,6 +146,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
     public void run() {
         while (procesador.tieneProcesos()){
             procesador.ejecutarProceso();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } 
     }
 	
