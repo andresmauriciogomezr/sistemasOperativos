@@ -15,10 +15,13 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import com.sun.javafx.tk.Toolkit;
+
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import main.Procesador;
+import main.Proceso;
 
 public class VentanaPrincipal extends JFrame implements ActionListener, Runnable{
 	
@@ -30,14 +33,16 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 	JMenu menu;
 	JMenuItem menuItem;
 	
-	
+	int tiempoProcesador;
 	private PanelProceso panelProceso;
 	private PanelTabla panelTabla;
 	private Procesador procesador;
 		
 	public VentanaPrincipal() {
+		tiempoProcesador = 6;
 		int WIDTH = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;;
 		int HEIGHT = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
+		
 		
 		menuBar = new JMenuBar();
 		menu = new JMenu("Men�");
@@ -48,7 +53,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		menuBar.add(menu);
 		this.setJMenuBar(menuBar);
 		
-		this.procesador = new Procesador();
+		this.procesador = new Procesador(this);
 		
 		this.setUndecorated(true);
 		try{
@@ -75,6 +80,19 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		
 	}
 	
+	public void probar(){
+		
+//		this.procesador.agregarProceso("Proceso1", 34, 6);
+//		this.procesador.agregarProceso("Proceso2", 34, 8);
+//		this.procesador.agregarProceso("Proceso3", 34, 4);
+//		this.procesador.agregarProceso("Proceso4", 34, 7);
+		for (int i = 0; i < 100; i++) {
+			this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 6) , (int)(Math.random() * 60));
+		}
+		this.panelTabla.listarProcesos();
+		
+	}
+	
 	public boolean validarNumeros(String cadena){
 		char[] prohibidos = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 		
@@ -96,19 +114,23 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 	
 	@Override
 	public void actionPerformed(ActionEvent evento) {
-                Thread hilo = new Thread(this);
-	
+		Thread hilo = new Thread(this);
+
 		if (evento.getActionCommand().equals("Salir")) {
 			System.exit(0);
 		}
 		if (evento.getActionCommand().equals("Agregar Proceso")) {
 			this.agregarProceso();
 		}
-                if (evento.getActionCommand().equals("Procesar")){
-                    if (hilo.isAlive()==false){
-                        hilo.start();
-                    }
-                }
+		if (evento.getActionCommand().equals("Procesar")){
+			if (hilo.isAlive()==false){
+				hilo.start();
+			}
+		}
+	}
+	
+	public void actualizarTiempo(Proceso proceso){
+		this.panelTabla.actualizarTiempo(proceso);
 	}
 	
 	public void agregarProceso(){
@@ -146,14 +168,20 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 
     @Override
     public void run() {
-        while (procesador.tieneProcesos()){
-            this.procesador.procesar();
-            this.panelTabla.listarProcesos();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        while (procesador.tieneProcesos() || procesador.tieneBloqueos()){
+        	this.procesador.procesar();
+        	while(this.procesador.isProcesando()){
+        	//for (int i = 0; i < tiempoProcesador; i++) {
+        		this.procesador.ejecutarProceso();
+			
+	            this.panelTabla.listarProcesos();
+	            try {
+	                Thread.sleep(100);
+	            } catch (InterruptedException ex) {
+	                Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+	            }
+        	}
+        	
         } 
     }
 	
