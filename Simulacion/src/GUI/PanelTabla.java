@@ -40,7 +40,10 @@ public class PanelTabla extends JPanel{
 		String[] identificadores = {"Identificador", "Estado", "Tiempo", "Transici�n"};
 		modeloTabla.setColumnIdentifiers(identificadores);	
 		
-		tabla = new JTable(modeloTabla);
+		tabla = new JTable(modeloTabla){
+                public boolean isCellEditable(int rowIndex, int vColIndex) {
+                    return false;
+                }};
 		tabla.getTableHeader().setReorderingAllowed(false);		
 		
 		scroll = new JScrollPane(tabla);

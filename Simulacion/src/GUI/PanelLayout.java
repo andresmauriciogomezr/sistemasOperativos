@@ -75,4 +75,8 @@ public class PanelLayout extends JPanel{
 	public String getText(){
 		return this.campoTexto.getText();
 	}
+        
+        public void limpiarTexto(){
+            this.campoTexto.setText("");
+        }
 }

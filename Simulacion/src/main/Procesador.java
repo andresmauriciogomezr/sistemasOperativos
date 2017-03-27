@@ -35,11 +35,13 @@ public class Procesador {
 	}
         
         public void procesar(){
-            if (procesosListos.isEmpty() == false) { 
+            if (procesosListos.isEmpty() == false || procesoEjecucion != null) { 
                 ejecutarProceso();
-            } else if (procesosBloqueados.isEmpty() == false) {
+            } 
+            if (procesosBloqueados.isEmpty() == false) {
                 bloquearProceso();
             }
+            System.out.println("Sigue procesando");
         }
         
         public void ejecutarProceso(){

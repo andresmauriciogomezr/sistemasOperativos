@@ -22,13 +22,13 @@ public class PanelProceso extends JPanel{
 		this.procesador = procesador;
 		setLayout(new GridLayout(4, 1));
 		
-		panelNombre = new PanelLayout("Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre será el identificador");
+		panelNombre = new PanelLayout("Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre serï¿½ el identificador");
 		this.add(panelNombre);
 		
-		panelPrioridad = new PanelLayout("Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan números en un rango [1,10], donde 10 es la priodidad más alta y 1 la más baja");
+		panelPrioridad = new PanelLayout("Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan nï¿½meros en un rango [1,10], donde 10 es la priodidad mï¿½s alta y 1 la mï¿½s baja");
 		this.add(panelPrioridad);
 		
-		panelTiempo = new PanelLayout("Tiempo de ejecución del proceso: ", "Escriba el tiempo en segundos que se demorará el proceso en ejecución, se aceptan números en el rango [1, 60]");
+		panelTiempo = new PanelLayout("Tiempo de ejecuciï¿½n del proceso: ", "Escriba el tiempo en segundos que se demorarï¿½ el proceso en ejecuciï¿½n, se aceptan nï¿½meros en el rango [1, 60]");
 		this.add(panelTiempo);
 		
 		
@@ -76,6 +76,10 @@ public class PanelProceso extends JPanel{
 		this.procesador = procesador;
 	}
 
-	
+	public void limpiarTexto(){
+            panelNombre.limpiarTexto();
+            panelPrioridad.limpiarTexto();
+            panelTiempo.limpiarTexto();
+        }
 
 }

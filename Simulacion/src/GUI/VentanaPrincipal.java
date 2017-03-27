@@ -126,8 +126,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		if (!this.validarNumeros(auxPriodad)) { 
 			JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente n�meros");
 			return;
-		}
+		} 
 		int prioridadProceso = Integer.parseInt(auxPriodad);
+                System.out.println("Prioridad: " + prioridadProceso);
+                if (prioridadProceso<1 || prioridadProceso>10){
+                    JOptionPane.showMessageDialog(null, "El campo prioridad debe estar entre 1 y 10");
+			return;
+                }
 		
 		// Validamos y agregamos el campo tiempo
 		int tiempo = (int)(Math.random() * 60);
@@ -142,7 +147,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		// Agregamos
 		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo);
 		this.panelTabla.listarProcesos();
+                limpiarProceso();
 	}
+        
+        public void limpiarProceso(){
+            panelProceso.limpiarTexto();
+        }
 
     @Override
     public void run() {
@@ -155,6 +165,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
                 Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
         } 
+        
     }
 	
 	
