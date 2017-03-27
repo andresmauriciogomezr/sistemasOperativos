@@ -12,8 +12,10 @@ public class Proceso {
 	private int tiempoEjecucion;
         private int tiempoFaltante;
         private int tiempoBloqueado;
+        private String transicion;
 	
 	public Proceso(String identificador, int prioridad, int tiempoEjecucion, Proceso procesoPadre){
+		this.transicion = "";
 		this.estadoActual = Estado.listo;
 		this.identificador = identificador;
 		this.procesoPadre = procesoPadre;
@@ -29,6 +31,7 @@ public class Proceso {
 	}
 
 	public void setEstadoActual(Estado estadoActual) {
+		this.transicion = "De " + this.estadoActual + " a " + estadoActual;
 		this.estadoActual = estadoActual;
 	}
 
@@ -88,7 +91,19 @@ public class Proceso {
         return tiempoBloqueado;
     }
     
-    Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {
+    
+    
+    public String getTransicion() {
+		return transicion;
+	}
+
+	public void setTransicion(String transicion) {
+		this.transicion = transicion;
+	}
+
+
+
+	Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {
 
             @Override
             public int compare(Proceso o1, Proceso o2) {
