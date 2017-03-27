@@ -45,7 +45,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		
 		
 		menuBar = new JMenuBar();
-		menu = new JMenu("Men�");
+		menu = new JMenu("Menu");
 		
 		menuItem = new JMenuItem("Salir");
 		menuItem.addActionListener(this);

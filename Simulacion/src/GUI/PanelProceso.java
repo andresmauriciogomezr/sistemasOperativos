@@ -28,7 +28,7 @@ public class PanelProceso extends JPanel{
 		panelPrioridad = new PanelLayout("Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan n�meros en un rango [1,10], donde 10 es la priodidad m�s alta y 1 la m�s baja");
 		this.add(panelPrioridad);
 		
-		panelTiempo = new PanelLayout("Tiempo de ejecuci�n del proceso: ", "Escriba el tiempo en segundos que se demorar� el proceso en ejecuci�n, se aceptan n�meros en el rango [1, 60]");
+		panelTiempo = new PanelLayout("Tiempo de ejecucion del proceso: ", "Escriba el tiempo en segundos que se demorar� el proceso en ejecuci�n, se aceptan n�meros en el rango [1, 60]");
 		this.add(panelTiempo);
 		
 		
