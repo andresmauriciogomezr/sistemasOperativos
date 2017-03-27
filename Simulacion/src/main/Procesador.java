@@ -45,6 +45,9 @@ public class Procesador {
         public void ejecutarProceso(){
             if (procesoEjecucion == null) {
                 despacharProceso();
+            } else if (procesoEjecucion.getTiempoFaltante() == 0) {
+                procesoEjecucion = null;
+                despacharProceso();
             } else if (count>TIEMPO_PROCESAMIENTO){
                 expirarTiempo();
                 despacharProceso();
@@ -79,11 +82,11 @@ public class Procesador {
                 if (proceso.getTiempoBloqueado()<TIEMPO_PROCESAMIENTO){
                     proceso.adicionarTiempoBloqueado();
                 } else {
+                    procesosBloqueados.remove(i);
                     proceso.setTiempoBloqueado(0);
                     proceso.setEstadoActual(Estado.listo);
                     procesosListos.add(proceso);
                     ordernarPorPrioridad();
-                    procesosBloqueados.remove(i);
                     i = i-1;
                 }
             }
