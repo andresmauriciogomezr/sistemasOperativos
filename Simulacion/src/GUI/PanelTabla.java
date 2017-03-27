@@ -45,10 +45,6 @@ public class PanelTabla extends JPanel{
                 public boolean isCellEditable(int rowIndex, int vColIndex) {
                     return false;
                 }};
-
-
-		tabla = new JTable(modeloTabla);
-
 		tabla.getTableHeader().setReorderingAllowed(false);		
 
 		scroll = new JScrollPane(tabla);
