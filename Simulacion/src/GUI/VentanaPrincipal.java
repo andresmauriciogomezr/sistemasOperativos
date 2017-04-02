@@ -14,7 +14,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import com.sun.javafx.tk.Toolkit;
 
 import java.util.Random;
 import java.util.logging.Level;
@@ -24,37 +23,37 @@ import main.Procesador;
 import main.Proceso;
 
 public class VentanaPrincipal extends JFrame implements ActionListener, Runnable{
-	
-	
-	
+
+
+
 	public static final String TITLE = "";
-	
+
 	JMenuBar menuBar;
 	JMenu menu;
 	JMenuItem menuItem;
-	
+
 	int tiempoProcesador;
 	private PanelProceso panelProceso;
 	private PanelTabla panelTabla;
 	private Procesador procesador;
-		
+
 	public VentanaPrincipal() {
 		tiempoProcesador = 6;
 		int WIDTH = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;;
 		int HEIGHT = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
-		
-		
+
+
 		menuBar = new JMenuBar();
 		menu = new JMenu("Menu");
-		
+
 		menuItem = new JMenuItem("Salir");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		menuBar.add(menu);
 		this.setJMenuBar(menuBar);
-		
+
 		this.procesador = new Procesador(this);
-		
+
 		this.setUndecorated(true);
 		try{
 			JFrame.setDefaultLookAndFeelDecorated(true);
@@ -65,37 +64,37 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		{
 			e.printStackTrace();
 		}
-		
-		
+
+
 		setTitle(TITLE);
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		
+
 		panelProceso = new PanelProceso(this.procesador, this);
 		this.add(panelProceso, BorderLayout.WEST);
-		
+
 		panelTabla = new PanelTabla(this.procesador, this);
 		this.add(panelTabla, BorderLayout.CENTER);
-		
+
 	}
-	
+
 	public void probar(){
-		
-//		this.procesador.agregarProceso("Proceso1", 34, 6);
-//		this.procesador.agregarProceso("Proceso2", 34, 8);
-//		this.procesador.agregarProceso("Proceso3", 34, 4);
-//		this.procesador.agregarProceso("Proceso4", 34, 7);
+
+		//		this.procesador.agregarProceso("Proceso1", 34, 6);
+		//		this.procesador.agregarProceso("Proceso2", 34, 8);
+		//		this.procesador.agregarProceso("Proceso3", 34, 4);
+		//		this.procesador.agregarProceso("Proceso4", 34, 7);
 		for (int i = 0; i < 100; i++) {
 			this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 6) , (int)(Math.random() * 60));
 		}
 		this.panelTabla.listarProcesos();
-		
+
 	}
-	
+
 	public boolean validarNumeros(String cadena){
 		char[] prohibidos = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-		
+
 		int cantidadValidos = 0; //Determina la cantidad de caracteres validos hay en la cadena
 		for (int i = 0; i < cadena.length(); i++) {
 			for (int j = 0; j < prohibidos.length; j++) {
@@ -111,7 +110,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent evento) {
 		Thread hilo = new Thread(this);
@@ -128,34 +127,34 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 			}
 		}
 	}
-	
+
 	public void actualizarTiempo(Proceso proceso){
 		this.panelTabla.actualizarTiempo(proceso);
 	}
-	
+
 	public void agregarProceso(){
 		String nombreProceso = this.panelProceso.getPanelNombre().getText();
-		String auxPriodad = this.panelProceso.getPanelPrioridad().getText();
+		String auxPriodad = this.panelProceso.getPanelPrioridad().getText(); //usa axiliar porque luego hay que convertir a entero
 		String auxTiempo = this.panelProceso.getPanelTiempo().getText();
-		
-		// Validamos y agregamos el campo prioridd
+
+		// Validamos y agregamos el campo nombre
 		if (nombreProceso.equals("") || nombreProceso.equals(" ") || auxPriodad.equals("") || auxPriodad.equals(" ")) { 
 			JOptionPane.showMessageDialog(null, "Solamente el campo 'Tiempo de ejecuci�n' puede estar vac�o");
 			return;
 		}
-		
+
 		// Validamos y agregamos el campo prioridd
 		if (!this.validarNumeros(auxPriodad)) { 
 			JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente n�meros");
 			return;
 		} 
 		int prioridadProceso = Integer.parseInt(auxPriodad);
-                System.out.println("Prioridad: " + prioridadProceso);
-                if (prioridadProceso<1 || prioridadProceso>10){
-                    JOptionPane.showMessageDialog(null, "El campo prioridad debe estar entre 1 y 10");
+		System.out.println("Prioridad: " + prioridadProceso);
+		if (prioridadProceso<1 || prioridadProceso>10){
+			JOptionPane.showMessageDialog(null, "El campo prioridad debe estar entre 1 y 10");
 			return;
-                }
-		
+		}
+
 		// Validamos y agregamos el campo tiempo
 		int tiempo = (int)(Math.random() * 60);
 		if (!this.validarNumeros(auxTiempo) && !auxTiempo.equals("") && !auxTiempo.equals(" ")) {			
@@ -165,37 +164,35 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		if (!auxTiempo.equals("") && !auxTiempo.equals(" ")) {
 			tiempo = Integer.parseInt(auxTiempo);			
 		}
-		
+
 		// Agregamos
 		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo);
 		this.panelTabla.listarProcesos();
-                limpiarProceso();
+		limpiarProceso();
 	}
-        
-        public void limpiarProceso(){
-            panelProceso.limpiarTexto();
-        }
 
-    @Override
-    public void run() {
-        while (procesador.tieneProcesos() || procesador.tieneBloqueos()){
-        	this.procesador.procesar();
-        	while(this.procesador.isProcesando()){
-        	//for (int i = 0; i < tiempoProcesador; i++) {
-        		this.procesador.ejecutarProceso();
-			
-	            this.panelTabla.listarProcesos();
-	            try {
-	                Thread.sleep(100);
-	            } catch (InterruptedException ex) {
-	                Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-	            }
-        	}
-        	
-        } 
-        
-    }
-	
-	
+	public void limpiarProceso(){
+		panelProceso.limpiarTexto();
+	}
+
+	@Override
+	public void run() {
+		while (procesador.tieneProcesos() || procesador.tieneBloqueos()){
+			this.procesador.procesar();
+			while(this.procesador.isProcesando()){ //Existen procesos listos y pueden haber bloqueados
+				this.procesador.ejecutarProceso();
+				this.panelTabla.listarProcesos();
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException ex) {
+					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
+
+		} 
+
+	}
+
+
 
 }
