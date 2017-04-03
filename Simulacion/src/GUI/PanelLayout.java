@@ -8,25 +8,33 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 
-public class PanelLayout extends JPanel{
+public class PanelLayout extends JPanel{ // Funciona como layout para los diferentes paneles que reciben datos
 
 	private static final long serialVersionUID = 735523904991087453L;
 
 	private JLabel labelTitulo;
 	private JLabel icoInfo;
 	private Icon icon;
+	
+	
 	private JTextField campoTexto;
+	private JButton botonAceptar;
+	private JComboBox<String> comboBox;
+
 
 	private GridBagLayout gridbag;
 	private GridBagConstraints gbc;
@@ -36,7 +44,7 @@ public class PanelLayout extends JPanel{
 	public static final int HEIGHT = 100;
 	
 
-	public PanelLayout(String titulo, String ayuda) {
+	public PanelLayout(ActionListener listener, String titulo, String ayuda, TipoPanel tipoPanel) {
 
 		gridbag = new GridBagLayout();
 
@@ -50,12 +58,7 @@ public class PanelLayout extends JPanel{
 		gbc = new GridBagConstraints(0, 0, 2, 1, 1, 1, GridBagConstraints.LINE_START, GridBagConstraints.NONE,
 				new Insets(5, 5, 5, 5), 0, 0);
 		
-		add(labelTitulo, gbc);
-
-		campoTexto = new JTextField(12);
-		gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
-				new Insets(5, 0, 5, 5), 0, 0);
-		add(campoTexto, gbc);
+		add(labelTitulo, gbc);	
 
 		
 		icoInfo = new JLabel(new ImageIcon(getClass().getResource(ICON)));
@@ -68,6 +71,31 @@ public class PanelLayout extends JPanel{
 		icoInfo.setIcon(icon);
 		icoInfo.setToolTipText(ayuda);
 		add(icoInfo, gbc);
+		
+		if (tipoPanel == TipoPanel.texto) { // Depende de la variable tipoPanel que indica el tipo de panel que es
+			campoTexto = new JTextField(12);
+			gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
+					new Insets(5, 0, 5, 5), 0, 0);
+			add(campoTexto, gbc);			
+		}
+		if (tipoPanel == TipoPanel.boton) {
+			botonAceptar = new JButton("Agregar Proceso");
+			botonAceptar.addActionListener(listener);
+			gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
+					new Insets(5, 0, 5, 5), 0, 0);
+			add(botonAceptar, gbc);
+		}
+		if (tipoPanel == TipoPanel.select) {
+			String[] opciones = { "Si", "No" };
+
+			//Create the combo box, select item at index 4.
+			//Indices start at 0, so 4 specifies the pig.
+			comboBox = new JComboBox(opciones);
+			comboBox.addActionListener(listener);
+			gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
+					new Insets(5, 0, 5, 5), 0, 0);
+			add(comboBox, gbc);
+		}
 		
 		
 	}

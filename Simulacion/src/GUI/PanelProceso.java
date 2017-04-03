@@ -13,27 +13,35 @@ public class PanelProceso extends JPanel{
 	private PanelLayout panelNombre;
 	private PanelLayout panelPrioridad;
 	private PanelLayout panelTiempo;
+	private PanelLayout panelBloqueo;
+	private PanelLayout panelBoton;
 	
-	private PanelBoton panelBoton;
+	//private PanelBoton panelBoton;
 	private Procesador procesador;
 	
 	
 	public PanelProceso(Procesador procesador, ActionListener listener){
 		this.procesador = procesador;
-		setLayout(new GridLayout(4, 1));
+		setLayout(new GridLayout(5, 1));
 		
-		panelNombre = new PanelLayout("Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre ser� el identificador");
+		panelNombre = new PanelLayout(listener, "Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre ser� el identificador", TipoPanel.texto);
 		this.add(panelNombre);
 		
-		panelPrioridad = new PanelLayout("Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan n�meros en un rango [1,10], donde 10 es la priodidad m�s alta y 1 la m�s baja");
+		panelBloqueo = new PanelLayout(listener, "¿El proceso debe bloquearse? ", "Selección si el proceso que se esta ingresando debe bloquearse", TipoPanel.select);
+		this.add(panelBloqueo);
+		
+		panelPrioridad = new PanelLayout(listener, "Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan n�meros en un rango [1,10], donde 10 es la priodidad m�s alta y 1 la m�s baja", TipoPanel.texto);
 		this.add(panelPrioridad);
 		
-		panelTiempo = new PanelLayout("Tiempo de ejecucion del proceso: ", "Escriba el tiempo en segundos que se demorar� el proceso en ejecuci�n, se aceptan n�meros en el rango [1, 60]");
+		panelTiempo = new PanelLayout(listener, "Tiempo de ejecucion del proceso: ", "Escriba el tiempo en segundos que se demorar� el proceso en ejecuci�n, se aceptan n�meros en el rango [1, 60]", TipoPanel.texto);
 		this.add(panelTiempo);
 		
 		
-		panelBoton = new PanelBoton(listener);	
+		//panelBoton = new PanelBoton(listener);
+		panelBoton = new PanelLayout(listener, "", "", TipoPanel.boton);
 		this.add(panelBoton);
+		
+		
 	}
 
 	public PanelLayout getPanelNombre() {
@@ -60,13 +68,13 @@ public class PanelProceso extends JPanel{
 		this.panelTiempo = panelTiempo;
 	}
 
-	public PanelBoton getPanelBoton() {
-		return panelBoton;
-	}
-
-	public void setPanelBoton(PanelBoton panelBoton) {
-		this.panelBoton = panelBoton;
-	}
+//	public PanelBoton getPanelBoton() {
+//		return panelBoton;
+//	}
+//
+//	public void setPanelBoton(PanelBoton panelBoton) {
+//		this.panelBoton = panelBoton;
+//	}
 
 	public Procesador getProcesador() {
 		return procesador;
