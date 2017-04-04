@@ -10,11 +10,11 @@ public class Proceso {
 	private ArrayList<Proceso> procesosHijos;
 	private int prioridad;
 	private int tiempoEjecucion;
-        private int tiempoFaltante;
-        private int tiempoBloqueado;
-        private String transicion;
-	
-	public Proceso(String identificador, int prioridad, int tiempoEjecucion, Proceso procesoPadre){
+	private int tiempoFaltante;
+	private int tiempoBloqueado;
+	private String transicion;
+
+	public Proceso(String identificador, int prioridad, int tiempoEjecucion, Proceso procesoPadre, boolean bloqueado){
 		this.transicion = "";
 		this.estadoActual = Estado.listo;
 		this.identificador = identificador;
@@ -22,8 +22,12 @@ public class Proceso {
 		this.procesosHijos = new ArrayList<Proceso>();
 		this.prioridad = prioridad;
 		this.tiempoEjecucion = tiempoEjecucion;
-                this.tiempoFaltante = tiempoEjecucion;
-                this.tiempoBloqueado = 0;
+		this.tiempoFaltante = tiempoEjecucion;
+		this.tiempoBloqueado = 0;
+		
+		if (bloqueado) { 
+			this.estadoActual = Estado.bloqueado;
+		}
 	}
 
 	public Estado getEstadoActual() {
@@ -66,34 +70,34 @@ public class Proceso {
 	public void setPrioridad(int prioridad) {
 		this.prioridad = prioridad;
 	}
-	
-    public int getTiempoEjecucion() {
-        return tiempoEjecucion;
-    }
 
-    public int getTiempoFaltante() {
-        return tiempoFaltante;
-    }
+	public int getTiempoEjecucion() {
+		return tiempoEjecucion;
+	}
 
-    public void setTiempoFaltante() {
-        this.tiempoFaltante--;
-    }
+	public int getTiempoFaltante() {
+		return tiempoFaltante;
+	}
 
-    public void adicionarTiempoBloqueado(){
-        this.tiempoBloqueado++;
-    }
+	public void setTiempoFaltante() {
+		this.tiempoFaltante--;
+	}
 
-    public void setTiempoBloqueado(int tiempoBloqueado) {
-        this.tiempoBloqueado = tiempoBloqueado;
-    }
+	public void adicionarTiempoBloqueado(){
+		this.tiempoBloqueado++;
+	}
 
-    public int getTiempoBloqueado() {
-        return tiempoBloqueado;
-    }
-    
-    
-    
-    public String getTransicion() {
+	public void setTiempoBloqueado(int tiempoBloqueado) {
+		this.tiempoBloqueado = tiempoBloqueado;
+	}
+
+	public int getTiempoBloqueado() {
+		return tiempoBloqueado;
+	}
+
+
+
+	public String getTransicion() {
 		return transicion;
 	}
 
@@ -105,9 +109,9 @@ public class Proceso {
 
 	Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {
 
-            @Override
-            public int compare(Proceso o1, Proceso o2) {
-                return o1.prioridad-o2.prioridad;
-            }
-        };
+		@Override
+		public int compare(Proceso o1, Proceso o2) {
+			return o1.prioridad-o2.prioridad;
+		}
+	};
 }

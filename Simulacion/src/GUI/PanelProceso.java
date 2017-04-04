@@ -67,14 +67,25 @@ public class PanelProceso extends JPanel{
 	public void setPanelTiempo(PanelLayout panelTiempo) {
 		this.panelTiempo = panelTiempo;
 	}
+	
+	
+	
 
-//	public PanelBoton getPanelBoton() {
-//		return panelBoton;
-//	}
-//
-//	public void setPanelBoton(PanelBoton panelBoton) {
-//		this.panelBoton = panelBoton;
-//	}
+	public PanelLayout getPanelBloqueo() {
+		return panelBloqueo;
+	}
+
+	public void setPanelBloqueo(PanelLayout panelBloqueo) {
+		this.panelBloqueo = panelBloqueo;
+	}
+
+	public PanelLayout getPanelBoton() {
+		return panelBoton;
+	}
+
+	public void setPanelBoton(PanelLayout panelBoton) {
+		this.panelBoton = panelBoton;
+	}
 
 	public Procesador getProcesador() {
 		return procesador;

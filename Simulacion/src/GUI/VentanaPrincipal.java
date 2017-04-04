@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.GraphicsEnvironment;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.peer.PanelPeer;
@@ -35,7 +36,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 	int tiempoProcesador;
 	private PanelProceso panelProceso;
 	private PanelTabla panelTabla;
+	private PanelListas panelListas;
 	private Procesador procesador;
+	private Panel panelContendio; // Va a contener tanto la tabla como las listas
 
 	public VentanaPrincipal() {
 		tiempoProcesador = 6;
@@ -74,9 +77,17 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		panelProceso = new PanelProceso(this.procesador, this);
 		this.add(panelProceso, BorderLayout.WEST);
 
+		panelContendio = new Panel();
+		panelContendio.setLayout(new BorderLayout());
+		
+		//Agregamos los dos paneles a uno nuevo con otro layout
 		panelTabla = new PanelTabla(this.procesador, this);
-		this.add(panelTabla, BorderLayout.CENTER);
-
+		panelContendio.add(panelTabla, BorderLayout.CENTER);
+		
+		panelListas = new PanelListas(procesador, this);
+		panelContendio.add(panelListas, BorderLayout.SOUTH);
+		
+		this.add(panelContendio,BorderLayout.CENTER);
 	}
 
 	public void probar(){
@@ -86,20 +97,20 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		//		this.procesador.agregarProceso("Proceso3", 34, 4);
 		//		this.procesador.agregarProceso("Proceso4", 34, 7);
 		for (int i = 0; i < 100; i++) {
-			this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 6) , (int)(Math.random() * 60));
+			this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 6) , (int)(Math.random() * 60), false);
 		}
 		this.panelTabla.listarProcesos();
 
 	}
 
 	public boolean validarNumeros(String cadena){
-		char[] prohibidos = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+		char[] permitios = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 		int cantidadValidos = 0; //Determina la cantidad de caracteres validos hay en la cadena
 		for (int i = 0; i < cadena.length(); i++) {
-			for (int j = 0; j < prohibidos.length; j++) {
+			for (int j = 0; j < permitios.length; j++) {
 				//ystem.out.println(cadena.charAt(i));
-				if (cadena.charAt(i) == (prohibidos[j]) ) {
+				if (cadena.charAt(i) == (permitios[j]) ) {
 					cantidadValidos ++;
 					break;
 				}
@@ -164,10 +175,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		if (!auxTiempo.equals("") && !auxTiempo.equals(" ")) {
 			tiempo = Integer.parseInt(auxTiempo);			
 		}
+		
+		boolean bloqueo = this.panelProceso.getPanelBloqueo().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
 
 		// Agregamos
-		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo);
+		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo, bloqueo);
 		this.panelTabla.listarProcesos();
+		this.panelListas.listarProcesos();
 		limpiarProceso();
 	}
 
@@ -175,6 +189,24 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		panelProceso.limpiarTexto();
 	}
 
+//	@Override
+//	public void run() {
+//		while (procesador.tieneProcesos() || procesador.tieneBloqueos()){
+//			this.procesador.procesar();
+//			while(this.procesador.isProcesando()){ //Existen procesos listos y pueden haber bloqueados
+//				this.procesador.ejecutarProceso();
+//				this.panelTabla.listarProcesos();
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException ex) {
+//					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+//				}
+//			}
+//
+//		} 
+//
+//	}
+	
 	@Override
 	public void run() {
 		while (procesador.tieneProcesos() || procesador.tieneBloqueos()){
@@ -183,7 +215,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 				this.procesador.ejecutarProceso();
 				this.panelTabla.listarProcesos();
 				try {
-					Thread.sleep(100);
+					Thread.sleep(1000);
 				} catch (InterruptedException ex) {
 					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
 				}

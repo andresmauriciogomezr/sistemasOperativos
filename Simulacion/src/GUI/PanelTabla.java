@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 
+import main.Estado;
 import main.Procesador;
 import main.Proceso;
 
@@ -33,11 +34,11 @@ public class PanelTabla extends JPanel{
 
 	public PanelTabla(Procesador procesador, ActionListener listener){
 		int width = 900;
-		int heigth = 500;
+		int heigth = 300;
 
 		this.procesador = procesador;
-		modeloTabla = new DefaultTableModel(0, 4);
-		String[] identificadores = {"Identificador", "Estado", "Tiempo", "Transici�n"};
+		String[] identificadores = {"Identificador", "Estado", "Tiempo", "Transicion", "Se bloquea?"};
+		modeloTabla = new DefaultTableModel(0, identificadores.length);
 		modeloTabla.setColumnIdentifiers(identificadores);	
 
 		
@@ -62,7 +63,7 @@ public class PanelTabla extends JPanel{
 		ArrayList<Proceso> procesosBloqueados = this.procesador.getProcesosBloqueados();
 		ArrayList<Proceso> procesosTerminados = this.procesador.getProcesosTerminados();
 		
-		String[] identificadores = {"Identificador", "Estado", "Tiempo", "Transici�n"};
+		String[] identificadores = {"Identificador", "Estado", "Tiempo", "Transicion", "Se bloquea?"};
 		modeloTabla = new DefaultTableModel(0, identificadores.length);
 		modeloTabla.setColumnIdentifiers(identificadores);
 		if (procesoEjecucion!=null){
@@ -93,6 +94,7 @@ public class PanelTabla extends JPanel{
 		modeloTabla.setValueAt(proceso.getEstadoActual(), row, 1); // Sumamos 1 porque la fila 0 est� reservada para los titulos
 		modeloTabla.setValueAt(proceso.getTiempoFaltante(), row, 2); // Sumamos 1 porque la fila 0 est� reservada para los titulos            
 		modeloTabla.setValueAt(proceso.getTransicion(), row, 3); // Sumamos 1 porque la fila 0 est� reservada para los titulos
+		modeloTabla.setValueAt(proceso.getEstadoActual().equals(Estado.bloqueado), row, 4); // Sumamos 1 porque la fila 0 est� reservada para los titulos
 	}
 	
 	public void actualizarTiempo(Proceso proceso){

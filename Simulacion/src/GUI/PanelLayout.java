@@ -29,8 +29,8 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 	private JLabel labelTitulo;
 	private JLabel icoInfo;
 	private Icon icon;
-	
-	
+
+
 	private JTextField campoTexto;
 	private JButton botonAceptar;
 	private JComboBox<String> comboBox;
@@ -42,7 +42,7 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 	public static final String ICON = "/img/icoInfo.png";
 	public static final int WIDTH = 400;
 	public static final int HEIGHT = 100;
-	
+
 
 	public PanelLayout(ActionListener listener, String titulo, String ayuda, TipoPanel tipoPanel) {
 
@@ -51,27 +51,27 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 		setLayout(gridbag);
 		setBorder(BorderFactory.createEtchedBorder());
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		
+
 
 		labelTitulo = new JLabel(titulo, SwingConstants.LEFT);
-		
+
 		gbc = new GridBagConstraints(0, 0, 2, 1, 1, 1, GridBagConstraints.LINE_START, GridBagConstraints.NONE,
 				new Insets(5, 5, 5, 5), 0, 0);
-		
+
 		add(labelTitulo, gbc);	
 
-		
+
 		icoInfo = new JLabel(new ImageIcon(getClass().getResource(ICON)));
 		icoInfo.setSize(20, 20);
 		gbc = new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE,
 				new Insets(5, 5, 5, 5), 0, 0);
-		
+
 		icon = new ImageIcon(new ImageIcon(getClass().getResource(ICON)).getImage()
 				.getScaledInstance(icoInfo.getWidth(), icoInfo.getHeight(), Image.SCALE_DEFAULT));
 		icoInfo.setIcon(icon);
 		icoInfo.setToolTipText(ayuda);
 		add(icoInfo, gbc);
-		
+
 		if (tipoPanel == TipoPanel.texto) { // Depende de la variable tipoPanel que indica el tipo de panel que es
 			campoTexto = new JTextField(12);
 			gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
@@ -96,15 +96,25 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 					new Insets(5, 0, 5, 5), 0, 0);
 			add(comboBox, gbc);
 		}
-		
-		
+
+
 	}
-	
+
 	public String getText(){
 		return this.campoTexto.getText();
 	}
-        
-        public void limpiarTexto(){
-            this.campoTexto.setText("");
-        }
+
+	public void limpiarTexto(){
+		this.campoTexto.setText("");
+	}
+
+	public JComboBox<String> getComboBox() {
+		return comboBox;
+	}
+
+	public void setComboBox(JComboBox<String> comboBox) {
+		this.comboBox = comboBox;
+	}
+	
+	
 }

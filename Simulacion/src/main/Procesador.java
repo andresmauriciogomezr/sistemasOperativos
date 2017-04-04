@@ -35,10 +35,14 @@ public class Procesador {
 		Collections.sort(procesosListos,procesosListos.get(0).comparatorPrioridad.reversed());
 	}
 
-	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion){
-		Proceso proceso = new Proceso(identificador, prioridad , tiempoEjecucion, null);
-		this.procesosListos.add(proceso);
-		ordernarPorPrioridad();
+	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado){
+		Proceso proceso = new Proceso(identificador, prioridad , tiempoEjecucion, null, bloqueado);
+		if (bloqueado) {
+			this.procesosBloqueados.add(proceso);
+		}else {
+			this.procesosListos.add(proceso);
+			ordernarPorPrioridad();
+		}
 	}
 
 	public void procesar(){
@@ -58,25 +62,43 @@ public class Procesador {
 			}
 			this.procesosBloqueados.clear();
 		}
+		this.ordernarPorPrioridad();
 	}
 
 	public boolean tieneBloqueos(){
 		return this.procesosBloqueados.size() > 0;
 	}
 
+//	public void ejecutarProceso(){        	
+//		if (procesoEjecucion == null) {//Creamos un proceso nuevo
+//			despacharProceso();
+//		} else if (count>=TIEMPO_PROCESAMIENTO){ 
+//			expirarTiempo();
+//			despacharProceso();
+//			count = 0;
+//		} else {// Proceso en ejecución
+//			if (procesoEjecucion.getTiempoFaltante() == 0) { // Se terminó de ejecutar el proceso
+//				this.terminarProceso();
+//				return;
+//			}
+//			count++;
+//			procesoEjecucion.setTiempoFaltante();
+//		}
+//	}
+	
 	public void ejecutarProceso(){        	
 		if (procesoEjecucion == null) {//Creamos un proceso nuevo
 			despacharProceso();
-		} else if (count>=TIEMPO_PROCESAMIENTO){ 
-			expirarTiempo();
-			despacharProceso();
-			count = 0;
+//		} else if (count>=TIEMPO_PROCESAMIENTO){ 
+//			expirarTiempo();
+//			despacharProceso();
+//			count = 0;
 		} else {// Proceso en ejecución
 			if (procesoEjecucion.getTiempoFaltante() == 0) { // Se terminó de ejecutar el proceso
 				this.terminarProceso();
 				return;
 			}
-			count++;
+//			count++;
 			procesoEjecucion.setTiempoFaltante();
 		}
 	}
