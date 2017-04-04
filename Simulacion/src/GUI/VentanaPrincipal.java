@@ -183,6 +183,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		this.panelTabla.listarProcesos();
 		this.panelListas.listarProcesos();
 		limpiarProceso();
+		this.repaint();
 	}
 
 	public void limpiarProceso(){
@@ -215,7 +216,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 				this.procesador.ejecutarProceso();
 				this.panelTabla.listarProcesos();
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(400);
 				} catch (InterruptedException ex) {
 					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
 				}
