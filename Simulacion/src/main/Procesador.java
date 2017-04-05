@@ -190,5 +190,30 @@ public class Procesador {
         return procesosDespachados;
     }
 
+    public ArrayList<InformacionTransicion> getProcesosExpirados() {
+        return procesosExpirados;
+    }
+
+    public ArrayList<InformacionTransicion> getProcesosBloqueados() {
+        return procesosBloqueados;
+    }
+
+    public ArrayList<InformacionTransicion> getProcesosSuspendidos() {
+        return procesosSuspendidos;
+    }
+
+    public ArrayList<String> getProcesosDestruidos() {
+        return procesosDestruidos;
+    }
+
+    public ArrayList<InformacionTransicion> getProcesosComunicados() {
+        return procesosComunicados;
+    }
+
+    public ArrayList<String> getProcesosTerminados() {
+        return procesosTerminados;
+    }
+
+    
 }
 	
