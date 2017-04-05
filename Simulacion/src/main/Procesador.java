@@ -54,30 +54,37 @@ public class Procesador {
 
     public void procesar() {
         this.ordernarComunPorPrioridad();
-        for (this.count = 0; count < procesosCargados.size(); count++) {
-            Proceso proceso = procesosCargados.get(count);
-            procesosListos.add(proceso);
-            if (!proceso.isDestruido()) {
-                this.despacharProceso(proceso);
-                //se ejecuta
-                this.ejecutarProceso(proceso);
-                if (proceso.isSuspendido()) {
-                    this.suspenderProceso(proceso);
-                    this.bloquearProceso(proceso);
-                    this.desbloquear(proceso);
-                } else if (proceso.isBloqueado()) {
-                    this.bloquearProceso(proceso);
-                    this.desbloquear(proceso);
-                } else {
-                    this.expirarTiempo(proceso);
-                }
+        while (procesosCargados.isEmpty() == false) {
+            for (this.count = 0; count < procesosCargados.size(); count++) {
+                Proceso proceso = procesosCargados.get(count);
+                procesosListos.add(proceso);
+                if (!proceso.isDestruido()) {
+                    this.despacharProceso(proceso);
+                    //se ejecuta
+                    int tiempo = proceso.getTiempoEjecucion();
+                    if (tiempo > 5) {
+                        proceso.setTiempoEjecucion(tiempo - 5);
+                        if (proceso.isSuspendido()) {
+                            this.suspenderProceso(proceso);
+                            this.bloquearProceso(proceso);
+                        } else if (proceso.isBloqueado()) {
+                            this.bloquearProceso(proceso);
+                        } else {
+                            this.expirarTiempo(proceso);
+                        }
+                    } else {
+                        proceso.setTiempoEjecucion(0);
+                        terminarProceso(proceso);
+                    }
+                    proceso.setTransicion(Estado.enEjecucion);
+                    this.listaEjecutados.add(proceso.getIdentificador() + " Termio ejecucio con tiempo de : " + proceso.getTiempoEjecucion());
 
-            } else { // Se destruye
-                destruirProceso(proceso);
-                removerProceso(proceso);
+                } else { // Se destruye
+                    destruirProceso(proceso);
+                    removerProceso(proceso);
+                }
             }
         }
-
     }
 
     public void removerProceso(Proceso proceso) {
@@ -88,13 +95,28 @@ public class Procesador {
     public void cambiarPrioridades() {
         for (int i = 0; i < this.procesosCargados.size(); i++) {
             Proceso proceso = this.procesosCargados.get(i);
-            if (proceso.getCambioPrioridad().isEmpty() == false) {
+            if (!proceso.getCambioPrioridad().equals("") && this.validarNumeros(proceso.getCambioPrioridad())) {
                 int nuevaPrioridad = Integer.parseInt(proceso.getCambioPrioridad());
                 if (!this.existePrioridad(nuevaPrioridad)) {
                     proceso.setPrioridad(nuevaPrioridad);
                 }
             }
+
         }
+    }
+
+    public boolean validarNumeros(String cadena) {
+        char[] permitios = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        for (int i = 0; i < cadena.length(); i++) {
+            for (int j = 0; j < permitios.length; j++) {
+                if (cadena.charAt(i) == permitios[j]) {
+                    break;
+                } else if (j == permitios.length) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public boolean existePrioridad(int prioridad) { // Verifica si existe una prioridad
@@ -105,22 +127,6 @@ public class Procesador {
             }
         }
         return false;
-    }
-
-    public void desbloquear(Proceso proceso) {
-        this.procesosListos.add(proceso);
-    }
-
-    public void ejecutarProceso(Proceso proceso) {
-        int tiempo = proceso.getTiempoEjecucion();
-        if (tiempo >= 5) {
-            proceso.setTiempoEjecucion(tiempo - 5);
-        } else {
-            proceso.setTiempoEjecucion(0);
-            terminarProceso(proceso);
-        }
-        proceso.setTransicion(Estado.enEjecucion);
-        this.listaEjecutados.add(proceso.getIdentificador() + " Termio ejecucio con tiempo de : " + proceso.getTiempoEjecucion());
     }
 
     public void terminarProceso(Proceso proceso) {
@@ -135,7 +141,6 @@ public class Procesador {
     public void expirarTiempo(Proceso proceso) {
         proceso.setTransicion(Estado.listo);
         this.procesosExpirados.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-        this.procesosListos.add(proceso);
     }
 
     public void suspenderProceso(Proceso proceso) {
@@ -206,5 +211,4 @@ public class Procesador {
     public ArrayList<String> getProcesosTerminados() {
         return procesosTerminados;
     }
-
 }

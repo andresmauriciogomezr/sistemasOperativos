@@ -143,13 +143,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 				opciones[i] = procesador.getProcesosCargados().get(i).getIdentificador();
 			}
 			panelProceso.getPanelComunicacion().setOpciones(opciones);
+			this.panelTabla.listarComunes();
 		}
 		if (evento.getActionCommand().equals("Procesar")){			
 			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
 			this.procesador.cambiarPrioridades();
 			this.procesador.procesar();			
 			this.panelListas.listarProcesos();
-			this.panelTabla.listarComunes();
 			this.dialogoResultados.setVisible(true);
 //			if (hilo.isAlive()==false){
 //				//hilo.start();

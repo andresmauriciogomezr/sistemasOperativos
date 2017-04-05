@@ -90,9 +90,11 @@ public class Proceso {
 
     Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {
 
+
         @Override
         public int compare(Proceso o1, Proceso o2) {
             return o1.prioridad - o2.prioridad;
         }
     };
+
 }
