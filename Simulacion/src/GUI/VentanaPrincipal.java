@@ -100,7 +100,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		this.procesador.agregarProceso("P3",	4 ,	 		7	, false, 	false, 		true, "", "");
 		this.procesador.agregarProceso("P4",	6 ,	 		9	, true, 	false, 		true, "", "");
 		this.procesador.agregarProceso("P5",	8 ,	 		6	, false, 	false, 		false, "p1", "");
-		this.procesador.agregarProceso("P6",	9 ,	 		7	, false, 	false, 		false, "", "");
+		this.procesador.agregarProceso("P6",	9 ,	 		7	, false, 	false, 		false, "", "5");
 		this.procesador.agregarProceso("P7",	10 ,	 	14	, true, 	false, 		false, "", "");
 		
 		for (int i = 0; i < 100; i++) {
@@ -148,6 +148,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		}
 		if (evento.getActionCommand().equals("Procesar")){			
 			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
+			this.procesador.cambiarPrioridades();
 			this.procesador.ejecutar();			
 			this.panelListas.listarProcesos();
 			this.panelTabla.listarComunes();
