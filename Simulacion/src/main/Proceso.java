@@ -37,7 +37,7 @@ public class Proceso {
 		this.suspedido = suspendido;
 		this.destruido = destruido;
 		
-		transiciones = identificador+  " ";
+		transicion = identificador+  " ";
 		this.cambioPrioridad = cambioPrioridad;
 	}
 
@@ -166,7 +166,7 @@ public class Proceso {
 	}
 
 	public void agregarTrasicio(Estado estado) {
-		this.transicion += " - Cambio a " + estado; 
+		this.transicion = this.transicion + " - Cambio a " + estado; 
 	}
 
 

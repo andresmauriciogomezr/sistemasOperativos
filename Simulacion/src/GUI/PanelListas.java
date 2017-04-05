@@ -167,8 +167,8 @@ public class PanelListas extends JPanel{
 		scrollTransiciones.setPreferredSize(new Dimension(width, heigth));
 		this.add(scrollTransiciones);
                 
-                // Transiciones
-		String[] identificadoresExpirados= {"Proceso", "Tiempo"};
+                // Expirados
+		String[] identificadoresExpirados= {"Lista de expirados"};
 		modeloTablaExpirados= new DefaultTableModel(0, identificadoresExpirados.length);
 		modeloTablaExpirados.setColumnIdentifiers(identificadoresExpirados);		
 		tablaExpirados= new JTable(modeloTablaExpirados){
@@ -186,11 +186,11 @@ public class PanelListas extends JPanel{
 	public void listarProcesos(){
 		Proceso procesoEjecucion = this.procesador.getProcesoEjecucion();
 		ArrayList<Proceso> procesosListos = this.procesador.getProcesosListos();		
-		ArrayList<Proceso> procesosExpirados = this.procesador.getProcesosExpirados();		
+		ArrayList<String> procesosExpirados = this.procesador.getProcesosExpirados();		
 		ArrayList<Proceso> procesosBloqueados = this.procesador.getProcesosBloqueados();
 		ArrayList<Proceso> procesosSuspendidos = this.procesador.getProcesosSuspendidos();
 		ArrayList<Proceso> procesosDestruidos = this.procesador.getProcesosDestruidos();
-		ArrayList<Proceso> procesosComunicados = this.procesador.getProcesosComunicados();
+		ArrayList<String> procesosComunicados = this.procesador.getProcesosComunicados();
 		ArrayList<Proceso> procesosTerminados = this.procesador.getProcesosTerminados();
 		ArrayList<Proceso> procesos= this.procesador.getListaComun();
 		ArrayList<String> ejecutados = this.procesador.getListaEjecutados();
@@ -213,7 +213,7 @@ public class PanelListas extends JPanel{
 			agregarDestruido(proceso);
 		}	
 		for (int i = 0; i < procesosComunicados.size(); i++) {
-			Proceso proceso = procesosComunicados.get(i);
+			String proceso = procesosComunicados.get(i);
 			agregarComunicado(proceso);
 		}
 		
@@ -223,13 +223,13 @@ public class PanelListas extends JPanel{
 		}
 		
 		for (int i = 0; i < ejecutados.size(); i++) {
-			agregarTransicion(ejecutados.get(i));
+			agregarEjecutado(ejecutados.get(i));
 		}
-                
-                for (Iterator<Proceso> iterator = procesosExpirados.iterator(); iterator.hasNext();) {
-                Proceso proceso = iterator.next();
-                    agregarExpirado(proceso);
-            }
+
+		for (Iterator<String> iterator = procesosExpirados.iterator(); iterator.hasNext();) {
+			String proceso = iterator.next();
+			agregarExpirado(proceso);
+		}
 		
 		//tabla.setFont(new FontUIResource("Verdana", Font.PLAIN, 20));
 		tablaListos.setModel(modeloTablaListos);
@@ -239,7 +239,7 @@ public class PanelListas extends JPanel{
 		tablaComunicados.setModel(modeloTablaComunicados);
 		tablaTransicioens.setModel(modeloTablaTransiciones);
 		tablaEjecutados.setModel(modeloTablaEjecutados);
-                tablaExpirados.setModel(modeloTablaExpirados);
+        tablaExpirados.setModel(modeloTablaExpirados);
 	}
 
 	public void agregarListo(Proceso proceso){
@@ -255,6 +255,12 @@ public class PanelListas extends JPanel{
 		modeloTablaBloqueados.setValueAt(proceso.getIdentificador(), row, 0); 
 	}
 	
+	public void agregarEjecutado(String proceso){
+		int row = this.modeloTablaEjecutados.getRowCount();
+		modeloTablaEjecutados.setRowCount(row+1);
+		modeloTablaEjecutados.setValueAt(proceso, row, 0); 
+	}
+	
 	public void agregarSuspendido(Proceso proceso){
 		int row = this.modeloTablaSuspendidos.getRowCount();
 		modeloTablaSuspendidos.setRowCount(row+1);
@@ -267,23 +273,26 @@ public class PanelListas extends JPanel{
 		modeloTablaDestruidos.setValueAt(proceso.getIdentificador(), row, 0); 
 	}
 	
-	public void agregarComunicado(Proceso proceso){
+	public void agregarComunicado(String proceso){
 		int row = this.modeloTablaComunicados.getRowCount();
 		modeloTablaComunicados.setRowCount(row+1);
-		modeloTablaComunicados.setValueAt(proceso.getIdentificador(), row, 0); 
+		if (!proceso.equals("")) {			
+			modeloTablaComunicados.setValueAt("Se comunicac con " +proceso, row, 0); 
+		}
 	}
 	
 	public void agregarTransicion(String proceso){
+		System.out.println(proceso);
 		int row = this.modeloTablaTransiciones.getRowCount();
 		modeloTablaTransiciones.setRowCount(row+1);
 		modeloTablaTransiciones.setValueAt(proceso, row, 0); 
 	}
 	
-        public void agregarExpirado(Proceso proceso){
+        public void agregarExpirado(String proceso){
 		int row = this.modeloTablaExpirados.getRowCount();
 		modeloTablaExpirados.setRowCount(row+1);
-		modeloTablaExpirados.setValueAt(proceso.getIdentificador(), row, 0); 
-		modeloTablaExpirados.setValueAt(proceso.getTiempoEjecucion(), row, 1); 
+		modeloTablaExpirados.setValueAt(proceso, row, 0); 
+		//modeloTablaExpirados.setValueAt(proceso.getTiempoEjecucion(), row, 1); 
 	}
 
 }

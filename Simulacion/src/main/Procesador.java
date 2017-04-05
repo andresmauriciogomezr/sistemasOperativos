@@ -17,11 +17,11 @@ public class Procesador {
 
 	private int count = 0;
 	private ArrayList<Proceso> procesosListos;
-	private ArrayList<Proceso> procesosExpirados;
+	private ArrayList<String> procesosExpirados;
 	private ArrayList<Proceso> procesosBloqueados;
 	private ArrayList<Proceso> procesosSuspendidos;
 	private ArrayList<Proceso> procesosDestruidos;
-	private ArrayList<Proceso> procesosComunicados;
+	private ArrayList<String> procesosComunicados;
 	private ArrayList<Proceso> procesosTerminados;
 	private ArrayList<Proceso> ListaComun;
 	private Proceso procesoEjecucion;
@@ -40,7 +40,7 @@ public class Procesador {
 		this.procesosBloqueados = new ArrayList<Proceso>();
 		this.procesosSuspendidos = new ArrayList<Proceso>();
 		this.procesosDestruidos = new ArrayList<Proceso>();
-		this.procesosComunicados = new ArrayList<Proceso>();
+		this.procesosComunicados = new ArrayList<String>();
 		this.procesosTerminados = new ArrayList<Proceso>();
 		this.ListaComun = new ArrayList<Proceso>();
 		this.ventana = ventana;
@@ -68,37 +68,65 @@ public class Procesador {
 	
 	public void ejecutar() {
 		this.ordernarComunPorPrioridad();
+		boolean ejecutando = true;
 		
-		for (int i = 0; i < ListaComun.size(); i++) {
-			Proceso proceso = ListaComun.get(i);
-			///if (!proceso.isDestruido()) {
-				//se ejecuta
-				procesosListos.add(proceso);
-				int tiempo = proceso.getTiempoEjecucion();
-				if (tiempo >= 5) {
-					proceso.setTiempoEjecucion(tiempo - 5);
-				}else{
-					proceso.setTiempoEjecucion(0);
-				}
-				proceso.agregarTrasicio(Estado.enEjecucion);
-				this.listaEjecutados.add(proceso.getIdentificador() + " Termio ejecucio con tiempo de : " + proceso.getTiempoEjecucion());
-				if (proceso.isSuspedido()) {
-					proceso.agregarTrasicio(Estado.suspendido);
-					this.procesosSuspendidos.add(proceso);
-					proceso.agregarTrasicio(Estado.bloqueado);
-					this.procesosBloqueados.add(proceso);
-				} else if (proceso.isBloqueado()) {
-					proceso.agregarTrasicio(Estado.bloqueado);
-					this.procesosBloqueados.add(proceso);
-				} else {
-                                    proceso.agregarTrasicio(Estado.listo);
-                                    this.procesosExpirados.add(proceso);
-                                }
-//			}else { // Se destruye
-//				proceso.agregarTrasicio(Estado.destruido);
-//				this.procesosDestruidos.add(proceso);
-//			}
-		}	
+		while(ejecutando) {
+			int cantidadTermiado = 0; // para determinar si sique procesando
+			for (int i = 0; i < ListaComun.size(); i++) {
+				Proceso proceso = ListaComun.get(i);
+				///if (!proceso.isDestruido()) {
+					//se ejecuta
+					if(proceso.getTiempoEjecucion() > 0) {
+						procesosListos.add(proceso);
+					}
+									
+					int tiempo = proceso.getTiempoEjecucion();
+					System.out.println("eimpo " + tiempo);
+					if (proceso.isDestruido()) {
+						this.procesosDestruidos.add(proceso);
+						proceso.setDestruido(false);
+						proceso.setTiempoEjecucion(0);
+						//this.ListaComun.remove(proceso);
+						//break;
+						
+					} else if (tiempo > 0 ){// Falta ejecucion
+						if (tiempo > 5) {
+							proceso.setTiempoEjecucion(tiempo - 5);
+						}else if(tiempo == 5) {
+							proceso.setTiempoEjecucion(0);
+							//this.ListaComun.remove(proceso);
+							this.procesosTerminados.add(proceso);
+						}else {
+							proceso.setTiempoEjecucion(0);
+							this.procesosTerminados.add(proceso);
+						}
+						proceso.agregarTrasicio(Estado.enEjecucion);
+						this.listaEjecutados.add(proceso.getIdentificador() + " Termio ejecucio con tiempo de : " + proceso.getTiempoEjecucion());
+						if (proceso.isSuspedido()) {
+							proceso.agregarTrasicio(Estado.suspendido);
+							this.procesosSuspendidos.add(proceso);
+							proceso.agregarTrasicio(Estado.bloqueado);
+							this.procesosBloqueados.add(proceso);
+						} else if (proceso.isBloqueado()) {
+							proceso.agregarTrasicio(Estado.bloqueado);
+							this.procesosBloqueados.add(proceso);
+						} 
+						else {
+							proceso.agregarTrasicio(Estado.listo);
+							this.procesosExpirados.add(proceso.getIdentificador() + " tiempo : " + proceso.getTiempoEjecucion());
+						}
+						if (!proceso.getSeComunica().equals("")) {
+							this.procesosComunicados.add(proceso.getSeComunica());
+						}
+					}else { // ya se ejecuto por completo
+						cantidadTermiado ++;
+					}
+			}	// acaba for
+			System.out.println("terminados ************ " + cantidadTermiado);
+			if (cantidadTermiado == ListaComun.size()) {
+				ejecutando = false;
+			}
+		}// acaba while
 		
 	}
 	
@@ -362,14 +390,19 @@ public class Procesador {
 	public void setProcesosDestruidos(ArrayList<Proceso> procesosDestruidos) {
 		this.procesosDestruidos = procesosDestruidos;
 	}
+	
+	
 
-	public ArrayList<Proceso> getProcesosComunicados() {
+
+	public ArrayList<String> getProcesosComunicados() {
 		return procesosComunicados;
 	}
 
-	public void setProcesosComunicados(ArrayList<Proceso> procesosComunicados) {
+	public void setProcesosComunicados(ArrayList<String> procesosComunicados) {
 		this.procesosComunicados = procesosComunicados;
 	}
+
+	
 
 	public ArrayList<String> getListaEjecutados() {
 		return listaEjecutados;
@@ -379,11 +412,17 @@ public class Procesador {
 		this.listaEjecutados = listaEjecutados;
 	}
 
+	public ArrayList<String> getProcesosExpirados() {
+		return procesosExpirados;
+	}
+
+	public void setProcesosExpirados(ArrayList<String> procesosExpirados) {
+		this.procesosExpirados = procesosExpirados;
+	}
+
   
 
-    public ArrayList<Proceso> getProcesosExpirados() {
-        return procesosExpirados;
-    }
+    
         
         
 
