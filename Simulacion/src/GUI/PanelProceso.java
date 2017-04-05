@@ -137,6 +137,16 @@ public class PanelProceso extends JPanel{
 	public void setPanelSuspender(PanelLayout panelSuspender) {
 		this.panelSuspender = panelSuspender;
 	}
+	
+	
+
+	public PanelLayout getPanelCambioPrioridad() {
+		return panelCambioPrioridad;
+	}
+
+	public void setPanelCambioPrioridad(PanelLayout panelCambioPrioridad) {
+		this.panelCambioPrioridad = panelCambioPrioridad;
+	}
 
 	public void limpiarTexto(){
             panelNombre.limpiarTexto();

@@ -13,15 +13,15 @@ public class Proceso {
 	private int tiempoFaltante;
 	private int tiempoBloqueado;
 	private String transicion;
-	private boolean seComunica;
+	private String seComunica;
 	boolean bloqueado;
 	boolean suspedido;
 	boolean destruido;
-	
+	String cambioPrioridad;
 	String transiciones;
 	
 					//Nombre				priodidad		tiempo 				bloqueo			suspendido				destruido		seComunica
-	public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, boolean seComunica){
+	public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, String seComunica, String cambioPrioridad){
 		this.transicion = "";
 		this.estadoActual = Estado.listo;
 		this.identificador = identificador;
@@ -30,6 +30,7 @@ public class Proceso {
 		this.tiempoEjecucion = tiempoEjecucion;
 		this.tiempoFaltante = tiempoEjecucion;
 		this.tiempoBloqueado = 0;
+		
 		this.seComunica = seComunica; 
 		
 		this.bloqueado = bloqueado;
@@ -37,6 +38,7 @@ public class Proceso {
 		this.destruido = destruido;
 		
 		transiciones = identificador+  " ";
+		this.cambioPrioridad = cambioPrioridad;
 	}
 
 	public Estado getEstadoActual() {
@@ -113,19 +115,16 @@ public class Proceso {
 	public void setTransicion(String transicion) {
 		this.transicion = transicion;
 	}
-
 	
 
-	public boolean SeComunica() {
+
+	public String getSeComunica() {
 		return seComunica;
 	}
 
-	public void setSeComunica(boolean seComunica) {
+	public void setSeComunica(String seComunica) {
 		this.seComunica = seComunica;
 	}
-	
-	
-
 
 	public boolean isBloqueado() {
 		return bloqueado;
@@ -153,6 +152,14 @@ public class Proceso {
 
 	
 
+
+	public String getCambioPrioridad() {
+		return cambioPrioridad;
+	}
+
+	public void setCambioPrioridad(String cambioPrioridad) {
+		this.cambioPrioridad = cambioPrioridad;
+	}
 
 	public void setTiempoEjecucion(int tiempoEjecucion) {
 		this.tiempoEjecucion = tiempoEjecucion;

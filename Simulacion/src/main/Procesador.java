@@ -54,8 +54,8 @@ public class Procesador {
 		Collections.sort(ListaComun,ListaComun.get(0).comparatorPrioridad);
 	}
 	//								Nombre				priodidad		tiempo 				bloqueo				suspendido		destruido		seComunica
-	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, boolean seComunica){
-		Proceso proceso = new Proceso(identificador, 	prioridad , 	tiempoEjecucion, 	bloqueado, 				suspendido, 	destruido, seComunica);
+	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, String seComunica, String cambioPrioridad){
+		Proceso proceso = new Proceso(identificador, 	prioridad , 	tiempoEjecucion, 	bloqueado, 				suspendido, 	destruido, seComunica, cambioPrioridad);
 		ListaComun.add(proceso);
 //		if (bloqueado) {
 //			this.procesosBloqueados.add(proceso);
@@ -119,11 +119,51 @@ public class Procesador {
 				procesosListos.add(proceso);
 			}
 			
-			if (proceso.SeComunica()) {
-				procesosComunicados.add(proceso);
-			}
 		}		
 	}
+	
+	public void cambiarPrioridades() {
+		for (int i = 0; i < this.ListaComun.size(); i++) {
+			Proceso proceso = this.ListaComun.get(i);
+			if (!proceso.getCambioPrioridad().equals("") && this.validarNumeros(proceso.getCambioPrioridad())) {
+				int nuevaPrioridad = Integer.parseInt(proceso.getCambioPrioridad());
+				if (!this.existePrioridad(nuevaPrioridad)) {
+					proceso.setPrioridad(nuevaPrioridad);
+				}
+			} 
+			
+		}
+	}
+	
+	public boolean validarNumeros(String cadena){
+		char[] permitios = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+		int cantidadValidos = 0; //Determina la cantidad de caracteres validos hay en la cadena
+		for (int i = 0; i < cadena.length(); i++) {
+			for (int j = 0; j < permitios.length; j++) {
+				//ystem.out.println(cadena.charAt(i));
+				if (cadena.charAt(i) == (permitios[j]) ) {
+					cantidadValidos ++;
+					break;
+				}
+			}
+		}
+		if (cantidadValidos == cadena.length()) { //todos los caracteres son validos
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean existePrioridad(int prioridad) { // Verifica si existe una prioridad
+		ArrayList<Proceso> procesos = this.ListaComun;
+		for (int i = 0; i < procesos.size(); i++) {
+			if (procesos.get(i).getPrioridad() == prioridad) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	public void procesar(){
 		if (procesosListos.isEmpty() == false) { // Listos No está vacío
