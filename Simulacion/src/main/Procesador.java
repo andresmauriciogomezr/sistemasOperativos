@@ -28,7 +28,7 @@ public class Procesador {
     private int count;
     boolean procesando; // Determina si existen procesos listos para ejecutarse
 
-    public Procesador() {
+     public Procesador() {
         this.procesando = false;
         this.procesosListos = new ArrayList<>();
         this.procesosDespachados = new ArrayList<>();
@@ -42,7 +42,7 @@ public class Procesador {
         this.listaEjecutados = new ArrayList<>();
         this.count = 0;
     }
-
+    
     public void ordernarComunPorPrioridad() {
         Collections.sort(procesosCargados, procesosCargados.get(0).comparatorPrioridad);
     }
@@ -104,6 +104,7 @@ public class Procesador {
 
         }
     }
+   
 
     public boolean validarNumeros(String cadena) {
         char[] permitios = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
@@ -158,6 +159,7 @@ public class Procesador {
         this.procesosDestruidos.add(proceso.getIdentificador());
     }
 
+
     public boolean existeProceso(String nombre) {
         for (Iterator<Proceso> iterator = procesosCargados.iterator(); iterator.hasNext();) {
             Proceso proceso = iterator.next();
@@ -188,27 +190,5 @@ public class Procesador {
         return procesosDespachados;
     }
 
-    public ArrayList<InformacionTransicion> getProcesosExpirados() {
-        return procesosExpirados;
-    }
-
-    public ArrayList<InformacionTransicion> getProcesosBloqueados() {
-        return procesosBloqueados;
-    }
-
-    public ArrayList<InformacionTransicion> getProcesosSuspendidos() {
-        return procesosSuspendidos;
-    }
-
-    public ArrayList<String> getProcesosDestruidos() {
-        return procesosDestruidos;
-    }
-
-    public ArrayList<InformacionTransicion> getProcesosComunicados() {
-        return procesosComunicados;
-    }
-
-    public ArrayList<String> getProcesosTerminados() {
-        return procesosTerminados;
-    }
 }
+	
