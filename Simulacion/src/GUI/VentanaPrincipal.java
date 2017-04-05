@@ -133,12 +133,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		}
 		if (evento.getActionCommand().equals("Procesar")){			
 			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
-			this.procesador.ejecutar();
-			//this.panelListas.listarProcesos();
+			this.procesador.ejecutar();			
+			this.panelListas.listarProcesos();
 			this.panelTabla.listarComunes();
-			if (hilo.isAlive()==false){
-				hilo.start();
-			}
+			this.dialogoResultados.setVisible(true);
+//			if (hilo.isAlive()==false){
+//				//hilo.start();
+//			}
 		}
 	}
 

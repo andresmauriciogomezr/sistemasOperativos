@@ -49,13 +49,23 @@ public class PanelListas extends JPanel{
 	private JTable tablaComunicados;
 	private JScrollPane scrollComunicados;
 	
+	// Tabla para transiciones
+	private DefaultTableModel modeloTablaTransiciones;
+	private JTable tablaTransicioens;
+	private JScrollPane scrollTransiciones;
+	
+	// Tabla para transiciones
+		private DefaultTableModel modeloTablaEjecutados;
+		private JTable tablaEjecutados;
+		private JScrollPane scrollEjecutados;
+	
 	private JButton botonProcesar;
 
 	private Procesador procesador;
 
 
 	public PanelListas(Procesador procesador){
-		int width = 450;
+		int width = 300;
 		int heigth = 350;
 
 		this.procesador = procesador;
@@ -72,6 +82,19 @@ public class PanelListas extends JPanel{
 		scrollListos = new JScrollPane(tablaListos);
 		scrollListos.setPreferredSize(new Dimension(width, heigth));
 		this.add(scrollListos);
+		
+		// Ejecutados
+		String[] identificadoresEjecutados = {"Lista Ejecutados"};
+		modeloTablaEjecutados= new DefaultTableModel(0, identificadoresEjecutados.length);
+		modeloTablaEjecutados.setColumnIdentifiers(identificadoresEjecutados);	
+		tablaEjecutados= new JTable(modeloTablaEjecutados){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+				return false;
+			}};
+			tablaEjecutados.getTableHeader().setReorderingAllowed(false);
+		scrollEjecutados= new JScrollPane(tablaEjecutados);
+		scrollEjecutados.setPreferredSize(new Dimension(width, heigth));
+		this.add(scrollEjecutados);
 
 		// Bloqueados
 		String[] identificadoresBloqueado = {"Lista Procesos Bloqueados"};
@@ -125,6 +148,19 @@ public class PanelListas extends JPanel{
 		scrollComunicados.setPreferredSize(new Dimension(width, heigth));
 		this.add(scrollComunicados);
 		
+		// Transiciones
+		String[] identificadoresTransiciones= {"Lista Transiciones"};
+		modeloTablaTransiciones= new DefaultTableModel(0, identificadoresTransiciones.length);
+		modeloTablaTransiciones.setColumnIdentifiers(identificadoresTransiciones);		
+		tablaTransicioens= new JTable(modeloTablaTransiciones){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+				return false;
+			}};
+			tablaTransicioens.getTableHeader().setReorderingAllowed(false);
+		scrollTransiciones= new JScrollPane(tablaTransicioens);
+		scrollTransiciones.setPreferredSize(new Dimension(width, heigth));
+		this.add(scrollTransiciones);
+		
 		
 	}
 
@@ -136,6 +172,9 @@ public class PanelListas extends JPanel{
 		ArrayList<Proceso> procesosDestruidos = this.procesador.getProcesosDestruidos();
 		ArrayList<Proceso> procesosComunicados = this.procesador.getProcesosComunicados();
 		ArrayList<Proceso> procesosTerminados = this.procesador.getProcesosTerminados();
+		
+		ArrayList<Proceso> procesos= this.procesador.getListaComun();
+		ArrayList<String> ejecutados = this.procesador.getListaEjecutados();
 		
 		String[] identificadores = {"Lista Procesos listos"};
 		modeloTablaListos = new DefaultTableModel(0, identificadores.length);
@@ -157,6 +196,14 @@ public class PanelListas extends JPanel{
 		modeloTablaComunicados= new DefaultTableModel(0, identificadoresComunicados.length);
 		modeloTablaComunicados.setColumnIdentifiers(identificadoresComunicados);	
 		
+		String[] identificadoresTransiciones= {"Lista Transiciones"};
+		modeloTablaTransiciones= new DefaultTableModel(0, identificadoresTransiciones.length);
+		modeloTablaTransiciones.setColumnIdentifiers(identificadoresTransiciones);
+		
+		String[] identificadoresEjecutados = {"Lista Ejecutados"};
+		modeloTablaEjecutados= new DefaultTableModel(0, identificadoresEjecutados.length);
+		modeloTablaEjecutados.setColumnIdentifiers(identificadoresEjecutados);	
+		
 		for (int i = 0; i < procesosListos.size(); i++) {
 			Proceso proceso = procesosListos.get(i);
 			agregarListo(proceso);
@@ -176,13 +223,25 @@ public class PanelListas extends JPanel{
 		for (int i = 0; i < procesosComunicados.size(); i++) {
 			Proceso proceso = procesosComunicados.get(i);
 			agregarComunicado(proceso);
-		}	
+		}
+		
+		for (int i = 0; i < procesos.size(); i++) {
+			Proceso proceso = procesos.get(i);
+			agregarTransicion(proceso.getTransicion());
+		}
+		
+		for (int i = 0; i < ejecutados.size(); i++) {
+			agregarTransicion(ejecutados.get(i));
+		}
+		
 		//tabla.setFont(new FontUIResource("Verdana", Font.PLAIN, 20));
 		tablaListos.setModel(modeloTablaListos);
 		tablaBloqueados.setModel(modeloTablaBloqueados);
 		tablaSuspedidos.setModel(modeloTablaSuspendidos);
 		tablaDestruidos.setModel(modeloTablaDestruidos);
 		tablaComunicados.setModel(modeloTablaComunicados);
+		tablaTransicioens.setModel(modeloTablaTransiciones);
+		tablaEjecutados.setModel(modeloTablaEjecutados);
 	}
 
 	public void agregarListo(Proceso proceso){
@@ -214,6 +273,12 @@ public class PanelListas extends JPanel{
 		int row = this.modeloTablaComunicados.getRowCount();
 		modeloTablaComunicados.setRowCount(row+1);
 		modeloTablaComunicados.setValueAt(proceso.getIdentificador(), row, 0); 
+	}
+	
+	public void agregarTransicion(String proceso){
+		int row = this.modeloTablaTransiciones.getRowCount();
+		modeloTablaTransiciones.setRowCount(row+1);
+		modeloTablaTransiciones.setValueAt(proceso, row, 0); 
 	}
 	
 

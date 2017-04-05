@@ -18,6 +18,8 @@ public class Proceso {
 	boolean suspedido;
 	boolean destruido;
 	
+	String transiciones;
+	
 					//Nombre				priodidad		tiempo 				bloqueo			suspendido				destruido		seComunica
 	public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, boolean seComunica){
 		this.transicion = "";
@@ -33,6 +35,8 @@ public class Proceso {
 		this.bloqueado = bloqueado;
 		this.suspedido = suspendido;
 		this.destruido = destruido;
+		
+		transiciones = identificador+  " ";
 	}
 
 	public Estado getEstadoActual() {
@@ -147,7 +151,16 @@ public class Proceso {
 		this.destruido = destruido;
 	}
 
+	
 
+
+	public void setTiempoEjecucion(int tiempoEjecucion) {
+		this.tiempoEjecucion = tiempoEjecucion;
+	}
+
+	public void agregarTrasicio(Estado estado) {
+		this.transicion += " - Cambio a " + estado; 
+	}
 
 
 	Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {

@@ -25,6 +25,11 @@ public class Procesador {
 	private ArrayList<Proceso> ListaComun;
 	private Proceso procesoEjecucion;
 	private VentanaPrincipal ventana;
+	
+	
+	private ArrayList<String> listaEjecutados;
+	
+	
 	boolean procesando; // Determina si existen procesos listos para ejecutarse
 
 	public Procesador(VentanaPrincipal ventana){
@@ -37,6 +42,9 @@ public class Procesador {
 		this.procesosTerminados = new ArrayList<Proceso>();
 		this.ListaComun = new ArrayList<Proceso>();
 		this.ventana = ventana;
+		
+		
+		this.listaEjecutados = new ArrayList<>();
 	}
 
 	public void ordernarPorPrioridad(){
@@ -60,6 +68,35 @@ public class Procesador {
 	
 	public void ejecutar() {
 		this.ordernarComunPorPrioridad();
+		
+		for (int i = 0; i < ListaComun.size(); i++) {
+			Proceso proceso = ListaComun.get(i);
+			if (!proceso.isDestruido()) {
+				//se ejecuta
+				procesosListos.add(proceso);
+				int tiempo = proceso.getTiempoEjecucion();
+				if (tiempo >= 5) {
+					proceso.setTiempoEjecucion(tiempo - 5);
+				}else{
+					proceso.setTiempoEjecucion(0);
+				}
+				proceso.agregarTrasicio(Estado.enEjecucion);
+				this.listaEjecutados.add(proceso.getIdentificador() + " Termio ejecucio con tiempo de : " + proceso.getTiempoEjecucion());
+				if (proceso.isSuspedido()) {
+					proceso.agregarTrasicio(Estado.suspendido);
+					this.procesosSuspendidos.add(proceso);
+					proceso.agregarTrasicio(Estado.bloqueado);
+					this.procesosBloqueados.add(proceso);
+				}
+				if (proceso.isBloqueado()) {
+					proceso.agregarTrasicio(Estado.bloqueado);
+					this.procesosBloqueados.add(proceso);
+				}
+			}else { // Se destruye
+				proceso.agregarTrasicio(Estado.destruido);
+				this.procesosDestruidos.add(proceso);
+			}
+		}	
 		
 	}
 	
@@ -280,6 +317,14 @@ public class Procesador {
 
 	public void setProcesosComunicados(ArrayList<Proceso> procesosComunicados) {
 		this.procesosComunicados = procesosComunicados;
+	}
+
+	public ArrayList<String> getListaEjecutados() {
+		return listaEjecutados;
+	}
+
+	public void setListaEjecutados(ArrayList<String> listaEjecutados) {
+		this.listaEjecutados = listaEjecutados;
 	}
 
 	
