@@ -138,9 +138,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		if (evento.getActionCommand().equals("Agregar Proceso")) {
 			this.agregarProceso();
 			// Se actualiza la selección de comunicacion
-			String[] opciones = new String[procesador.getProcesosCargados().size()];
-			for (int i = 0; i < opciones.length; i++) {
-				opciones[i] = procesador.getProcesosCargados().get(i).getIdentificador();
+			String[] opciones = new String[procesador.getProcesosCargados().size()+1];
+			opciones[0] = "";
+			for (int i = 1; i < opciones.length; i++) {
+				opciones[i] = procesador.getProcesosCargados().get(i-1).getIdentificador();
 			}
 			panelProceso.getPanelComunicacion().setOpciones(opciones);
 			this.panelTabla.listarComunes();
@@ -148,6 +149,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		if (evento.getActionCommand().equals("Procesar")){			
 			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
 			this.procesador.cambiarPrioridades();
+			this.procesador.ordernarComunPorPrioridad();
+			this.panelTabla.listarComunes();
 			this.procesador.procesar();			
 			this.panelListas.listarProcesos();
 			this.dialogoResultados.setVisible(true);
@@ -166,6 +169,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		String auxPriodad = this.panelProceso.getPanelPrioridad().getText(); //usa axiliar porque luego hay que convertir a entero
 		String auxTiempo = this.panelProceso.getPanelTiempo().getText();
 		String auxCambioPrioridad = this.panelProceso.getPanelCambioPrioridad().getText();
+		System.out.println("------------------" + auxCambioPrioridad);
 
 		// Validamos y agregamos el campo nombre
 		if (nombreProceso.equals("") || nombreProceso.equals(" ") || auxPriodad.equals("") || auxPriodad.equals(" ")) { 

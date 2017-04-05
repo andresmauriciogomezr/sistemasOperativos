@@ -63,7 +63,7 @@ public class PanelListas extends JPanel {
     Procesador procesador;
     
     public PanelListas(Procesador procesador){
-        int width = 300;
+        int width = 350;
         int heigth = 230;
         
         this.procesador = procesador;
@@ -205,6 +205,7 @@ public class PanelListas extends JPanel {
         ArrayList<String> procesosTerminados = this.procesador.getProcesosTerminados();
         ArrayList<Proceso> procesos = this.procesador.getProcesosCargados();
         ArrayList<String> ejecutados = this.procesador.getListaEjecutados();
+        ArrayList<Proceso> listaComunicaciones = this.procesador.getListaComunicaciones();
 
         for (int i = 0; i < procesosListos.size(); i++) {
             Proceso proceso = procesosListos.get(i);
@@ -226,9 +227,8 @@ public class PanelListas extends JPanel {
             String proceso = procesosDestruidos.get(i);
             agregarDestruido(proceso);
         }
-        for (int i = 0; i < procesosComunicados.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosComunicados.get(i);
-            agregarComunicado(informacionTransicion);
+        for (int i = 0; i < listaComunicaciones.size(); i++) {
+            agregarComunicado(listaComunicaciones.get(i));
         }
 
         for (int i = 0; i < ejecutados.size(); i++) {
@@ -285,10 +285,10 @@ public class PanelListas extends JPanel {
         modeloTablaDestruidos.setValueAt(proceso, row, 0);
     }
 
-    public void agregarComunicado(InformacionTransicion it) {
+    public void agregarComunicado(Proceso proceso) {
         int row = this.modeloTablaComunicados.getRowCount();
         modeloTablaComunicados.setRowCount(row + 1);
-        modeloTablaComunicados.setValueAt(it.getIdentificadorProceso() + " con el proceso " + it.getIdentificadorProcesadorComunicado(), row, 0);
+        modeloTablaComunicados.setValueAt(proceso.getIdentificador() + " con el proceso " + proceso.getSeComunica(), row, 0);
     }
 
     public void agregarExpirado(InformacionTransicion it) {

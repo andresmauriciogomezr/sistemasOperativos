@@ -64,6 +64,10 @@ public class PanelTabla extends JPanel {
 
     public void listarComunes() {
         ArrayList<Proceso> procesos = this.procesador.getProcesosCargados();
+        
+        String[] identificadores = {"Identificador", "Estado", "Tiempo", "Prioridad", "Transicion", "Se bloquea?"};
+        modeloTabla = new DefaultTableModel(0, identificadores.length);
+        modeloTabla.setColumnIdentifiers(identificadores);
 
         for (int i = 0; i < procesos.size(); i++) {
             Proceso proceso = procesos.get(i);
@@ -90,11 +94,11 @@ public class PanelTabla extends JPanel {
         int row = this.modeloTabla.getRowCount();
         modeloTabla.setRowCount(row + 1);
         modeloTabla.setValueAt(proceso.getIdentificador(), row, 0); // Identificador 
-        modeloTabla.setValueAt(proceso.getTiempoEjecucion(), row, 1);// Tiempo             
-        modeloTabla.setValueAt(proceso.getPrioridad(), row, 2); // Prioridad
-        modeloTabla.setValueAt(proceso.getTransicion(), row, 3); // Transicion 
-        modeloTabla.setValueAt(cambiarAPalabra(proceso.isBloqueado()), row, 4); // bloqueo?
-        modeloTabla.setValueAt(cambiarAPalabra(proceso.isSuspendido()), row, 5); // bloqueo?
+        modeloTabla.setValueAt(proceso.getEstadoActual(), row, 1);// Estado             
+        modeloTabla.setValueAt(proceso.getTiempoEjecucion(), row, 2); // Tiempo
+        modeloTabla.setValueAt(proceso.getPrioridad(), row, 3); // Prioridad
+        modeloTabla.setValueAt((proceso.getTransicion()), row, 4); // bloqueo?
+        modeloTabla.setValueAt(cambiarAPalabra(proceso.isBloqueado()), row, 5); // bloqueo?
     }
 
     public String cambiarAPalabra(Boolean bool) {

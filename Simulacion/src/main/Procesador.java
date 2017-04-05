@@ -24,6 +24,7 @@ public class Procesador {
     private ArrayList<String> procesosTerminados;
     private ArrayList<Proceso> procesosCargados;
     private ArrayList<String> listaEjecutados;
+    private ArrayList<Proceso> listaComunicaciones;
 
     private int count;
     boolean procesando; // Determina si existen procesos listos para ejecutarse
@@ -40,6 +41,7 @@ public class Procesador {
         this.procesosTerminados = new ArrayList<>();
         this.procesosCargados = new ArrayList<>();
         this.listaEjecutados = new ArrayList<>();
+        this.listaComunicaciones = new ArrayList<>();
         this.count = 0;
     }
     
@@ -75,6 +77,9 @@ public class Procesador {
                     } else {
                         proceso.setTiempoEjecucion(0);
                         terminarProceso(proceso);
+                    }
+                    if(!proceso.getSeComunica().equals("")){
+                    	this.listaComunicaciones.add(proceso);
                     }
                     proceso.setTransicion(Estado.enEjecucion);
                     this.listaEjecutados.add(proceso.getIdentificador() + " Termio ejecucio con tiempo de : " + proceso.getTiempoEjecucion());
@@ -214,6 +219,15 @@ public class Procesador {
         return procesosTerminados;
     }
 
+	public ArrayList<Proceso> getListaComunicaciones() {
+		return listaComunicaciones;
+	}
+
+	public void setListaComunicaciones(ArrayList<Proceso> listaComunicaciones) {
+		this.listaComunicaciones = listaComunicaciones;
+	}
+
+    
     
 }
 	

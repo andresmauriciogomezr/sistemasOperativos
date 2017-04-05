@@ -31,16 +31,18 @@ public class PanelProceso extends JPanel{
 		panelNombre = new PanelLayout(listener, "Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre ser� el identificador", TipoPanel.texto);
 		this.add(panelNombre);
 		
-		panelDestruir = new PanelLayout(listener, "¿El proceso debe Destruirse? ", "Selección si el proceso que se esta ingresando debe destruirse", TipoPanel.select);
+		panelDestruir = new PanelLayout(listener, "�El proceso debe Destruirse? ", "Selección si el proceso que se esta ingresando debe destruirse", TipoPanel.select);
 		this.add(panelDestruir);
 		
-		panelSuspender = new PanelLayout(listener, "¿El proceso debe Suspederse? ", "Selección si el proceso que se esta ingresando debe suspenderse", TipoPanel.select);
+		panelSuspender = new PanelLayout(listener, "�El proceso debe Suspederse? ", "Selección si el proceso que se esta ingresando debe suspenderse", TipoPanel.select);
 		this.add(panelSuspender);
 		
-		panelBloqueo = new PanelLayout(listener, "¿El proceso debe bloquearse? ", "Selección si el proceso que se esta ingresando debe bloquearse", TipoPanel.select);
+		panelBloqueo = new PanelLayout(listener, "�El proceso debe bloquearse? ", "Selección si el proceso que se esta ingresando debe bloquearse", TipoPanel.select);
 		this.add(panelBloqueo);
 		
-		panelComunicacion = new PanelLayout(listener, "¿El proceso se counicara? ", "Selección si el proceso que se esta ingresando debe comunicarse", TipoPanel.select);
+		panelComunicacion = new PanelLayout(listener, "�El proceso se counicara? ", "Selección si el proceso que se esta ingresando debe comunicarse", TipoPanel.select);
+		String[] opciones = {""};
+		panelComunicacion.setOpciones(opciones);
 		this.add(panelComunicacion);
 		
 		panelPrioridad = new PanelLayout(listener, "Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan n�meros en un rango [1,10], donde 10 es la priodidad m�s alta y 1 la m�s baja", TipoPanel.texto);
@@ -152,6 +154,7 @@ public class PanelProceso extends JPanel{
             panelNombre.limpiarTexto();
             panelPrioridad.limpiarTexto();
             panelTiempo.limpiarTexto();
+            panelCambioPrioridad.limpiarTexto();
         }
 
 }

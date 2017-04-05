@@ -16,6 +16,7 @@ public class Proceso {
     String cambioPrioridad;
     String transiciones;
     private ArrayList<String> procesosComunica;
+    private String seComunica;
 
     //Nombre				priodidad		tiempo 				bloqueo			suspendido				destruido		seComunica
     public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, String seComunica, String cambioPrioridad) {
@@ -29,6 +30,7 @@ public class Proceso {
         this.destruido = destruido;
         transiciones = identificador + " ";
         this.cambioPrioridad = cambioPrioridad;
+        this.seComunica = seComunica;
     }
 
     public Estado getEstadoActual() {
@@ -96,5 +98,23 @@ public class Proceso {
             return o1.prioridad - o2.prioridad;
         }
     };
+
+	public ArrayList<String> getProcesosComunica() {
+		return procesosComunica;
+	}
+
+	public void setProcesosComunica(ArrayList<String> procesosComunica) {
+		this.procesosComunica = procesosComunica;
+	}
+
+	public String getSeComunica() {
+		return seComunica;
+	}
+
+	public void setSeComunica(String seComunica) {
+		this.seComunica = seComunica;
+	}
+    
+    
 
 }
