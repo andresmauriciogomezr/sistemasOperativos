@@ -154,29 +154,31 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 
 		// Validamos y agregamos el campo nombre
 		if (nombreProceso.equals("") || nombreProceso.equals(" ") || auxPriodad.equals("") || auxPriodad.equals(" ")) { 
-			JOptionPane.showMessageDialog(null, "Solamente el campo 'Tiempo de ejecuci�n' puede estar vac�o");
+			JOptionPane.showMessageDialog(null, "El campo nombre debe tener al menos una caracter alfanumerico");
 			return;
-		}
+		} else if (procesador.existeProceso(nombreProceso)) {
+                    JOptionPane.showMessageDialog(null, "El proceso ya existe");
+			return;
+                }
 
 		// Validamos y agregamos el campo prioridd
 		if (!this.validarNumeros(auxPriodad)) { 
-			JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente n�meros");
+			JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente numeros enteros");
 			return;
 		} 
 		int prioridadProceso = Integer.parseInt(auxPriodad);
 		System.out.println("Prioridad: " + prioridadProceso);
-		if (prioridadProceso<1 || prioridadProceso>10){
-			JOptionPane.showMessageDialog(null, "El campo prioridad debe estar entre 1 y 10");
+		if (procesador.existePrioridad(prioridadProceso)){
+			JOptionPane.showMessageDialog(null, "La prioridad ya esta asignada a un proceso");
 			return;
 		}
 
 		// Validamos y agregamos el campo tiempo
-		int tiempo = (int)(Math.random() * 60);
+		int tiempo = 0;
 		if (!this.validarNumeros(auxTiempo) && !auxTiempo.equals("") && !auxTiempo.equals(" ")) {			
-			JOptionPane.showMessageDialog(null, "El campo tiempo debe contener unicamente n�meros, o estar vac�o");
+			JOptionPane.showMessageDialog(null, "El campo tiempo debe contener unicamente numeros enteros");
 			return;
-		}
-		if (!auxTiempo.equals("") && !auxTiempo.equals(" ")) {
+		} else {
 			tiempo = Integer.parseInt(auxTiempo);			
 		}
 		

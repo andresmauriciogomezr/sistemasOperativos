@@ -327,6 +327,24 @@ public class Procesador {
 		this.listaEjecutados = listaEjecutados;
 	}
 
-	
+	public boolean existePrioridad(int prioridad) {
+            for (Iterator<Proceso> iterator = ListaComun.iterator(); iterator.hasNext();) {
+                    Proceso proceso = iterator.next();
+                    if (proceso.getPrioridad() == prioridad){
+                        return true;
+                    }
+            }
+            return false;
+        }
+        
+        public boolean existeProceso(String nombre){
+            for (Iterator<Proceso> iterator = ListaComun.iterator(); iterator.hasNext();) {
+                    Proceso proceso = iterator.next();
+                    if (proceso.getIdentificador().equals(nombre)){
+                        return true;
+                    }
+            }
+            return false;
+        }
 
 }
