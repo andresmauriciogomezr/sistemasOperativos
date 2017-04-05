@@ -44,10 +44,11 @@ public class DialogoResultados extends JFrame implements ActionListener{
 		this.setUndecorated(true);
 		try{
 			JFrame.setDefaultLookAndFeelDecorated(true);
-			JDialog.setDefaultLookAndFeelDecorated(true);
+			//JDialog.setDefaultLookAndFeelDecorated(true);
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 			setTitle("");
 			setSize(WIDTH, HEIGHT);
+			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			setLayout(new BorderLayout());
 		}
 		catch (Exception e)

@@ -65,7 +65,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		this.setUndecorated(true);
 		try{
 			JFrame.setDefaultLookAndFeelDecorated(true);
-			JDialog.setDefaultLookAndFeelDecorated(true);
+			//JDialog.setDefaultLookAndFeelDecorated(true);
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 			
 			setTitle(TITLE);
@@ -132,10 +132,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 			this.agregarProceso();
 		}
 		if (evento.getActionCommand().equals("Procesar")){			
-			this.procesador.asignar();// Distribuye los procesos en las diferentes listas 
-			this.panelListas.listarProcesos();
+			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
+			this.procesador.ejecutar();
+			//this.panelListas.listarProcesos();
+			this.panelTabla.listarComunes();
 			if (hilo.isAlive()==false){
-				hilo.start();
+				//hilo.start();
 			}
 		}
 	}

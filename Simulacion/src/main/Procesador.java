@@ -42,6 +42,9 @@ public class Procesador {
 	public void ordernarPorPrioridad(){
 		Collections.sort(procesosListos,procesosListos.get(0).comparatorPrioridad.reversed());
 	}
+	public void ordernarComunPorPrioridad(){
+		Collections.sort(ListaComun,ListaComun.get(0).comparatorPrioridad.reversed());
+	}
 	//								Nombre				priodidad		tiempo 				bloqueo				suspendido		destruido		seComunica
 	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, boolean seComunica){
 		Proceso proceso = new Proceso(identificador, 	prioridad , 	tiempoEjecucion, 	bloqueado, 				suspendido, 	destruido, seComunica);
@@ -55,6 +58,11 @@ public class Procesador {
 		
 	}
 	
+	public void ejecutar() {
+		this.ordernarComunPorPrioridad();
+		
+	}
+	
 	
 	public void asignar() {
 		for (int i = 0; i < ListaComun.size(); i++) {
@@ -65,6 +73,7 @@ public class Procesador {
 			}
 			else if (proceso.getEstadoActual() == Estado.suspendido) {
 				procesosSuspendidos.add(proceso);
+				procesosBloqueados.add(proceso);
 			}
 			else if (proceso.getEstadoActual() == Estado.destruido) {
 				procesosDestruidos.add(proceso);
@@ -123,16 +132,23 @@ public class Procesador {
 	public void ejecutarProceso(){        	
 		if (procesoEjecucion == null) {//El proceso actual es nulo .Creamos un proceso nuevo
 			despacharProceso();
-//		} else if (count>=TIEMPO_PROCESAMIENTO){ 
-//			expirarTiempo();
-//			despacharProceso();
-//			count = 0;
+		} else if (count>=TIEMPO_PROCESAMIENTO){ 
+			expirarTiempo();			
+			despacharProceso();
+			count = 0;
 		} else {// Proceso en ejecución
+			if (procesoEjecucion.isBloqueado()) {
+				procesoEjecucion.setEstadoActual(Estado.bloqueado);
+				this.procesosBloqueados.add(procesoEjecucion);
+				procesoEjecucion = null;
+				this.procesando = false;
+				return;
+			}
 			if (procesoEjecucion.getTiempoFaltante() == 0) { // Se terminó de ejecutar el proceso
 				this.terminarProceso();
 				return;
 			}
-//			count++; //Aca se procesa
+			count++; //Aca se procesa
 			procesoEjecucion.setTiempoFaltante();
 		}
 	}
@@ -157,8 +173,9 @@ public class Procesador {
 	}
 
 	public void expirarTiempo(){
-		procesoEjecucion.setEstadoActual(Estado.bloqueado);
-		procesosBloqueados.add(procesoEjecucion);
+		procesoEjecucion.setEstadoActual(Estado.listo);
+		//procesosBloqueados.add(procesoEjecucion);
+		procesosListos.add(procesoEjecucion);
 		procesoEjecucion = null;
 		this.procesando = false;
 	}

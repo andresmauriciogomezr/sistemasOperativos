@@ -14,6 +14,9 @@ public class Proceso {
 	private int tiempoBloqueado;
 	private String transicion;
 	private boolean seComunica;
+	boolean bloqueado;
+	boolean suspedido;
+	boolean destruido;
 	
 					//Nombre				priodidad		tiempo 				bloqueo			suspendido				destruido		seComunica
 	public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, boolean seComunica){
@@ -27,15 +30,9 @@ public class Proceso {
 		this.tiempoBloqueado = 0;
 		this.seComunica = seComunica; 
 		
-		if (bloqueado) { 
-			this.estadoActual = Estado.bloqueado;
-		}
-		if (suspendido) { 
-			this.estadoActual = Estado.suspendido;
-		}
-		if (destruido) { 
-			this.estadoActual = Estado.destruido;
-		}
+		this.bloqueado = bloqueado;
+		this.suspedido = suspendido;
+		this.destruido = destruido;
 	}
 
 	public Estado getEstadoActual() {
@@ -122,6 +119,34 @@ public class Proceso {
 	public void setSeComunica(boolean seComunica) {
 		this.seComunica = seComunica;
 	}
+	
+	
+
+
+	public boolean isBloqueado() {
+		return bloqueado;
+	}
+
+	public void setBloqueado(boolean bloqueado) {
+		this.bloqueado = bloqueado;
+	}
+
+	public boolean isSuspedido() {
+		return suspedido;
+	}
+
+	public void setSuspedido(boolean suspedido) {
+		this.suspedido = suspedido;
+	}
+
+	public boolean isDestruido() {
+		return destruido;
+	}
+
+	public void setDestruido(boolean destruido) {
+		this.destruido = destruido;
+	}
+
 
 
 
