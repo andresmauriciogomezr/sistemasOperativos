@@ -14,6 +14,7 @@ public class PanelProceso extends JPanel{
 	private PanelLayout panelDestruir;
 	private PanelLayout panelSuspender;
 	private PanelLayout panelPrioridad;
+	private PanelLayout panelCambioPrioridad;
 	private PanelLayout panelTiempo;
 	private PanelLayout panelBloqueo;
 	private PanelLayout panelComunicacion;
@@ -25,7 +26,7 @@ public class PanelProceso extends JPanel{
 	
 	public PanelProceso(Procesador procesador, ActionListener listener){
 		this.procesador = procesador;
-		setLayout(new GridLayout(8, 1)); // El numero de filas, el numero de columnas
+		setLayout(new GridLayout(9, 1)); // El numero de filas, el numero de columnas
 		
 		panelNombre = new PanelLayout(listener, "Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre ser� el identificador", TipoPanel.texto);
 		this.add(panelNombre);
@@ -44,6 +45,9 @@ public class PanelProceso extends JPanel{
 		
 		panelPrioridad = new PanelLayout(listener, "Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan n�meros en un rango [1,10], donde 10 es la priodidad m�s alta y 1 la m�s baja", TipoPanel.texto);
 		this.add(panelPrioridad);
+		
+		panelCambioPrioridad = new PanelLayout(listener, "Cambie la prioridad: ", "Escriba la prioridad del proceso que desea agregar, se aceptan n�meros en un rango [1,10], donde 10 es la priodidad m�s alta y 1 la m�s baja", TipoPanel.texto);
+		this.add(panelCambioPrioridad);
 		
 		panelTiempo = new PanelLayout(listener, "Tiempo de ejecucion del proceso: ", "Escriba el tiempo en segundos que se demorar� el proceso en ejecuci�n, se aceptan n�meros en el rango [1, 60]", TipoPanel.texto);
 		this.add(panelTiempo);
@@ -132,6 +136,16 @@ public class PanelProceso extends JPanel{
 
 	public void setPanelSuspender(PanelLayout panelSuspender) {
 		this.panelSuspender = panelSuspender;
+	}
+	
+	
+
+	public PanelLayout getPanelCambioPrioridad() {
+		return panelCambioPrioridad;
+	}
+
+	public void setPanelCambioPrioridad(PanelLayout panelCambioPrioridad) {
+		this.panelCambioPrioridad = panelCambioPrioridad;
 	}
 
 	public void limpiarTexto(){

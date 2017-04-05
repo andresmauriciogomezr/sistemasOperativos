@@ -94,9 +94,18 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		//		this.procesador.agregarProceso("Proceso2", 34, 8);
 		//		this.procesador.agregarProceso("Proceso3", 34, 4);
 		//		this.procesador.agregarProceso("Proceso4", 34, 7);
+//									Nombre	priodidad	tiempo 	bloqueo	suspendido	destruido	seComunica		
+		this.procesador.agregarProceso("P1",	3 ,	 		8	, false, 	false, 		false, "", "");
+		this.procesador.agregarProceso("P2",	2 ,	 		11	, true, 	true, 		false, "", "");
+		this.procesador.agregarProceso("P3",	4 ,	 		7	, false, 	false, 		true, "", "");
+		this.procesador.agregarProceso("P4",	6 ,	 		9	, true, 	false, 		true, "", "");
+		this.procesador.agregarProceso("P5",	8 ,	 		6	, false, 	false, 		false, "p1", "");
+		this.procesador.agregarProceso("P6",	9 ,	 		7	, false, 	false, 		false, "", "5");
+		this.procesador.agregarProceso("P7",	10 ,	 	14	, true, 	false, 		false, "", "");
+		
 		for (int i = 0; i < 100; i++) {
 //											Nombre				priodidad					tiempo 							bloqueo							suspendido				destruido					seComunica
-			this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 20) , (int)(Math.random() * 10), (int)(Math.random() * 10) == 3, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 1);
+			//this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 20) , (int)(Math.random() * 10), (int)(Math.random() * 10) == 3, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 1);
 		}
 		//this.panelTabla.listarProcesos();
 		this.panelTabla.listarComunes();
@@ -130,9 +139,16 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		}
 		if (evento.getActionCommand().equals("Agregar Proceso")) {
 			this.agregarProceso();
+			// Se actualiza la selección de comunicacion
+			String[] opciones = new String[procesador.getListaComun().size()];
+			for (int i = 0; i < opciones.length; i++) {
+				opciones[i] = procesador.getListaComun().get(i).getIdentificador();
+			}
+			panelProceso.getPanelComunicacion().setOpciones(opciones);
 		}
 		if (evento.getActionCommand().equals("Procesar")){			
 			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
+			this.procesador.cambiarPrioridades();
 			this.procesador.ejecutar();			
 			this.panelListas.listarProcesos();
 			this.panelTabla.listarComunes();
@@ -151,6 +167,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		String nombreProceso = this.panelProceso.getPanelNombre().getText();
 		String auxPriodad = this.panelProceso.getPanelPrioridad().getText(); //usa axiliar porque luego hay que convertir a entero
 		String auxTiempo = this.panelProceso.getPanelTiempo().getText();
+		String auxCambioPrioridad = this.panelProceso.getPanelCambioPrioridad().getText();
 
 		// Validamos y agregamos el campo nombre
 		if (nombreProceso.equals("") || nombreProceso.equals(" ") || auxPriodad.equals("") || auxPriodad.equals(" ")) { 
@@ -180,20 +197,22 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 			return;
 		} else {
 			tiempo = Integer.parseInt(auxTiempo);			
-		}
+		}		
 		
 		boolean bloqueo = this.panelProceso.getPanelBloqueo().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
 		boolean suspendido = this.panelProceso.getPanelSuspender().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
 		boolean destruido = this.panelProceso.getPanelDestruir().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
-		boolean seComunica = this.panelProceso.getPanelComunicacion().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
+		String seComunica = (String)(this.panelProceso.getPanelComunicacion().getComboBox().getSelectedItem()); // se evala que el campo seleccionado sea Si
 
 		//									Nombre		priodidad		tiempo	bloqueo	suspendido destruido seComunica
-		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo, bloqueo, suspendido, destruido, seComunica);
+		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo, bloqueo, suspendido, destruido, seComunica, auxCambioPrioridad);
 		//this.panelTabla.listarProcesos();
 		//this.panelListas.listarProcesos();
 		this.panelTabla.listarComunes();
 		limpiarProceso();
 	}
+	
+	
 
 	public void limpiarProceso(){
 		panelProceso.limpiarTexto();
