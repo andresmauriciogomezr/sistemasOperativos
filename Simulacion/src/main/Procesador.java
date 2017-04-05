@@ -51,7 +51,7 @@ public class Procesador {
 		Collections.sort(procesosListos,procesosListos.get(0).comparatorPrioridad.reversed());
 	}
 	public void ordernarComunPorPrioridad(){
-		Collections.sort(ListaComun,ListaComun.get(0).comparatorPrioridad.reversed());
+		Collections.sort(ListaComun,ListaComun.get(0).comparatorPrioridad);
 	}
 	//								Nombre				priodidad		tiempo 				bloqueo				suspendido		destruido		seComunica
 	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, boolean seComunica){
@@ -71,7 +71,7 @@ public class Procesador {
 		
 		for (int i = 0; i < ListaComun.size(); i++) {
 			Proceso proceso = ListaComun.get(i);
-			if (!proceso.isDestruido()) {
+			///if (!proceso.isDestruido()) {
 				//se ejecuta
 				procesosListos.add(proceso);
 				int tiempo = proceso.getTiempoEjecucion();
@@ -92,10 +92,10 @@ public class Procesador {
 					proceso.agregarTrasicio(Estado.bloqueado);
 					this.procesosBloqueados.add(proceso);
 				}
-			}else { // Se destruye
-				proceso.agregarTrasicio(Estado.destruido);
-				this.procesosDestruidos.add(proceso);
-			}
+//			}else { // Se destruye
+//				proceso.agregarTrasicio(Estado.destruido);
+//				this.procesosDestruidos.add(proceso);
+//			}
 		}	
 		
 	}

@@ -116,5 +116,12 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 		this.comboBox = comboBox;
 	}
 	
+	public void setOpciones(String[] opciones) {
+		this.remove(this.comboBox);
+		this.comboBox = new JComboBox<>(opciones);
+		gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
+				new Insets(5, 0, 5, 5), 0, 0);
+		add(comboBox, gbc);
+	}
 	
 }
