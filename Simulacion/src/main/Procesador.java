@@ -17,6 +17,7 @@ public class Procesador {
 
 	private int count = 0;
 	private ArrayList<Proceso> procesosListos;
+	private ArrayList<Proceso> procesosExpirados;
 	private ArrayList<Proceso> procesosBloqueados;
 	private ArrayList<Proceso> procesosSuspendidos;
 	private ArrayList<Proceso> procesosDestruidos;
@@ -35,6 +36,7 @@ public class Procesador {
 	public Procesador(VentanaPrincipal ventana){
 		this.procesando = false;
 		this.procesosListos = new ArrayList<Proceso>();
+                this.procesosExpirados = new ArrayList<>();
 		this.procesosBloqueados = new ArrayList<Proceso>();
 		this.procesosSuspendidos = new ArrayList<Proceso>();
 		this.procesosDestruidos = new ArrayList<Proceso>();
@@ -42,8 +44,6 @@ public class Procesador {
 		this.procesosTerminados = new ArrayList<Proceso>();
 		this.ListaComun = new ArrayList<Proceso>();
 		this.ventana = ventana;
-		
-		
 		this.listaEjecutados = new ArrayList<>();
 	}
 
@@ -87,11 +87,13 @@ public class Procesador {
 					this.procesosSuspendidos.add(proceso);
 					proceso.agregarTrasicio(Estado.bloqueado);
 					this.procesosBloqueados.add(proceso);
-				}
-				if (proceso.isBloqueado()) {
+				} else if (proceso.isBloqueado()) {
 					proceso.agregarTrasicio(Estado.bloqueado);
 					this.procesosBloqueados.add(proceso);
-				}
+				} else {
+                                    proceso.agregarTrasicio(Estado.listo);
+                                    this.procesosExpirados.add(proceso);
+                                }
 //			}else { // Se destruye
 //				proceso.agregarTrasicio(Estado.destruido);
 //				this.procesosDestruidos.add(proceso);
@@ -258,6 +260,16 @@ public class Procesador {
 		procesoEjecucion = null;
 		this.procesando = false;
 	}
+        
+        public boolean existeProceso(String nombre){
+            for (Iterator<Proceso> iterator = ListaComun.iterator(); iterator.hasNext();) {
+                    Proceso proceso = iterator.next();
+                    if (proceso.getIdentificador().equals(nombre)){
+                        return true;
+                    }
+            }
+            return false;
+        }
 
 	public void bloquearProceso(){
 		for (int i = 0; i < procesosBloqueados.size(); i++) {
@@ -368,14 +380,11 @@ public class Procesador {
 	}
 
   
-        public boolean existeProceso(String nombre){
-            for (Iterator<Proceso> iterator = ListaComun.iterator(); iterator.hasNext();) {
-                    Proceso proceso = iterator.next();
-                    if (proceso.getIdentificador().equals(nombre)){
-                        return true;
-                    }
-            }
-            return false;
-        }
+
+    public ArrayList<Proceso> getProcesosExpirados() {
+        return procesosExpirados;
+    }
+        
+        
 
 }
