@@ -9,7 +9,7 @@ public class Main {
 		VentanaPrincipal ventana = new VentanaPrincipal();
 		ventana.setVisible(true);
 				
-		ventana.probar();
+		//ventana.probar();
 	}
 
 }

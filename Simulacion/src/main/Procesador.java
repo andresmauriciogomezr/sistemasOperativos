@@ -139,11 +139,13 @@ public class Procesador {
 		} else {// Proceso en ejecución
 			if (procesoEjecucion.isBloqueado()) {
 				procesoEjecucion.setEstadoActual(Estado.bloqueado);
+				procesoEjecucion.setBloqueado(false);
 				this.procesosBloqueados.add(procesoEjecucion);
 				procesoEjecucion = null;
 				this.procesando = false;
 				return;
 			}
+			
 			if (procesoEjecucion.getTiempoFaltante() == 0) { // Se terminó de ejecutar el proceso
 				this.terminarProceso();
 				return;

@@ -137,7 +137,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 			//this.panelListas.listarProcesos();
 			this.panelTabla.listarComunes();
 			if (hilo.isAlive()==false){
-				//hilo.start();
+				hilo.start();
 			}
 		}
 	}
@@ -222,7 +222,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 				this.procesador.ejecutarProceso();
 				this.panelTabla.listarProcesos();
 				try {
-					Thread.sleep(000);
+					Thread.sleep(400);
 				} catch (InterruptedException ex) {
 					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
 				}
