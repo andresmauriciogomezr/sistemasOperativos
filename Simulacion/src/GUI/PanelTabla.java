@@ -26,7 +26,7 @@ import main.Estado;
 import main.Procesador;
 import main.Proceso;
 
-public class PanelTabla extends JPanel implements MouseListener{
+public class PanelTabla extends JPanel{
 
 	private DefaultTableModel modeloTabla;
 	private JTable tabla;
@@ -55,7 +55,7 @@ public class PanelTabla extends JPanel implements MouseListener{
                     return false;
                 }};
 		tabla.getTableHeader().setReorderingAllowed(false);
-		tabla.addMouseListener(this);
+		//tabla.addMouseListener(this);
 
 		scroll = new JScrollPane(tabla);
 		scroll.setPreferredSize(new Dimension(width, heigth));
@@ -69,6 +69,21 @@ public class PanelTabla extends JPanel implements MouseListener{
 		menuEmergente = new JPopupMenu();
 		itemCrearProceso = new JMenuItem("Crear Proceso");
 		menuEmergente.add(itemCrearProceso);
+	}
+	
+	public void listarComunes() {
+		ArrayList<Proceso> procesos = this.procesador.getListaComun();
+		
+		String[] identificadores = {"Identificador", "Estado", "Tiempo", "Prioridad", "Transicion", "Se bloquea?"};
+		modeloTabla = new DefaultTableModel(0, identificadores.length);
+		modeloTabla.setColumnIdentifiers(identificadores);
+
+		for (int i = 0; i < procesos.size(); i++) {
+			Proceso proceso = procesos.get(i);
+			agregarFila(proceso);
+		}
+		//tabla.setFont(new FontUIResource("Verdana", Font.PLAIN, 20));
+		tabla.setModel(modeloTabla);
 	}
 
 	public void listarProcesos(){
@@ -91,7 +106,7 @@ public class PanelTabla extends JPanel implements MouseListener{
 			Proceso proceso = procesosBloqueados.get(i);
 			agregarFila(proceso);
 		}
-		for (int i = 0; i < procesosTerminados.size(); i++) {
+		for (int i = procesosTerminados.size()-1; i >= 0; i--) {
 			Proceso proceso = procesosTerminados.get(i);
 			agregarFila(proceso);
 		}
@@ -119,43 +134,6 @@ public class PanelTabla extends JPanel implements MouseListener{
 				break;
 			}
 		}		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		System.out.println(e.getButton());
-		switch (e.getButton()) {		
-		case 1: // Boton derecho
-			
-			break;
-		case 3: // Boton derecho
-			System.out.println(e.getX() + " " + e.getY());
-			break;
-		}		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

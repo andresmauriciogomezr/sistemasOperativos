@@ -11,9 +11,12 @@ import javax.swing.JPanel;
 
 public class PanelProceso extends JPanel{
 	private PanelLayout panelNombre;
+	private PanelLayout panelDestruir;
+	private PanelLayout panelSuspender;
 	private PanelLayout panelPrioridad;
 	private PanelLayout panelTiempo;
 	private PanelLayout panelBloqueo;
+	private PanelLayout panelComunicacion;
 	private PanelLayout panelBoton;
 	
 	//private PanelBoton panelBoton;
@@ -22,13 +25,22 @@ public class PanelProceso extends JPanel{
 	
 	public PanelProceso(Procesador procesador, ActionListener listener){
 		this.procesador = procesador;
-		setLayout(new GridLayout(5, 1));
+		setLayout(new GridLayout(8, 1)); // El numero de filas, el numero de columnas
 		
 		panelNombre = new PanelLayout(listener, "Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre ser� el identificador", TipoPanel.texto);
 		this.add(panelNombre);
 		
+		panelDestruir = new PanelLayout(listener, "¿El proceso debe Destruirse? ", "Selección si el proceso que se esta ingresando debe destruirse", TipoPanel.select);
+		this.add(panelDestruir);
+		
+		panelSuspender = new PanelLayout(listener, "¿El proceso debe Suspederse? ", "Selección si el proceso que se esta ingresando debe suspenderse", TipoPanel.select);
+		this.add(panelSuspender);
+		
 		panelBloqueo = new PanelLayout(listener, "¿El proceso debe bloquearse? ", "Selección si el proceso que se esta ingresando debe bloquearse", TipoPanel.select);
 		this.add(panelBloqueo);
+		
+		panelComunicacion = new PanelLayout(listener, "¿El proceso se counicara? ", "Selección si el proceso que se esta ingresando debe comunicarse", TipoPanel.select);
+		this.add(panelComunicacion);
 		
 		panelPrioridad = new PanelLayout(listener, "Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan n�meros en un rango [1,10], donde 10 es la priodidad m�s alta y 1 la m�s baja", TipoPanel.texto);
 		this.add(panelPrioridad);
@@ -93,6 +105,33 @@ public class PanelProceso extends JPanel{
 
 	public void setProcesador(Procesador procesador) {
 		this.procesador = procesador;
+	}
+	
+	
+
+	public PanelLayout getPanelDestruir() {
+		return panelDestruir;
+	}
+
+	public void setPanelDestruir(PanelLayout panelDestruir) {
+		this.panelDestruir = panelDestruir;
+	}
+
+	public PanelLayout getPanelComunicacion() {
+		return panelComunicacion;
+	}
+
+	public void setPanelComunicacion(PanelLayout panelComunicacion) {
+		this.panelComunicacion = panelComunicacion;
+	}
+	
+	
+	public PanelLayout getPanelSuspender() {
+		return panelSuspender;
+	}
+
+	public void setPanelSuspender(PanelLayout panelSuspender) {
+		this.panelSuspender = panelSuspender;
 	}
 
 	public void limpiarTexto(){

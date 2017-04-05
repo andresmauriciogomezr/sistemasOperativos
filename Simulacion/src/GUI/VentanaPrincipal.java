@@ -15,7 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,8 +37,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 	private PanelProceso panelProceso;
 	private PanelTabla panelTabla;
 	private PanelListas panelListas;
+	
 	private Procesador procesador;
 	private Panel panelContendio; // Va a contener tanto la tabla como las listas
+	
+	private DialogoResultados dialogoResultados;
 
 	public VentanaPrincipal() {
 		tiempoProcesador = 6;
@@ -56,38 +59,33 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		this.setJMenuBar(menuBar);
 
 		this.procesador = new Procesador(this);
+		this.panelListas = new PanelListas(this.procesador);
+		dialogoResultados = new DialogoResultados(this.procesador, this.panelListas);
 
 		this.setUndecorated(true);
 		try{
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JDialog.setDefaultLookAndFeelDecorated(true);
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			
+			setTitle(TITLE);
+			setSize(WIDTH, HEIGHT);
+			setDefaultCloseOperation(EXIT_ON_CLOSE);
+			setLayout(new BorderLayout());
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-
-
-		setTitle(TITLE);
-		setSize(WIDTH, HEIGHT);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLayout(new BorderLayout());
+		
 
 		panelProceso = new PanelProceso(this.procesador, this);
 		this.add(panelProceso, BorderLayout.WEST);
 
-		panelContendio = new Panel();
-		panelContendio.setLayout(new BorderLayout());
-		
 		//Agregamos los dos paneles a uno nuevo con otro layout
 		panelTabla = new PanelTabla(this.procesador, this);
-		panelContendio.add(panelTabla, BorderLayout.CENTER);
+		this.add(panelTabla, BorderLayout.CENTER);
 		
-		panelListas = new PanelListas(procesador, this);
-		panelContendio.add(panelListas, BorderLayout.SOUTH);
-		
-		this.add(panelContendio,BorderLayout.CENTER);
 	}
 
 	public void probar(){
@@ -97,10 +95,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		//		this.procesador.agregarProceso("Proceso3", 34, 4);
 		//		this.procesador.agregarProceso("Proceso4", 34, 7);
 		for (int i = 0; i < 100; i++) {
-			this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 6) , (int)(Math.random() * 60), false);
+//											Nombre				priodidad					tiempo 							bloqueo							suspendido				destruido					seComunica
+			this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 20) , (int)(Math.random() * 10), (int)(Math.random() * 10) == 3, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 1);
 		}
-		this.panelTabla.listarProcesos();
-
+		//this.panelTabla.listarProcesos();
+		this.panelTabla.listarComunes();
 	}
 
 	public boolean validarNumeros(String cadena){
@@ -132,7 +131,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		if (evento.getActionCommand().equals("Agregar Proceso")) {
 			this.agregarProceso();
 		}
-		if (evento.getActionCommand().equals("Procesar")){
+		if (evento.getActionCommand().equals("Procesar")){			
+			this.procesador.asignar();// Distribuye los procesos en las diferentes listas 
+			this.panelListas.listarProcesos();
 			if (hilo.isAlive()==false){
 				hilo.start();
 			}
@@ -177,13 +178,16 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		}
 		
 		boolean bloqueo = this.panelProceso.getPanelBloqueo().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
+		boolean suspendido = this.panelProceso.getPanelSuspender().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
+		boolean destruido = this.panelProceso.getPanelDestruir().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
+		boolean seComunica = this.panelProceso.getPanelComunicacion().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
 
-		// Agregamos
-		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo, bloqueo);
-		this.panelTabla.listarProcesos();
-		this.panelListas.listarProcesos();
+		//									Nombre		priodidad		tiempo	bloqueo	suspendido destruido seComunica
+		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo, bloqueo, suspendido, destruido, seComunica);
+		//this.panelTabla.listarProcesos();
+		//this.panelListas.listarProcesos();
+		this.panelTabla.listarComunes();
 		limpiarProceso();
-		this.repaint();
 	}
 
 	public void limpiarProceso(){
@@ -216,16 +220,17 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 				this.procesador.ejecutarProceso();
 				this.panelTabla.listarProcesos();
 				try {
-					Thread.sleep(400);
+					Thread.sleep(000);
 				} catch (InterruptedException ex) {
 					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
 				}
 			}
 
-		} 
-
+		}
+		System.out.println("salio del blu");
+		dialogoResultados.setVisible(true);
 	}
-
+	
 
 
 }

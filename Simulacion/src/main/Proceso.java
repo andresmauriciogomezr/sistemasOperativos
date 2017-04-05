@@ -13,20 +13,28 @@ public class Proceso {
 	private int tiempoFaltante;
 	private int tiempoBloqueado;
 	private String transicion;
-
-	public Proceso(String identificador, int prioridad, int tiempoEjecucion, Proceso procesoPadre, boolean bloqueado){
+	private boolean seComunica;
+	
+					//Nombre				priodidad		tiempo 				bloqueo			suspendido				destruido		seComunica
+	public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, boolean seComunica){
 		this.transicion = "";
 		this.estadoActual = Estado.listo;
 		this.identificador = identificador;
-		this.procesoPadre = procesoPadre;
 		this.procesosHijos = new ArrayList<Proceso>();
 		this.prioridad = prioridad;
 		this.tiempoEjecucion = tiempoEjecucion;
 		this.tiempoFaltante = tiempoEjecucion;
 		this.tiempoBloqueado = 0;
+		this.seComunica = seComunica; 
 		
 		if (bloqueado) { 
 			this.estadoActual = Estado.bloqueado;
+		}
+		if (suspendido) { 
+			this.estadoActual = Estado.suspendido;
+		}
+		if (destruido) { 
+			this.estadoActual = Estado.destruido;
 		}
 	}
 
@@ -103,6 +111,16 @@ public class Proceso {
 
 	public void setTransicion(String transicion) {
 		this.transicion = transicion;
+	}
+
+	
+
+	public boolean SeComunica() {
+		return seComunica;
+	}
+
+	public void setSeComunica(boolean seComunica) {
+		this.seComunica = seComunica;
 	}
 
 

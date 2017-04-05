@@ -18,7 +18,11 @@ public class Procesador {
 	private int count = 0;
 	private ArrayList<Proceso> procesosListos;
 	private ArrayList<Proceso> procesosBloqueados;
+	private ArrayList<Proceso> procesosSuspendidos;
+	private ArrayList<Proceso> procesosDestruidos;
+	private ArrayList<Proceso> procesosComunicados;
 	private ArrayList<Proceso> procesosTerminados;
+	private ArrayList<Proceso> ListaComun;
 	private Proceso procesoEjecucion;
 	private VentanaPrincipal ventana;
 	boolean procesando; // Determina si existen procesos listos para ejecutarse
@@ -27,29 +31,59 @@ public class Procesador {
 		this.procesando = false;
 		this.procesosListos = new ArrayList<Proceso>();
 		this.procesosBloqueados = new ArrayList<Proceso>();
+		this.procesosSuspendidos = new ArrayList<Proceso>();
+		this.procesosDestruidos = new ArrayList<Proceso>();
+		this.procesosComunicados = new ArrayList<Proceso>();
 		this.procesosTerminados = new ArrayList<Proceso>();
+		this.ListaComun = new ArrayList<Proceso>();
 		this.ventana = ventana;
 	}
 
 	public void ordernarPorPrioridad(){
 		Collections.sort(procesosListos,procesosListos.get(0).comparatorPrioridad.reversed());
 	}
-
-	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado){
-		Proceso proceso = new Proceso(identificador, prioridad , tiempoEjecucion, null, bloqueado);
-		if (bloqueado) {
-			this.procesosBloqueados.add(proceso);
-		}else {
-			this.procesosListos.add(proceso);
-			ordernarPorPrioridad();
-		}
+	//								Nombre				priodidad		tiempo 				bloqueo				suspendido		destruido		seComunica
+	public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, boolean seComunica){
+		Proceso proceso = new Proceso(identificador, 	prioridad , 	tiempoEjecucion, 	bloqueado, 				suspendido, 	destruido, seComunica);
+		ListaComun.add(proceso);
+//		if (bloqueado) {
+//			this.procesosBloqueados.add(proceso);
+//		}else {
+//			this.procesosListos.add(proceso);
+//			ordernarPorPrioridad();
+//		}	
+		
+	}
+	
+	
+	public void asignar() {
+		for (int i = 0; i < ListaComun.size(); i++) {
+			Proceso proceso = ListaComun.get(i);
+			if (proceso.getEstadoActual() == Estado.bloqueado) {
+				procesosBloqueados.add(proceso);
+				
+			}
+			else if (proceso.getEstadoActual() == Estado.suspendido) {
+				procesosSuspendidos.add(proceso);
+			}
+			else if (proceso.getEstadoActual() == Estado.destruido) {
+				procesosDestruidos.add(proceso);
+			}
+			else {
+				procesosListos.add(proceso);
+			}
+			
+			if (proceso.SeComunica()) {
+				procesosComunicados.add(proceso);
+			}
+		}		
 	}
 
 	public void procesar(){
-		if (procesosListos.isEmpty() == false) { 
+		if (procesosListos.isEmpty() == false) { // Listos No está vacío
 			this.procesando = true;
 			ejecutarProceso();
-		} else if (procesosBloqueados.isEmpty() == false) {
+		} else if (procesosBloqueados.isEmpty() == false) {// Listos está vacío y bloqueados no esta vacio
 			this.desbloquear();
 		}
 
@@ -87,7 +121,7 @@ public class Procesador {
 //	}
 	
 	public void ejecutarProceso(){        	
-		if (procesoEjecucion == null) {//Creamos un proceso nuevo
+		if (procesoEjecucion == null) {//El proceso actual es nulo .Creamos un proceso nuevo
 			despacharProceso();
 //		} else if (count>=TIEMPO_PROCESAMIENTO){ 
 //			expirarTiempo();
@@ -98,7 +132,7 @@ public class Procesador {
 				this.terminarProceso();
 				return;
 			}
-//			count++;
+//			count++; //Aca se procesa
 			procesoEjecucion.setTiempoFaltante();
 		}
 	}
@@ -112,9 +146,10 @@ public class Procesador {
 	}
 
 	public void despacharProceso(){
-		if (procesoEjecucion == null && procesosListos.size() > 0){
+		if (procesoEjecucion == null && procesosListos.size() > 0){ // Proceso en ejecución nulo y listos no esta vacio
 			procesoEjecucion = procesosListos.get(0);
 			procesosListos.remove(0);
+			
 			this.procesando = true;
 			procesoEjecucion.setEstadoActual(Estado.enEjecucion);
 
@@ -196,6 +231,38 @@ public class Procesador {
 		this.procesosTerminados = procesosTerminados;
 	}
 
+	public ArrayList<Proceso> getListaComun() {
+		return ListaComun;
+	}
 
+	public void setListaComun(ArrayList<Proceso> listaComun) {
+		ListaComun = listaComun;
+	}
+
+	public ArrayList<Proceso> getProcesosSuspendidos() {
+		return procesosSuspendidos;
+	}
+
+	public void setProcesosSuspendidos(ArrayList<Proceso> procesosSuspendidos) {
+		this.procesosSuspendidos = procesosSuspendidos;
+	}
+
+	public ArrayList<Proceso> getProcesosDestruidos() {
+		return procesosDestruidos;
+	}
+
+	public void setProcesosDestruidos(ArrayList<Proceso> procesosDestruidos) {
+		this.procesosDestruidos = procesosDestruidos;
+	}
+
+	public ArrayList<Proceso> getProcesosComunicados() {
+		return procesosComunicados;
+	}
+
+	public void setProcesosComunicados(ArrayList<Proceso> procesosComunicados) {
+		this.procesosComunicados = procesosComunicados;
+	}
+
+	
 
 }
