@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
@@ -33,7 +34,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 	JMenu menu;
 	JMenuItem menuItem;
 
-	int tiempoProcesador;
 	private PanelProceso panelProceso;
 	private PanelTabla panelTabla;
 	private PanelListas panelListas;
@@ -44,12 +44,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 	private DialogoResultados dialogoResultados;
 
 	public VentanaPrincipal() {
-		tiempoProcesador = 6;
-		int WIDTH = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;;
-		int HEIGHT = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
 
+                Dimension dimension = this.getToolkit().getScreenSize();
 
-		menuBar = new JMenuBar();
+                menuBar = new JMenuBar();
 		menu = new JMenu("Menu");
 
 		menuItem = new JMenuItem("Salir");
@@ -58,7 +56,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		menuBar.add(menu);
 		this.setJMenuBar(menuBar);
 
-		this.procesador = new Procesador(this);
+		this.procesador = new Procesador();
 		this.panelListas = new PanelListas(this.procesador);
 		dialogoResultados = new DialogoResultados(this.procesador, this.panelListas);
 
@@ -69,7 +67,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 			
 			setTitle(TITLE);
-			setSize(WIDTH, HEIGHT);
+			setSize(dimension);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			setLayout(new BorderLayout());
 		}
@@ -94,14 +92,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		//		this.procesador.agregarProceso("Proceso2", 34, 8);
 		//		this.procesador.agregarProceso("Proceso3", 34, 4);
 		//		this.procesador.agregarProceso("Proceso4", 34, 7);
-//									Nombre	priodidad	tiempo 	bloqueo	suspendido	destruido	seComunica		
+//						Nombre	priodidad	tiempo 	         bloqueo	suspendido	destruido	seComunica		
 		this.procesador.agregarProceso("P1",	3 ,	 		8	, false, 	false, 		false, "", "");
 		this.procesador.agregarProceso("P2",	2 ,	 		11	, true, 	true, 		false, "", "");
 		this.procesador.agregarProceso("P3",	4 ,	 		7	, false, 	false, 		true, "", "");
 		this.procesador.agregarProceso("P4",	6 ,	 		9	, true, 	false, 		true, "", "");
 		this.procesador.agregarProceso("P5",	8 ,	 		6	, false, 	false, 		false, "p1", "");
 		this.procesador.agregarProceso("P6",	9 ,	 		7	, false, 	false, 		false, "", "5");
-		this.procesador.agregarProceso("P7",	10 ,	 	14	, true, 	false, 		false, "", "");
+		this.procesador.agregarProceso("P7",	10 ,                    14	, true, 	false, 		false, "", "");
 		
 		for (int i = 0; i < 100; i++) {
 //											Nombre				priodidad					tiempo 							bloqueo							suspendido				destruido					seComunica
@@ -140,16 +138,16 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		if (evento.getActionCommand().equals("Agregar Proceso")) {
 			this.agregarProceso();
 			// Se actualiza la selección de comunicacion
-			String[] opciones = new String[procesador.getListaComun().size()];
+			String[] opciones = new String[procesador.getProcesosCargados().size()];
 			for (int i = 0; i < opciones.length; i++) {
-				opciones[i] = procesador.getListaComun().get(i).getIdentificador();
+				opciones[i] = procesador.getProcesosCargados().get(i).getIdentificador();
 			}
 			panelProceso.getPanelComunicacion().setOpciones(opciones);
 		}
 		if (evento.getActionCommand().equals("Procesar")){			
 			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
 			this.procesador.cambiarPrioridades();
-			this.procesador.ejecutar();			
+			this.procesador.procesar();			
 			this.panelListas.listarProcesos();
 			this.panelTabla.listarComunes();
 			this.dialogoResultados.setVisible(true);
@@ -238,17 +236,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 	
 	@Override
 	public void run() {
-		while (procesador.tieneProcesos() || procesador.tieneBloqueos()){
+		while (procesador.isProcesando()){
 			this.procesador.procesar();
-			while(this.procesador.isProcesando()){ //Existen procesos listos y pueden haber bloqueados
-				this.procesador.ejecutarProceso();
-				this.panelTabla.listarProcesos();
+			
 				try {
 					Thread.sleep(400);
 				} catch (InterruptedException ex) {
 					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
 				}
-			}
+			
 
 		}
 		System.out.println("salio del blu");

@@ -4,177 +4,95 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Proceso {
-	private Estado estadoActual;
-	private String identificador;
-	private Proceso procesoPadre;
-	private ArrayList<Proceso> procesosHijos;
-	private int prioridad;
-	private int tiempoEjecucion;
-	private int tiempoFaltante;
-	private int tiempoBloqueado;
-	private String transicion;
-	private String seComunica;
-	boolean bloqueado;
-	boolean suspedido;
-	boolean destruido;
-	String cambioPrioridad;
-	String transiciones;
-	
-					//Nombre				priodidad		tiempo 				bloqueo			suspendido				destruido		seComunica
-	public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, String seComunica, String cambioPrioridad){
-		this.transicion = "";
-		this.estadoActual = Estado.listo;
-		this.identificador = identificador;
-		this.procesosHijos = new ArrayList<Proceso>();
-		this.prioridad = prioridad;
-		this.tiempoEjecucion = tiempoEjecucion;
-		this.tiempoFaltante = tiempoEjecucion;
-		this.tiempoBloqueado = 0;
-		
-		this.seComunica = seComunica; 
-		
-		this.bloqueado = bloqueado;
-		this.suspedido = suspendido;
-		this.destruido = destruido;
-		
-		transiciones = identificador+  " ";
-		this.cambioPrioridad = cambioPrioridad;
-	}
 
-	public Estado getEstadoActual() {
-		return estadoActual;
-	}
+    private Estado estadoActual;
+    private String identificador;
+    private int prioridad;
+    private int tiempoEjecucion;
+    private String transicion;
+    boolean bloqueado;
+    boolean suspedido;
+    boolean destruido;
+    String cambioPrioridad;
+    String transiciones;
+    private ArrayList<String> procesosComunica;
 
-	public void setEstadoActual(Estado estadoActual) {
-		this.transicion = "De " + this.estadoActual + " a " + estadoActual;
-		this.estadoActual = estadoActual;
-	}
+    //Nombre				priodidad		tiempo 				bloqueo			suspendido				destruido		seComunica
+    public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, String seComunica, String cambioPrioridad) {
+        this.transicion = "";
+        this.identificador = identificador;
+        this.procesosComunica = new ArrayList<>();
+        this.prioridad = prioridad;
+        this.tiempoEjecucion = tiempoEjecucion;
+        this.bloqueado = bloqueado;
+        this.suspedido = suspendido;
+        this.destruido = destruido;
+        transiciones = identificador + " ";
+        this.cambioPrioridad = cambioPrioridad;
+    }
 
-	public String getIdentificador() {
-		return identificador;
-	}
+    public Estado getEstadoActual() {
+        return estadoActual;
+    }
 
-	public void setIdentificador(String identificador) {
-		this.identificador = identificador;
-	}
+    public void setEstadoActual(Estado estadoActual) {
+        this.transicion = "De " + this.estadoActual + " a " + estadoActual;
+        this.estadoActual = estadoActual;
+    }
 
-	public Proceso getProcesoPadre() {
-		return procesoPadre;
-	}
+    public String getIdentificador() {
+        return identificador;
+    }
 
-	public void setProcesoPadre(Proceso procesoPadre) {
-		this.procesoPadre = procesoPadre;
-	}
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
+    }
 
-	public ArrayList<Proceso> getProcesosHijos() {
-		return procesosHijos;
-	}
+    public int getPrioridad() {
+        return prioridad;
+    }
 
-	public void setProcesosHijos(ArrayList<Proceso> procesosHijos) {
-		this.procesosHijos = procesosHijos;
-	}
+    public void setPrioridad(int prioridad) {
+        this.prioridad = prioridad;
+    }
 
-	public int getPrioridad() {
-		return prioridad;
-	}
+    public int getTiempoEjecucion() {
+        return tiempoEjecucion;
+    }
 
-	public void setPrioridad(int prioridad) {
-		this.prioridad = prioridad;
-	}
+    public void setTiempoEjecucion(int tiempoEjecucion) {
+        this.tiempoEjecucion = tiempoEjecucion;
+    }
+    
+    public String getTransicion() {
+        return transicion;
+    }
 
-	public int getTiempoEjecucion() {
-		return tiempoEjecucion;
-	}
+    public void setTransicion(Estado estado) {
+        this.transicion += " - Cambio a " + estado;
+    }
 
-	public int getTiempoFaltante() {
-		return tiempoFaltante;
-	}
+    public boolean isBloqueado() {
+        return bloqueado;
+    }
 
-	public void setTiempoFaltante() {
-		this.tiempoFaltante--;
-	}
+    public boolean isSuspendido() {
+        return suspedido;
+    }
 
-	public void adicionarTiempoBloqueado(){
-		this.tiempoBloqueado++;
-	}
+    public boolean isDestruido() {
+        return destruido;
+    }
 
-	public void setTiempoBloqueado(int tiempoBloqueado) {
-		this.tiempoBloqueado = tiempoBloqueado;
-	}
+    public String getCambioPrioridad() {
+        return cambioPrioridad;
+    }
 
-	public int getTiempoBloqueado() {
-		return tiempoBloqueado;
-	}
+    Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {
 
-
-
-	public String getTransicion() {
-		return transicion;
-	}
-
-	public void setTransicion(String transicion) {
-		this.transicion = transicion;
-	}
-	
-
-
-	public String getSeComunica() {
-		return seComunica;
-	}
-
-	public void setSeComunica(String seComunica) {
-		this.seComunica = seComunica;
-	}
-
-	public boolean isBloqueado() {
-		return bloqueado;
-	}
-
-	public void setBloqueado(boolean bloqueado) {
-		this.bloqueado = bloqueado;
-	}
-
-	public boolean isSuspedido() {
-		return suspedido;
-	}
-
-	public void setSuspedido(boolean suspedido) {
-		this.suspedido = suspedido;
-	}
-
-	public boolean isDestruido() {
-		return destruido;
-	}
-
-	public void setDestruido(boolean destruido) {
-		this.destruido = destruido;
-	}
-
-	
-
-
-	public String getCambioPrioridad() {
-		return cambioPrioridad;
-	}
-
-	public void setCambioPrioridad(String cambioPrioridad) {
-		this.cambioPrioridad = cambioPrioridad;
-	}
-
-	public void setTiempoEjecucion(int tiempoEjecucion) {
-		this.tiempoEjecucion = tiempoEjecucion;
-	}
-
-	public void agregarTrasicio(Estado estado) {
-		this.transicion += " - Cambio a " + estado; 
-	}
-
-
-	Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {
-
-		@Override
-		public int compare(Proceso o1, Proceso o2) {
-			return o1.prioridad-o2.prioridad;
-		}
-	};
+        @Override
+        public int compare(Proceso o1, Proceso o2) {
+            return o1.prioridad - o2.prioridad;
+        }
+    };
 }
