@@ -12,7 +12,8 @@ import javax.swing.JPanel;
 public class PanelProceso extends JPanel{
 	private PanelLayout panelNombre;
 	private PanelLayout panelDestruir;
-	private PanelLayout panelSuspender;
+	private PanelLayout panelSuspenderListo;
+	private PanelLayout panelSuspenderBloqueado;
 	private PanelLayout panelPrioridad;
 	private PanelLayout panelCambioPrioridad;
 	private PanelLayout panelTiempo;
@@ -26,22 +27,31 @@ public class PanelProceso extends JPanel{
 	
 	public PanelProceso(Procesador procesador, ActionListener listener){
 		this.procesador = procesador;
-		setLayout(new GridLayout(9, 1)); // El numero de filas, el numero de columnas
+		setLayout(new GridLayout(10, 1)); // El numero de filas, el numero de columnas
 		
+		// Nombre del proceso
 		panelNombre = new PanelLayout(listener, "Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre serï¿½ el identificador", TipoPanel.texto);
 		this.add(panelNombre);
 		
+		// Tiempo del proceso
 		panelTiempo = new PanelLayout(listener, "Tiempo de ejecucion del proceso: ", "Escriba el tiempo en segundos que se demorarï¿½ el proceso en ejecuciï¿½n, se aceptan nï¿½meros en el rango [1, 60]", TipoPanel.texto);
 		this.add(panelTiempo);
 		
+		// prioridad del proceso
 		panelPrioridad = new PanelLayout(listener, "Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan nï¿½meros en un rango [1,10], donde 10 es la priodidad mï¿½s alta y 1 la mï¿½s baja", TipoPanel.texto);
 		this.add(panelPrioridad);
-		
+
+		// Cambio de prioridad del proceso
 		panelCambioPrioridad = new PanelLayout(listener, "Cambie la prioridad: ", "Escriba la prioridad del proceso que desea agregar, se aceptan nï¿½meros en un rango [1,10], donde 10 es la priodidad mï¿½s alta y 1 la mï¿½s baja", TipoPanel.texto);
 		this.add(panelCambioPrioridad);		
 		
-		panelSuspender = new PanelLayout(listener, "¿El proceso debe Suspederse? ", "SelecciÃ³n si el proceso que se esta ingresando debe suspenderse", TipoPanel.select);
-		this.add(panelSuspender);
+		// Suspender Listo 
+		panelSuspenderListo = new PanelLayout(listener, "¿El proceso debe pasar al estado Suspedido/Listo? ", "SelecciÃ³n si el proceso que se esta ingresando debe pasar al estado Suspedido/Listo", TipoPanel.select);
+		this.add(panelSuspenderListo);
+
+		// Suspender Bloqueado
+		panelSuspenderBloqueado= new PanelLayout(listener, "¿El proceso debe pasar al estado Suspedido/Bloqueado? ", "SelecciÃ³n si el proceso que se esta ingresando debe pasar al estado Suspedido/Bloqueado", TipoPanel.select);
+		this.add(panelSuspenderBloqueado);	
 		
 		panelBloqueo = new PanelLayout(listener, "¿El proceso debe bloquearse? ", "SelecciÃ³n si el proceso que se esta ingresando debe bloquearse", TipoPanel.select);
 		this.add(panelBloqueo);
@@ -132,11 +142,11 @@ public class PanelProceso extends JPanel{
 	
 	
 	public PanelLayout getPanelSuspender() {
-		return panelSuspender;
+		return panelSuspenderListo;
 	}
 
 	public void setPanelSuspender(PanelLayout panelSuspender) {
-		this.panelSuspender = panelSuspender;
+		this.panelSuspenderListo = panelSuspender;
 	}
 	
 	

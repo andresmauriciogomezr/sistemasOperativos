@@ -31,6 +31,7 @@ public class Proceso {
         transiciones = identificador + " ";
         this.cambioPrioridad = cambioPrioridad;
         this.seComunica = seComunica;
+        this.estadoActual = Estado.listo;
     }
 
     public Estado getEstadoActual() {
