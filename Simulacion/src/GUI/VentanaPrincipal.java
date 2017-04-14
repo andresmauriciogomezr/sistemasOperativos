@@ -240,8 +240,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 //
 //	}
 	
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 		while (procesador.isProcesando()){
 			this.procesador.procesar();
 			
@@ -249,10 +249,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 					Thread.sleep(400);
 				} catch (InterruptedException ex) {
 					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-				}
+    }
 			
 
-		}
+}
 		System.out.println("salio del blu");
 		dialogoResultados.setVisible(true);
 	}

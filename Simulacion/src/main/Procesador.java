@@ -18,7 +18,8 @@ public class Procesador {
     private ArrayList<InformacionTransicion> procesosDespachados;
     private ArrayList<InformacionTransicion> procesosExpirados;
     private ArrayList<InformacionTransicion> procesosBloqueados;
-    private ArrayList<InformacionTransicion> procesosSuspendidos;
+    private ArrayList<InformacionTransicion> procesosSuspendidosBloqueados;
+    private ArrayList<InformacionTransicion> procesosSuspendidosListos;
     private ArrayList<String> procesosDestruidos;
     private ArrayList<InformacionTransicion> procesosComunicados;
     private ArrayList<String> procesosTerminados;
@@ -35,7 +36,8 @@ public class Procesador {
         this.procesosDespachados = new ArrayList<>();
         this.procesosExpirados = new ArrayList<>();
         this.procesosBloqueados = new ArrayList<>();
-        this.procesosSuspendidos = new ArrayList<>();
+        this.procesosSuspendidosListos = new ArrayList<>();
+        this.procesosSuspendidosBloqueados= new ArrayList<>();
         this.procesosDestruidos = new ArrayList<>();
         this.procesosComunicados = new ArrayList<>();
         this.procesosTerminados = new ArrayList<>();
@@ -161,7 +163,7 @@ public class Procesador {
 
     public void suspenderProceso(Proceso proceso) {
         proceso.setTransicion(Estado.suspendido);
-        this.procesosSuspendidos.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+        this.procesosSuspendidosListos.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
     }
 
     public void bloquearProceso(Proceso proceso) {
@@ -214,7 +216,7 @@ public class Procesador {
     }
 
     public ArrayList<InformacionTransicion> getProcesosSuspendidos() {
-        return procesosSuspendidos;
+        return procesosSuspendidosListos;
     }
 
     public ArrayList<String> getProcesosDestruidos() {
