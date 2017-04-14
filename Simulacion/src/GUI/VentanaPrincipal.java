@@ -130,6 +130,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 
 	@Override
 	public void actionPerformed(ActionEvent evento) {
+		Thread hilo = new Thread(this);
 
 		if (evento.getActionCommand().equals("Salir")) {
 			System.exit(0);
@@ -146,13 +147,16 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 			this.panelTabla.listarComunes();
 		}
 		if (evento.getActionCommand().equals("Procesar")){			
+			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
 			this.procesador.cambiarPrioridades();
 			this.procesador.ordernarComunPorPrioridad();
 			this.panelTabla.listarComunes();
 			this.procesador.procesar();			
 			this.panelListas.listarProcesos();
 			this.dialogoResultados.setVisible(true);
-                        
+//			if (hilo.isAlive()==false){
+//				//hilo.start();
+//			}
 		}
 	}
 
@@ -216,8 +220,41 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		panelProceso.limpiarTexto();
 	}
 
+//	@Override
+//	public void run() {
+//		while (procesador.tieneProcesos() || procesador.tieneBloqueos()){
+//			this.procesador.procesar();
+//			while(this.procesador.isProcesando()){ //Existen procesos listos y pueden haber bloqueados
+//				this.procesador.ejecutarProceso();
+//				this.panelTabla.listarProcesos();
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException ex) {
+//					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+//				}
+//			}
+//
+//		} 
+//
+//	}
+	
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		while (procesador.isProcesando()){
+			this.procesador.procesar();
+			
+				try {
+					Thread.sleep(400);
+				} catch (InterruptedException ex) {
+					Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
     }
+			
+
+}
+		System.out.println("salio del blu");
+		dialogoResultados.setVisible(true);
+	}
+	
+
+
 }
