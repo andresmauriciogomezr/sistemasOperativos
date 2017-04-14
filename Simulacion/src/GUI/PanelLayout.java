@@ -86,7 +86,7 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 			add(botonAceptar, gbc);
 		}
 		if (tipoPanel == TipoPanel.select) {
-			String[] opciones = { "Si", "No" };
+			String[] opciones = { "No", "Si" };
 
 			//Create the combo box, select item at index 4.
 			//Indices start at 0, so 4 specifies the pig.

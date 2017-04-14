@@ -92,14 +92,16 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		//		this.procesador.agregarProceso("Proceso2", 34, 8);
 		//		this.procesador.agregarProceso("Proceso3", 34, 4);
 		//		this.procesador.agregarProceso("Proceso4", 34, 7);
-//						Nombre	priodidad	tiempo 	         bloqueo	suspendido	destruido	seComunica		
-		this.procesador.agregarProceso("P1",	3 ,	 		8	, false, 	false, 		false, "", "");
-		this.procesador.agregarProceso("P2",	2 ,	 		11	, true, 	true, 		false, "", "");
-		this.procesador.agregarProceso("P3",	4 ,	 		7	, false, 	false, 		true, "", "");
-		this.procesador.agregarProceso("P4",	6 ,	 		9	, true, 	false, 		true, "", "");
-		this.procesador.agregarProceso("P5",	8 ,	 		6	, false, 	false, 		false, "p1", "");
-		this.procesador.agregarProceso("P6",	9 ,	 		7	, false, 	false, 		false, "", "5");
-		this.procesador.agregarProceso("P7",	10 ,                    14	, true, 	false, 		false, "", "");
+//									Nombre	priodidad	tiempo 	 bloqueo suspendido	 destruido	seComunica	cambioPrioridad	
+		this.procesador.agregarProceso("P10",	3 ,	 		8	, false, 	false, 		true,	 "", 		"");
+		this.procesador.agregarProceso("P20",	2 ,	 		9	, false, 	true, 		false,	 "", 		"");
+		this.procesador.agregarProceso("P30",	6 ,	 		7	, false, 	false, 		false, 	 "", 		"");
+		this.procesador.agregarProceso("P40",	4 ,	 		5	, false, 	false, 		true,    "", 		"");
+		this.procesador.agregarProceso("P50",	7, 			11	, false, 	false, 		false,   "p1", 		"");
+		this.procesador.agregarProceso("P60",	5 ,	 		13	, false, 	false, 		false, 	 "", 		"");
+		this.procesador.agregarProceso("P70",	8 ,			18	, false, 	false, 		false, 	 "", 		"1");
+		this.procesador.agregarProceso("P80",	9 ,			14	, false, 	false, 		false, 	 "", 		"");
+		this.procesador.agregarProceso("P90",	10 ,		22	, false, 	true, 		true, 	 "", 		"");
 		
 		for (int i = 0; i < 100; i++) {
 //											Nombre				priodidad					tiempo 							bloqueo							suspendido				destruido					seComunica

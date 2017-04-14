@@ -1,14 +1,18 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 
@@ -63,10 +67,22 @@ public class PanelListas extends JPanel {
     Procesador procesador;
     
     public PanelListas(Procesador procesador){
+    	
+    	
         int width = 350;
         int heigth = 230;
         
         this.procesador = procesador;
+        
+        //La decoración
+		try{
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}      
         
         String[] identificadoresListos = {"Lista Procesos listos"};
         modeloTablaListos = new DefaultTableModel(0, identificadoresListos.length);

@@ -60,36 +60,46 @@ public class Procesador {
             for (this.count = 0; count < procesosCargados.size(); count++) {
                 Proceso proceso = procesosCargados.get(count);
                 procesosListos.add(proceso);
-                if (!proceso.isDestruido()) {
-                    this.despacharProceso(proceso);
-                    //se ejecuta
-                    int tiempo = proceso.getTiempoEjecucion();
-                    if (tiempo > 5) {
-                        proceso.setTiempoEjecucion(tiempo - 5);
-                        if (proceso.isSuspendido()) {
-                            this.suspenderProceso(proceso);
-                            this.bloquearProceso(proceso);
-                        } else if (proceso.isBloqueado()) {
-                            this.bloquearProceso(proceso);
-                        } else {
-                            this.expirarTiempo(proceso);
-                        }
-                    } else {
-                        proceso.setTiempoEjecucion(0);
-                        terminarProceso(proceso);
-                    }
-                    if(!proceso.getSeComunica().equals("")){
-                    	this.listaComunicaciones.add(proceso);
-                    }
-                    proceso.setTransicion(Estado.enEjecucion);
-                    this.listaEjecutados.add(proceso.getIdentificador() + " Termio ejecucio con tiempo de : " + proceso.getTiempoEjecucion());
-
-                } else { // Se destruye
+                if (!proceso.isDestruido()) { // No se destruye
+                    this.ejecutarProceso(proceso);
+                } else { // Se destruye                	
+                	if (proceso.isSuspendido() || proceso.isBloqueado()) { // Se debe procesar antes de destruirse
+                		this.ejecutarProceso(proceso);
+					}                	
                     destruirProceso(proceso);
                     removerProceso(proceso);
                 }
             }
         }
+    }
+    
+    
+    public void ejecutarProceso(Proceso proceso){ 
+    	this.despacharProceso(proceso); // Se agrega a la lista despachados
+        //se ejecuta
+        int tiempo = proceso.getTiempoEjecucion();
+        
+        if (tiempo > 5) { // debe expirarse y luego volver a procesar        	
+            proceso.setTiempoEjecucion(tiempo - 5);
+            if (proceso.isSuspendido()) {
+                this.suspenderProceso(proceso);
+                this.bloquearProceso(proceso);
+            } else if (proceso.isBloqueado()) {
+                this.bloquearProceso(proceso);
+            } else {
+                this.expirarTiempo(proceso);
+            }
+        } else {
+            proceso.setTiempoEjecucion(0);
+            terminarProceso(proceso);
+        }
+        if(!proceso.getSeComunica().equals("")){
+        	this.listaComunicaciones.add(proceso);
+        	//proceso.setSeComunica("");
+        }
+        
+        proceso.setTransicion(Estado.enEjecucion);
+        this.listaEjecutados.add(proceso.getIdentificador() + " Termio ejecucio con tiempo de : " + proceso.getTiempoEjecucion());
     }
 
     public void removerProceso(Proceso proceso) {

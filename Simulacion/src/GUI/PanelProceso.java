@@ -31,8 +31,14 @@ public class PanelProceso extends JPanel{
 		panelNombre = new PanelLayout(listener, "Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre serï¿½ el identificador", TipoPanel.texto);
 		this.add(panelNombre);
 		
-		panelDestruir = new PanelLayout(listener, "¿El proceso debe Destruirse? ", "SelecciÃ³n si el proceso que se esta ingresando debe destruirse", TipoPanel.select);
-		this.add(panelDestruir);
+		panelTiempo = new PanelLayout(listener, "Tiempo de ejecucion del proceso: ", "Escriba el tiempo en segundos que se demorarï¿½ el proceso en ejecuciï¿½n, se aceptan nï¿½meros en el rango [1, 60]", TipoPanel.texto);
+		this.add(panelTiempo);
+		
+		panelPrioridad = new PanelLayout(listener, "Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan nï¿½meros en un rango [1,10], donde 10 es la priodidad mï¿½s alta y 1 la mï¿½s baja", TipoPanel.texto);
+		this.add(panelPrioridad);
+		
+		panelCambioPrioridad = new PanelLayout(listener, "Cambie la prioridad: ", "Escriba la prioridad del proceso que desea agregar, se aceptan nï¿½meros en un rango [1,10], donde 10 es la priodidad mï¿½s alta y 1 la mï¿½s baja", TipoPanel.texto);
+		this.add(panelCambioPrioridad);		
 		
 		panelSuspender = new PanelLayout(listener, "¿El proceso debe Suspederse? ", "SelecciÃ³n si el proceso que se esta ingresando debe suspenderse", TipoPanel.select);
 		this.add(panelSuspender);
@@ -45,15 +51,8 @@ public class PanelProceso extends JPanel{
 		panelComunicacion.setOpciones(opciones);
 		this.add(panelComunicacion);
 		
-		panelPrioridad = new PanelLayout(listener, "Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan nï¿½meros en un rango [1,10], donde 10 es la priodidad mï¿½s alta y 1 la mï¿½s baja", TipoPanel.texto);
-		this.add(panelPrioridad);
-		
-		panelCambioPrioridad = new PanelLayout(listener, "Cambie la prioridad: ", "Escriba la prioridad del proceso que desea agregar, se aceptan nï¿½meros en un rango [1,10], donde 10 es la priodidad mï¿½s alta y 1 la mï¿½s baja", TipoPanel.texto);
-		this.add(panelCambioPrioridad);
-		
-		panelTiempo = new PanelLayout(listener, "Tiempo de ejecucion del proceso: ", "Escriba el tiempo en segundos que se demorarï¿½ el proceso en ejecuciï¿½n, se aceptan nï¿½meros en el rango [1, 60]", TipoPanel.texto);
-		this.add(panelTiempo);
-		
+		panelDestruir = new PanelLayout(listener, "¿El proceso debe Destruirse? ", "SelecciÃ³n si el proceso que se esta ingresando debe destruirse", TipoPanel.select);
+		this.add(panelDestruir);		
 		
 		//panelBoton = new PanelBoton(listener);
 		panelBoton = new PanelLayout(listener, "", "", TipoPanel.boton);
