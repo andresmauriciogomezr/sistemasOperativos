@@ -92,16 +92,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		//		this.procesador.agregarProceso("Proceso2", 34, 8);
 		//		this.procesador.agregarProceso("Proceso3", 34, 4);
 		//		this.procesador.agregarProceso("Proceso4", 34, 7);
-//									Nombre	priodidad	tiempo 	 bloqueo suspendido	 destruido	seComunica	cambioPrioridad	
-		this.procesador.agregarProceso("P10",	3 ,	 		8	, false, 	false, 		true,	 "", 		"");
-		this.procesador.agregarProceso("P20",	2 ,	 		9	, false, 	true, 		false,	 "", 		"");
-		this.procesador.agregarProceso("P30",	6 ,	 		7	, false, 	false, 		false, 	 "", 		"");
-		this.procesador.agregarProceso("P40",	4 ,	 		5	, false, 	false, 		true,    "", 		"");
-		this.procesador.agregarProceso("P50",	7, 			11	, false, 	false, 		false,   "p1", 		"");
-		this.procesador.agregarProceso("P60",	5 ,	 		13	, false, 	false, 		false, 	 "", 		"");
-		this.procesador.agregarProceso("P70",	8 ,			18	, false, 	false, 		false, 	 "", 		"1");
-		this.procesador.agregarProceso("P80",	9 ,			14	, false, 	false, 		false, 	 "", 		"");
-		this.procesador.agregarProceso("P90",	10 ,		22	, false, 	true, 		true, 	 "", 		"");
+//									Nombre	priodidad	tiempo 	 bloqueo suspendido/Listo SuspendidoBloq destruido	seComunica	cambioPrioridad	
+		this.procesador.agregarProceso("P1",	5 ,	 		4	, false, 	false,			"No", 					false,	 "", 		"");
+		this.procesador.agregarProceso("P2",	5 ,	 		9	, true, 	false,			"No", 					false,	 "", 		"");
+		this.procesador.agregarProceso("P3",	5 ,	 		14	, false, 	true,			"No", 					false, 	 "", 		"");
+		this.procesador.agregarProceso("P4",	5 ,	 		8	, true, 	false,			"No", 					false,    "", 		"");
+		this.procesador.agregarProceso("P5",	5, 			7	, true, 	false,			"Bloqueado", 			false,   "p1", 		"");
+		this.procesador.agregarProceso("P6",	5 ,	 		11	, false, 	true,			"No", 					false, 	 "", 		"");
+		this.procesador.agregarProceso("P7",	5 ,			8	, true, 	false,			"Suspedido/ListoNo",	false, 	 "", 		"1");
+		this.procesador.agregarProceso("P8",	5 ,			10	, false, 	false,			"No", 					false, 	 "", 		"");
 		
 		for (int i = 0; i < 100; i++) {
 //											Nombre				priodidad					tiempo 							bloqueo							suspendido				destruido					seComunica
@@ -132,7 +131,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 
 	@Override
 	public void actionPerformed(ActionEvent evento) {
-		Thread hilo = new Thread(this);
 
 		if (evento.getActionCommand().equals("Salir")) {
 			System.exit(0);
@@ -149,16 +147,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 			this.panelTabla.listarComunes();
 		}
 		if (evento.getActionCommand().equals("Procesar")){			
-			//this.procesador.asignar();// Distribuye los procesos en las diferentes listas
-			this.procesador.cambiarPrioridades();
-			this.procesador.ordernarComunPorPrioridad();
+			//this.procesador.cambiarPrioridades();
+			//this.procesador.ordernarComunPorPrioridad();
 			this.panelTabla.listarComunes();
 			this.procesador.procesar();			
-			this.panelListas.listarProcesos();
-			this.dialogoResultados.setVisible(true);
-//			if (hilo.isAlive()==false){
-//				//hilo.start();
-//			}
+			this.panelListas.listarProcesos(); // Muestra como quedó la tabla de procesos cargados 
+			this.dialogoResultados.setVisible(true); // Muestra la ventana resultados
 		}
 	}
 
@@ -207,9 +201,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, Runnable
 		String seComunica = (String)(this.panelProceso.getPanelComunicacion().getComboBox().getSelectedItem()); // se evala que el campo seleccionado sea Si
 
 		//									Nombre		priodidad		tiempo	bloqueo	suspendido destruido seComunica
-		this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo, bloqueo, suspendido, destruido, seComunica, auxCambioPrioridad);
-		//this.panelTabla.listarProcesos();
-		//this.panelListas.listarProcesos();
+		//this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo, bloqueo, suspendido, destruido, seComunica, auxCambioPrioridad);
 		this.panelTabla.listarComunes();
 		limpiarProceso();
 	}

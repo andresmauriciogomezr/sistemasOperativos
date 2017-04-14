@@ -11,22 +11,24 @@ public class Proceso {
     private int tiempoEjecucion;
     private String transicion;
     boolean bloqueado;
-    boolean suspedido;
+    boolean suspedidoListo;
+    String suspedidoBloqueado;
     boolean destruido;
     String cambioPrioridad;
     String transiciones;
     private ArrayList<String> procesosComunica;
     private String seComunica;
 
-    //Nombre				priodidad		tiempo 				bloqueo			suspendido				destruido		seComunica
-    public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendido, boolean destruido, String seComunica, String cambioPrioridad) {
+    				//Nombre				priodidad		tiempo 				bloqueo			suspendidoListo				SuspedidoBLoqueado			destruido		seComunica
+    public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendidoListo, String suspendidoBloqueado, boolean destruido, String seComunica, String cambioPrioridad) {
         this.transicion = "";
         this.identificador = identificador;
         this.procesosComunica = new ArrayList<>();
         this.prioridad = prioridad;
         this.tiempoEjecucion = tiempoEjecucion;
         this.bloqueado = bloqueado;
-        this.suspedido = suspendido;
+        this.suspedidoListo = suspendidoListo;
+        this.suspedidoBloqueado = suspendidoBloqueado;
         this.destruido = destruido;
         transiciones = identificador + " ";
         this.cambioPrioridad = cambioPrioridad;
@@ -79,11 +81,22 @@ public class Proceso {
         return bloqueado;
     }
 
-    public boolean isSuspendido() {
-        return suspedido;
-    }
+    public boolean isSuspendidoListo() {
+        return suspedidoListo;
+    }    
+    
 
-    public boolean isDestruido() {
+   
+
+	public String getSuspedidoBloqueado() {
+		return suspedidoBloqueado;
+	}
+
+	public void setSuspedidoBloqueado(String suspedidoBloqueado) {
+		this.suspedidoBloqueado = suspedidoBloqueado;
+	}
+
+	public boolean isDestruido() {
         return destruido;
     }
 

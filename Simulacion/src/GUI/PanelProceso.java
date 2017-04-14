@@ -51,6 +51,8 @@ public class PanelProceso extends JPanel{
 
 		// Suspender Bloqueado
 		panelSuspenderBloqueado= new PanelLayout(listener, "¿El proceso debe pasar al estado Suspedido/Bloqueado? ", "SelecciÃ³n si el proceso que se esta ingresando debe pasar al estado Suspedido/Bloqueado", TipoPanel.select);
+		String[] opciones1 = {"No", "Suspedido/Listo", "Bloqueado"};
+		panelSuspenderBloqueado.setOpciones(opciones1);
 		this.add(panelSuspenderBloqueado);	
 		
 		panelBloqueo = new PanelLayout(listener, "¿El proceso debe bloquearse? ", "SelecciÃ³n si el proceso que se esta ingresando debe bloquearse", TipoPanel.select);

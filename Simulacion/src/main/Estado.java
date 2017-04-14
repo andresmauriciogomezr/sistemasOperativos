@@ -4,7 +4,8 @@ public enum Estado {
 	listo,
 	enEjecucion,
 	bloqueado,
-	suspendido,
+	suspendidoListo,
+	suspendidoBloqueado,
 	destruido,
 	terminado
 }

@@ -33,10 +33,15 @@ public class PanelListas extends JPanel {
     private JTable tablaBloqueados;
     private JScrollPane scrollBloqueados;
 
-    // Tabla para suspendidos
-    private DefaultTableModel modeloTablaSuspendidos;
-    private JTable tablaSuspedidos;
-    private JScrollPane scrollSuspendidos;
+    // Tabla para suspendidosListos
+    private DefaultTableModel modeloTablaSuspendidosListos;
+    private JTable tablaSuspedidosListos;
+    private JScrollPane scrollSuspendidosListos;
+    
+ // Tabla para suspendidosBloqueados
+    private DefaultTableModel modeloTablaSuspendidosBloqueados;
+    private JTable tablaSuspedidosBloqueados;
+    private JScrollPane scrollSuspendidosBloqueados;
 
     // Tabla para destruidos
     private DefaultTableModel modeloTablaDestruidos;
@@ -84,6 +89,7 @@ public class PanelListas extends JPanel {
 			e.printStackTrace();
 		}      
         
+		 // Listos
         String[] identificadoresListos = {"Lista Procesos listos"};
         modeloTablaListos = new DefaultTableModel(0, identificadoresListos.length);
         modeloTablaListos.setColumnIdentifiers(identificadoresListos);
@@ -97,7 +103,8 @@ public class PanelListas extends JPanel {
         scrollListos.setPreferredSize(new Dimension(width, heigth));
         this.add(scrollListos);
         
-         String[] identificadoresDespachados = {"Lista Procesos Despachados"};
+        // Despachados
+         String[] identificadoresDespachados = {"Lista Procesos Despachados (Listo a Ejecutado)"};
         modeloTablaDespachados = new DefaultTableModel(0, identificadoresDespachados.length);
         modeloTablaDespachados.setColumnIdentifiers(identificadoresDespachados);
         tablaDespachados = new JTable(modeloTablaDespachados) {
@@ -123,7 +130,8 @@ public class PanelListas extends JPanel {
         scrollEjecutados = new JScrollPane(tablaEjecutados);
         scrollEjecutados.setPreferredSize(new Dimension(width, heigth));
         this.add(scrollEjecutados);
-
+        
+        // expirados
         String[] identificadoresExpirados = {"Lista Procesos expirados"};
         modeloTablaExpirados = new DefaultTableModel(0, identificadoresExpirados.length);
         modeloTablaExpirados.setColumnIdentifiers(identificadoresExpirados);
@@ -151,19 +159,33 @@ public class PanelListas extends JPanel {
         scrollBloqueados.setPreferredSize(new Dimension(width, heigth));
         this.add(scrollBloqueados);
 
-        // Suspendidos
-        String[] identificadoresSuspendidos = {"Lista Procesos Suspendidos"};
-        modeloTablaSuspendidos = new DefaultTableModel(0, identificadoresSuspendidos.length);
-        modeloTablaSuspendidos.setColumnIdentifiers(identificadoresSuspendidos);
-        tablaSuspedidos = new JTable(modeloTablaSuspendidos) {
+        // SuspendidosListos
+        String[] identificadoresSuspendidos = {"Lista Procesos Suspendidos/Listos"};
+        modeloTablaSuspendidosListos = new DefaultTableModel(0, identificadoresSuspendidos.length);
+        modeloTablaSuspendidosListos.setColumnIdentifiers(identificadoresSuspendidos);
+        tablaSuspedidosListos = new JTable(modeloTablaSuspendidosListos) {
             public boolean isCellEditable(int rowIndex, int vColIndex) {
                 return false;
             }
         };
-        tablaSuspedidos.getTableHeader().setReorderingAllowed(false);
-        scrollSuspendidos = new JScrollPane(tablaSuspedidos);
-        scrollSuspendidos.setPreferredSize(new Dimension(width, heigth));
-        this.add(scrollSuspendidos);
+        tablaSuspedidosListos.getTableHeader().setReorderingAllowed(false);
+        scrollSuspendidosListos = new JScrollPane(tablaSuspedidosListos);
+        scrollSuspendidosListos.setPreferredSize(new Dimension(width, heigth));
+        this.add(scrollSuspendidosListos);
+        
+     // SuspendidosBLoqueados
+        String[] identificadoresSuspendidosBloqueados = {"Lista Suspendidos/bloqueados"};
+        modeloTablaSuspendidosBloqueados = new DefaultTableModel(0, identificadoresSuspendidosBloqueados.length);
+        modeloTablaSuspendidosBloqueados.setColumnIdentifiers(identificadoresSuspendidosBloqueados);
+        tablaSuspedidosBloqueados= new JTable(modeloTablaSuspendidosBloqueados) {
+            public boolean isCellEditable(int rowIndex, int vColIndex) {
+                return false;
+            }
+        };
+        tablaSuspedidosBloqueados.getTableHeader().setReorderingAllowed(false);
+        scrollSuspendidosBloqueados= new JScrollPane(tablaSuspedidosBloqueados);
+        scrollSuspendidosBloqueados.setPreferredSize(new Dimension(width, heigth));
+        this.add(scrollSuspendidosBloqueados);
 
         // Destruidos
         String[] identificadoresDestruidos = {"Lista Procesos Destruidos"};
@@ -177,7 +199,7 @@ public class PanelListas extends JPanel {
         tablaDestruidos.getTableHeader().setReorderingAllowed(false);
         scrollDestruidos = new JScrollPane(tablaDestruidos);
         scrollDestruidos.setPreferredSize(new Dimension(width, heigth));
-        this.add(scrollDestruidos);
+        //this.add(scrollDestruidos);
 
         // Comunicados
         String[] identificadoresComunicados = {"Lista Procesos Comunicados"};
@@ -211,11 +233,12 @@ public class PanelListas extends JPanel {
     }
 
     public void listarProcesos() {
-        ArrayList<Proceso> procesosListos = this.procesador.getProcesosListos();
+        ArrayList<String> procesosListos = this.procesador.getProcesosListos();
         ArrayList<InformacionTransicion> procesosDespachados = this.procesador.getProcesosDespachados();
         ArrayList<InformacionTransicion> procesosExpirados = this.procesador.getProcesosExpirados();
         ArrayList<InformacionTransicion> procesosBloqueados = this.procesador.getProcesosBloqueados();
-        ArrayList<InformacionTransicion> procesosSuspendidos = this.procesador.getProcesosSuspendidos();
+        ArrayList<InformacionTransicion> procesosSuspendidosListos = this.procesador.getProcesosSuspendidos();
+        ArrayList<String> procesosSuspendidosBloqueados= this.procesador.getListaSuspendidosBloqueados();
         ArrayList<String> procesosDestruidos = this.procesador.getProcesosDestruidos();
         ArrayList<InformacionTransicion> procesosComunicados = this.procesador.getProcesosComunicados();
         ArrayList<String> procesosTerminados = this.procesador.getProcesosTerminados();
@@ -224,8 +247,8 @@ public class PanelListas extends JPanel {
         ArrayList<Proceso> listaComunicaciones = this.procesador.getListaComunicaciones();
 
         for (int i = 0; i < procesosListos.size(); i++) {
-            Proceso proceso = procesosListos.get(i);
-            agregarListo(proceso);
+            //Proceso proceso = ;
+            agregarListo(procesosListos.get(i));
         }
         for (int i = 0; i < procesosDespachados.size(); i++) {
             InformacionTransicion informacionTransicion = procesosDespachados.get(i);
@@ -235,9 +258,12 @@ public class PanelListas extends JPanel {
             InformacionTransicion informacionTransicion = procesosBloqueados.get(i);
             agregarBloqueado(informacionTransicion);
         }
-        for (int i = 0; i < procesosSuspendidos.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosSuspendidos.get(i);
+        for (int i = 0; i < procesosSuspendidosListos.size(); i++) {
+            InformacionTransicion informacionTransicion = procesosSuspendidosListos.get(i);
             agregarSuspendido(informacionTransicion);
+        }
+        for (int i = 0; i < procesosSuspendidosBloqueados.size(); i++) {
+            agregarSuspendidoBloqueado(procesosSuspendidosBloqueados.get(i));
         }
         for (int i = 0; i < procesosDestruidos.size(); i++) {
             String proceso = procesosDestruidos.get(i);
@@ -263,17 +289,17 @@ public class PanelListas extends JPanel {
         tablaListos.setModel(modeloTablaListos);
         tablaDespachados.setModel(modeloTablaDespachados);
         tablaBloqueados.setModel(modeloTablaBloqueados);
-        tablaSuspedidos.setModel(modeloTablaSuspendidos);
+        tablaSuspedidosListos.setModel(modeloTablaSuspendidosListos);
         tablaDestruidos.setModel(modeloTablaDestruidos);
         tablaComunicados.setModel(modeloTablaComunicados);
         tablaEjecutados.setModel(modeloTablaEjecutados);
         tablaExpirados.setModel(modeloTablaExpirados);
     }
 
-    public void agregarListo(Proceso proceso) {
+    public void agregarListo(String proceso) {
         int row = this.modeloTablaListos.getRowCount();
         modeloTablaListos.setRowCount(row + 1);
-        modeloTablaListos.setValueAt(proceso.getIdentificador(), row, 0);
+        modeloTablaListos.setValueAt(proceso, row, 0);
 
     }
 
@@ -290,9 +316,15 @@ public class PanelListas extends JPanel {
     }
 
     public void agregarSuspendido(InformacionTransicion it) {
-        int row = this.modeloTablaSuspendidos.getRowCount();
-        modeloTablaSuspendidos.setRowCount(row + 1);
-        modeloTablaSuspendidos.setValueAt(it.getIdentificadorProceso() + " con un tiempo de " + it.getTiempoLleva(), row, 0);
+        int row = this.modeloTablaSuspendidosListos.getRowCount();
+        modeloTablaSuspendidosListos.setRowCount(row + 1);
+        modeloTablaSuspendidosListos.setValueAt(it.getIdentificadorProceso() + " con un tiempo de " + it.getTiempoLleva(), row, 0);
+    }
+    
+    public void agregarSuspendidoBloqueado(String proceso) {
+        int row = this.modeloTablaSuspendidosBloqueados.getRowCount();
+        modeloTablaSuspendidosBloqueados.setRowCount(row + 1);
+        modeloTablaSuspendidosBloqueados.setValueAt(proceso, row, 0);
     }
 
     public void agregarDestruido(String proceso) {
