@@ -11,7 +11,7 @@ public class Proceso {
     private int tiempoEjecucion;
     private String transicion;
     boolean bloqueado;
-    boolean suspedidoListo;
+    String suspedidoListo;
     String suspedidoBloqueado;
     boolean destruido;
     String cambioPrioridad;
@@ -19,8 +19,8 @@ public class Proceso {
     private ArrayList<String> procesosComunica;
     private String seComunica;
 
-    				//Nombre				priodidad		tiempo 				bloqueo			suspendidoListo				SuspedidoBLoqueado			destruido		seComunica
-    public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, boolean suspendidoListo, String suspendidoBloqueado, boolean destruido, String seComunica, String cambioPrioridad) {
+    //Nombre				priodidad		tiempo 				bloqueo			suspendidoListo				SuspedidoBLoqueado			destruido		seComunica
+    public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, String suspendidoListo, String suspendidoBloqueado, boolean destruido, String seComunica, String cambioPrioridad) {
         this.transicion = "";
         this.identificador = identificador;
         this.procesosComunica = new ArrayList<>();
@@ -68,7 +68,7 @@ public class Proceso {
     public void setTiempoEjecucion(int tiempoEjecucion) {
         this.tiempoEjecucion = tiempoEjecucion;
     }
-    
+
     public String getTransicion() {
         return transicion;
     }
@@ -81,22 +81,19 @@ public class Proceso {
         return bloqueado;
     }
 
-    public boolean isSuspendidoListo() {
+    public String getSuspedidoListo() {
         return suspedidoListo;
-    }    
-    
+    }
 
-   
+    public String getSuspedidoBloqueado() {
+        return suspedidoBloqueado;
+    }
 
-	public String getSuspedidoBloqueado() {
-		return suspedidoBloqueado;
-	}
+    public void setSuspedidoBloqueado(String suspedidoBloqueado) {
+        this.suspedidoBloqueado = suspedidoBloqueado;
+    }
 
-	public void setSuspedidoBloqueado(String suspedidoBloqueado) {
-		this.suspedidoBloqueado = suspedidoBloqueado;
-	}
-
-	public boolean isDestruido() {
+    public boolean isDestruido() {
         return destruido;
     }
 
@@ -106,29 +103,26 @@ public class Proceso {
 
     Comparator<Proceso> comparatorPrioridad = new Comparator<Proceso>() {
 
-
         @Override
         public int compare(Proceso o1, Proceso o2) {
             return o1.prioridad - o2.prioridad;
         }
     };
 
-	public ArrayList<String> getProcesosComunica() {
-		return procesosComunica;
-	}
+    public ArrayList<String> getProcesosComunica() {
+        return procesosComunica;
+    }
 
-	public void setProcesosComunica(ArrayList<String> procesosComunica) {
-		this.procesosComunica = procesosComunica;
-	}
+    public void setProcesosComunica(ArrayList<String> procesosComunica) {
+        this.procesosComunica = procesosComunica;
+    }
 
-	public String getSeComunica() {
-		return seComunica;
-	}
+    public String getSeComunica() {
+        return seComunica;
+    }
 
-	public void setSeComunica(String seComunica) {
-		this.seComunica = seComunica;
-	}
-    
-    
+    public void setSeComunica(String seComunica) {
+        this.seComunica = seComunica;
+    }
 
 }
