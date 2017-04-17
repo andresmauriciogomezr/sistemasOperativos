@@ -42,15 +42,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
 
+        menuItemManual = new JMenuItem("Ver Manual");
+        menuItemManual.addActionListener(this);
+        menu.add(menuItemManual);
+
         menuItem = new JMenuItem("Salir");
         menuItem.addActionListener(this);
         menu.add(menuItem);
-        
-        menuItemManual = new JMenuItem("Ver Manual");
-		menuItemManual.addActionListener(this);
-		menu.add(menuItemManual);
-        
-		menuBar.add(menu);
+
+        menuBar.add(menu);
         this.setJMenuBar(menuBar);
 
         this.procesador = new Procesador();
@@ -90,9 +90,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     	this.procesador.agregarProceso("P2",	5 ,	 		9	, true, 	"No",			"No", 					false,	 "", 		"");
     	this.procesador.agregarProceso("P3",	5 ,	 		14	, false, 	"Ejecucion",			"No", 					false, 	 "", 		"");
     	this.procesador.agregarProceso("P4",	5 ,	 		8	, true, 	"No",			"No", 					false,    "", 		"");
-    	this.procesador.agregarProceso("P5",	5, 			7	, true, 	"No",			"Bloqueado", 			false,   "p1", 		"");
+    	this.procesador.agregarProceso("P5",	5, 			7	, true, 	"No",			"Bloqueado", 			false,   "", 		"");
     	this.procesador.agregarProceso("P6",	5 ,	 		11	, false, 	"Ejecucion",			"No", 					false, 	 "", 		"");
-    	this.procesador.agregarProceso("P7",	5 ,			8	, true, 	"No",			"Suspendido/Listo",	false, 	 "", 		"1");
+    	this.procesador.agregarProceso("P7",	5 ,			8	, true, 	"No",			"Suspendido/Listo",	false, 	 "", 		"");
     	this.procesador.agregarProceso("P8",	5 ,			10	, false, 	"No",			"No", 					false, 	 "", 		"");
 
     	for (int i = 0; i < 100; i++) {
