@@ -45,12 +45,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         menuItem = new JMenuItem("Salir");
         menuItem.addActionListener(this);
         menu.add(menuItem);
-        
+
         menuItemManual = new JMenuItem("Ver Manual");
-		menuItemManual.addActionListener(this);
-		menu.add(menuItemManual);
-        
-		menuBar.add(menu);
+        menuItemManual.addActionListener(this);
+        menu.add(menuItemManual);
+
+        menuBar.add(menu);
         this.setJMenuBar(menuBar);
 
         this.procesador = new Procesador();
@@ -77,30 +77,57 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         panelTabla = new PanelTabla(this.procesador, this);
         this.add(panelTabla, BorderLayout.CENTER);
 
-    }
-    
-    public void probar(){
-    	 
-    	//		this.procesador.agregarProceso("Proceso1", 34, 6);
-    	//		this.procesador.agregarProceso("Proceso2", 34, 8);
-    	//		this.procesador.agregarProceso("Proceso3", 34, 4);
-    	//		this.procesador.agregarProceso("Proceso4", 34, 7);
-    	//							Nombre	priodidad	tiempo 	 bloqueo suspendido/Listo SuspendidoBloq destruido	seComunica	cambioPrioridad	
-    	this.procesador.agregarProceso("P1",	5 ,	 		4	, false, 	"No",			"No", 					false,	 "", 		"");
-    	this.procesador.agregarProceso("P2",	5 ,	 		9	, true, 	"No",			"No", 					false,	 "", 		"");
-    	this.procesador.agregarProceso("P3",	5 ,	 		14	, false, 	"Ejecucion",			"No", 					false, 	 "", 		"");
-    	this.procesador.agregarProceso("P4",	5 ,	 		8	, true, 	"No",			"No", 					false,    "", 		"");
-    	this.procesador.agregarProceso("P5",	5, 			7	, true, 	"No",			"Bloqueado", 			false,   "p1", 		"");
-    	this.procesador.agregarProceso("P6",	5 ,	 		11	, false, 	"Ejecucion",			"No", 					false, 	 "", 		"");
-    	this.procesador.agregarProceso("P7",	5 ,			8	, true, 	"No",			"Suspendido/Listo",	false, 	 "", 		"1");
-    	this.procesador.agregarProceso("P8",	5 ,			10	, false, 	"No",			"No", 					false, 	 "", 		"");
+        ingresarParticiones();
 
-    	for (int i = 0; i < 100; i++) {
-    		//Nombre				priodidad					tiempo 							bloqueo							suspendido				destruido					seComunica
-    		//this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 20) , (int)(Math.random() * 10), (int)(Math.random() * 10) == 3, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 1);
-    	}
-    	//this.panelTabla.listarProcesos();
-    	this.panelTabla.listarComunes();
+    }
+
+    public void probar() {
+
+        //		this.procesador.agregarProceso("Proceso1", 34, 6);
+        //		this.procesador.agregarProceso("Proceso2", 34, 8);
+        //		this.procesador.agregarProceso("Proceso3", 34, 4);
+        //		this.procesador.agregarProceso("Proceso4", 34, 7);
+        //							Nombre	priodidad	tiempo 	 bloqueo suspendido/Listo SuspendidoBloq destruido	seComunica	cambioPrioridad	
+//    	this.procesador.agregarProceso("P1",	5 ,	 		4	, false, 	"No",			"No", 					false,	 "", 		"");
+//    	this.procesador.agregarProceso("P2",	5 ,	 		9	, true, 	"No",			"No", 					false,	 "", 		"");
+//    	this.procesador.agregarProceso("P3",	5 ,	 		14	, false, 	"Ejecucion",			"No", 					false, 	 "", 		"");
+//    	this.procesador.agregarProceso("P4",	5 ,	 		8	, true, 	"No",			"No", 					false,    "", 		"");
+//    	this.procesador.agregarProceso("P5",	5, 			7	, true, 	"No",			"Bloqueado", 			false,   "p1", 		"");
+//    	this.procesador.agregarProceso("P6",	5 ,	 		11	, false, 	"Ejecucion",			"No", 					false, 	 "", 		"");
+//    	this.procesador.agregarProceso("P7",	5 ,			8	, true, 	"No",			"Suspendido/Listo",	false, 	 "", 		"1");
+//    	this.procesador.agregarProceso("P8",	5 ,			10	, false, 	"No",			"No", 					false, 	 "", 		"");
+//
+//    	for (int i = 0; i < 100; i++) {
+//    		//Nombre				priodidad					tiempo 							bloqueo							suspendido				destruido					seComunica
+//    		//this.procesador.agregarProceso("Proceso" +i,(int)(Math.random() * 20) , (int)(Math.random() * 10), (int)(Math.random() * 10) == 3, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 2, (int)(Math.random() * 5) == 1);
+//    	}
+//    	//this.panelTabla.listarProcesos();
+        this.panelTabla.listarComunes();
+    }
+
+    public void ingresarParticiones() {
+        String totalParticiones = JOptionPane.showInputDialog(this, "¿Cuantas particiones son en total?");
+        int total;
+        if (totalParticiones != null) {
+            if (validarNumeros(totalParticiones)) {
+                total = Integer.parseInt(totalParticiones);
+                for (int i = 0; i < total; i++) {
+                    String tamanioParticion = JOptionPane.showInputDialog(this, "¿Cual es el tamaño de la particion numero: " + (i + 1) + "?");
+                    if (validarNumeros(tamanioParticion)) {
+                        procesador.agregarParticion(Integer.parseInt(tamanioParticion));
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Debe ser un numero entero positivo");
+                        i--;
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Debe ser un numero entero positivo");
+                ingresarParticiones();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe existir por los menos 1 particion");
+            ingresarParticiones();
+        }
     }
 
     public boolean validarNumeros(String cadena) {
@@ -148,10 +175,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Tiene que haber por lo menos 1 proceso");
             }
         }
-        if (evento.getActionCommand().equals("Ver Manual")){
-			Manual manual = new Manual();
-			manual.abrir();
-		}
+        if (evento.getActionCommand().equals("Ver Manual")) {
+            Manual manual = new Manual();
+            manual.abrir();
+        }
     }
 
     public void actualizarTiempo(Proceso proceso) {
@@ -160,10 +187,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
     public void agregarProceso() {
         String nombreProceso = this.panelProceso.getPanelNombre().getText();
-        String auxPriodad = this.panelProceso.getPanelPrioridad().getText(); //usa axiliar porque luego hay que convertir a entero
+        String auxTamanio = this.panelProceso.getPanelTamanio().getText(); //usa axiliar porque luego hay que convertir a entero
         String auxTiempo = this.panelProceso.getPanelTiempo().getText();
-        String auxCambioPrioridad = this.panelProceso.getPanelCambioPrioridad().getText();
-        System.out.println("------------------" + auxCambioPrioridad);
 
         // Validamos y agregamos el campo nombre
         if (nombreProceso.equals("") || nombreProceso.equals(" ")) {
@@ -176,12 +201,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
         // Validamos y agregamos el campo prioridd
         int prioridadProceso = 5;
-        if (!this.validarNumeros(auxPriodad)) {
+        if (!this.validarNumeros(auxTamanio)) {
             JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente numeros enteros");
             return;
         }
-        if (!auxPriodad.equals("")) { // Se asign� ua prioridad			
-            prioridadProceso = Integer.parseInt(auxPriodad);
+        if (!auxTamanio.equals("")) { // Se asign� ua prioridad			
+            prioridadProceso = Integer.parseInt(auxTamanio);
         }
 
         // Validamos y agregamos el campo tiempo
@@ -202,15 +227,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, "El proceso ya va a pasar a estado de Suspendido listo");
             return;
         }
-        if (suspendidoBloqueado.equals("No")==false) {
+        if (suspendidoBloqueado.equals("No") == false) {
             bloqueo = true;
-        } 
-        if (suspendidoBloqueado.equals("Suspendido/Listo")){
+        }
+        if (suspendidoBloqueado.equals("Suspendido/Listo")) {
             suspendidoListo = "Si";
         }
         System.out.println("SL: " + suspendidoListo);
         //									Nombre		priodidad		tiempo	bloqueo	suspendido destruido seComunica
-        this.procesador.agregarProceso(nombreProceso, prioridadProceso, tiempo, bloqueo, suspendidoListo, suspendidoBloqueado, destruido, seComunica, auxCambioPrioridad);
+//        this.procesador.agregarProceso(nombreProceso, tiempo, tamanio, particion);
         this.panelTabla.listarComunes();
         limpiarProceso();
     }

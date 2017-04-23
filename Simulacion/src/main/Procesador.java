@@ -34,101 +34,95 @@ public class Procesador {
     private ArrayList<Proceso> procesosCargados;
     private ArrayList<String> listaEjecutados;
     private ArrayList<Proceso> listaComunicaciones;
+    private ArrayList<Particion> particiones;
 
-    private int count;
+    private int count; // Indica en que posicion de las listas de procesos se encuentra ejecutando
     boolean procesando; // Determina si existen procesos listos para ejecutarse
 
     public Procesador() {
-        this.procesando = false;
         this.procesosListos = new ArrayList<>();
         this.procesosDespachados = new ArrayList<>();
         this.procesosExpirados = new ArrayList<>();
-        this.procesosBloqueados = new ArrayList<>();
-        this.procesosEsperaEjeABloq = new ArrayList<>();
-        this.procesosSuspenderBloqASuspBloq = new ArrayList<>();
-        this.procesosTerminaBloqALis = new ArrayList<>();
-        this.procesosSuspendidosListos = new ArrayList<>();
-        this.procesosSuspenderEjeASuspL = new ArrayList<>();
-        this.procesosSuspenderListosASuspL = new ArrayList<>();
-        this.procesosReanudarSuspLAListo = new ArrayList<>();
-        this.listaSuspendidosBloqueados = new ArrayList<>();
-        this.procesosTerminaSuspBASuspL = new ArrayList<>();
-        this.procesosReanudarSBloqABloq = new ArrayList<>();
-        this.procesosDestruidos = new ArrayList<>();
-        this.procesosComunicados = new ArrayList<>();
         this.procesosTerminados = new ArrayList<>();
-        this.procesosCargados = new ArrayList<>();
         this.listaEjecutados = new ArrayList<>();
-        this.listaComunicaciones = new ArrayList<>();
+        this.particiones = new ArrayList<>();
         this.count = 0;
+        this.procesando = true;
     }
 
-    public void ordernarComunPorPrioridad() {
-        Collections.sort(procesosCargados, procesosCargados.get(0).comparatorPrioridad);
+    public void agregarParticion(int tamanio) {
+        Particion particion = new Particion(tamanio);
+        this.particiones.add(particion);
     }
 
-    public void agregarProceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, String suspendidoListo, String suspendidoBloqueado, boolean destruido, String seComunica, String cambioPrioridad) {
-        Proceso proceso = new Proceso(identificador, prioridad, tiempoEjecucion, bloqueado, suspendidoListo, suspendidoBloqueado, destruido, seComunica, cambioPrioridad);
-        procesosCargados.add(proceso);
+    public void agregarProceso(String identificador, int tiempoEjecucion, int tamanio, int particion) {
+        Proceso process = new Proceso(identificador, tiempoEjecucion, tamanio);
+        particiones.get(particion).addProcess(process);
     }
 
     public void procesar() {
-        this.ordernarComunPorPrioridad();
-        while (procesosCargados.isEmpty() == false) {
-            for (this.count = 0; count < procesosCargados.size(); count++) {
-                Proceso proceso = procesosCargados.get(count);
-                while (proceso.getTiempoEjecucion() > 0) {
-                    procesosListos.add(proceso.getIdentificador() + " - Tiempo : " + proceso.getTiempoEjecucion());
-                    if (!proceso.isDestruido()) { // No se destruye
-                        this.ejecutarProceso(proceso);
-                    } else { // Se destruye                	
-                        if (proceso.getSuspedidoListo().equals("No") == false || proceso.isBloqueado()) { // Se debe procesar antes de destruirse
-                            this.ejecutarProceso(proceso);
-                        }
-                        destruirProceso(proceso);
-                        //System.out.println(this.count);
-                        removerProceso(proceso);
+        verificarProcesando();
+        empezar();
+        while (procesando) {
+            for (int i = 0; i < particiones.size(); i++) {
+                Particion particion = particiones.get(i);
+                if (particion.obternerTotalProcesos() > 0) {
+                    Proceso proceso = particion.obtenerProceso(0);
+                    if (proceso.getSize() <= particion.getTamanio()) {
+                        particion.agregarProcesado(proceso.getIdentificador());
+                        ejecutarProceso(proceso, i);
+                    } else {
+                        listarProceso(proceso, i);
+                        particion.agregarNoProcesado(proceso.getIdentificador());
+                        removerProceso(proceso, i);
                     }
                 }
             }
+            verificarProcesando();
+            count++;
         }
     }
 
-    public void ejecutarProceso(Proceso proceso) {
-        this.despacharProceso(proceso); // Se agrega a la lista despachados
+    public void verificarProcesando() {
+        for (Iterator<Particion> iterator = particiones.iterator(); iterator.hasNext();) {
+            Particion next = iterator.next();
+            procesando = procesando && next.procesosProcesados();
+        }
+    }
+
+    public void empezar() {
+        for (Iterator<Particion> iterator = particiones.iterator(); iterator.hasNext();) {
+            Particion next = iterator.next();
+            if (next.procesosProcesados()) {
+                next.empezar();
+            }
+        }
+    }
+
+    public void ejecutarProceso(Proceso proceso, int posicion) {
         //se ejecuta
         int tiempo = proceso.getTiempoEjecucion();
-
+        this.listarProceso(proceso, posicion); //Se agrega a las listas de listos
+        this.despacharProceso(proceso, posicion); // Se agrega a la listas despachados
         if (tiempo > 5) { // debe expirarse y luego volver a procesar        	
             proceso.setTiempoEjecucion(tiempo - 5);
-            if (proceso.getSuspedidoListo().equals("No") == false && proceso.getSuspedidoListo().equals("Si") == false) {
-                this.suspenderListo(proceso);
-                //this.bloquearProceso(proceso);
-            } else if (proceso.getSuspedidoBloqueado().equals("No") == false) { // Hay que pasar por suspendidoBloqueado
-                System.out.println("NI PUTA IDEA: " + proceso.getSuspedidoBloqueado());
-                this.suspenderBloqueado(proceso);
-            } else if (proceso.isBloqueado()) {
-                this.bloquearProceso(proceso);
-            } else {
-                this.expirarTiempo(proceso);
-            }
+            expirarTiempo(proceso, posicion);
         } else {
             proceso.setTiempoEjecucion(0);
-            if (!proceso.isDestruido()) {
-                terminarProceso(proceso);
-            }
+            terminarProceso(proceso, posicion);
         }
-        if (!proceso.getSeComunica().equals("")) {
-            this.listaComunicaciones.add(proceso);
-            //proceso.setSeComunica("");
-        }
-        proceso.setTransicion(Estado.enEjecucion);
         this.listaEjecutados.add(proceso.getIdentificador() + " - Tiempo: " + proceso.getTiempoEjecucion());
+        particiones.get(posicion).agregarEjecutado(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+
     }
 
-    public void removerProceso(Proceso proceso) {
-        procesosCargados.remove(count);
-        count--;
+    public void listarProceso(Proceso proceso, int posicion) {
+        procesosListos.add(proceso.getIdentificador() + " - Tiempo: " + proceso.getTiempoEjecucion());
+        particiones.get(posicion).agregarListo(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+    }
+
+    public void removerProceso(Proceso proceso, int posicion) {
+        particiones.get(posicion).removerProceso(proceso);
     }
 
     public void cambiarPrioridades() {
@@ -168,91 +162,96 @@ public class Procesador {
         return false;
     }
 
-    public void terminarProceso(Proceso proceso) {
+    public void terminarProceso(Proceso proceso, int posicion) {
         procesosTerminados.add(proceso.getIdentificador());
-        this.removerProceso(proceso);
+        particiones.get(posicion).agregarTerminado(proceso.getIdentificador());
+        this.removerProceso(proceso, posicion);
+    }
+//
+//    public void suspenderBloqueado(Proceso proceso) {
+//        this.listaSuspendidosBloqueados.add(proceso.getIdentificador() + " -Tiempo : " + proceso.getTiempoEjecucion());
+//        this.procesosSuspenderBloqASuspBloq.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//        this.bloquearProceso(proceso);
+//        if (proceso.getSuspedidoBloqueado().equals("Suspendido/Listo")) {
+//            this.terminarESuspendidoB(proceso);
+//            this.suspenderListo(proceso);
+//        } else if (proceso.getSuspedidoBloqueado().equals("Bloqueado")) {
+//            this.reanudarSuspendidoBloqueado(proceso);
+//        }
+//    }
+//
+//    public void terminarESuspendidoB(Proceso proceso) {
+//        proceso.setTransicion(Estado.suspendidoListo);
+//        this.procesosTerminaSuspBASuspL.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//    }
+//
+//    public void reanudarSuspendidoBloqueado(Proceso proceso) {
+//        this.procesosReanudarSBloqABloq.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//        this.procesosBloqueados.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//        this.terminarEBloqueados(proceso);
+//    }
+
+    public void despacharProceso(Proceso proceso, int posicion) {
+        InformacionTransicion it = new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion());
+        this.procesosDespachados.add(it);
+        this.particiones.get(posicion).agregarDespachado(it);
     }
 
-    public void suspenderBloqueado(Proceso proceso) {
-        this.listaSuspendidosBloqueados.add(proceso.getIdentificador() + " -Tiempo : " + proceso.getTiempoEjecucion());
-        this.procesosSuspenderBloqASuspBloq.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-        this.bloquearProceso(proceso);
-        if (proceso.getSuspedidoBloqueado().equals("Suspendido/Listo")) {
-            this.terminarESuspendidoB(proceso);
-            this.suspenderListo(proceso);
-        } else if (proceso.getSuspedidoBloqueado().equals("Bloqueado")) {
-            this.reanudarSuspendidoBloqueado(proceso);
-        }
-    }
-
-    public void terminarESuspendidoB(Proceso proceso) {
-        proceso.setTransicion(Estado.suspendidoListo);
-        this.procesosTerminaSuspBASuspL.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-    }
-
-    public void reanudarSuspendidoBloqueado(Proceso proceso) {
-        this.procesosReanudarSBloqABloq.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-        this.procesosBloqueados.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-        this.terminarEBloqueados(proceso);
-    }
-
-    public void despacharProceso(Proceso proceso) {
-        this.procesosDespachados.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-    }
-
-    public void expirarTiempo(Proceso proceso) {
+    public void expirarTiempo(Proceso proceso, int posicion) {
         proceso.setTransicion(Estado.listo);
-        this.procesosExpirados.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+        InformacionTransicion it = new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion());
+        this.procesosExpirados.add(it);
+        this.particiones.get(posicion).agregarExpirado(it);
     }
-
-    public void suspenderListo(Proceso proceso) {
-        this.procesosSuspendidosListos.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-        if (proceso.getSuspedidoListo().equals("Listo")) {
-            System.out.println("Entro A");
-            this.expirarTiempo(proceso);
-            this.procesosListos.add(proceso.getIdentificador() + " - Tiempo : " + proceso.getTiempoEjecucion());
-            this.suspenderListoDeListo(proceso);
-        } else if (proceso.getSuspedidoListo().equals("Ejecucion")) {
-            System.out.println("Entro B");
-            this.suspenderListoDeEjecucion(proceso);
-        }
-        this.reanudarSuspendidoListo(proceso);
-    }
-
-    public void reanudarSuspendidoListo(Proceso proceso) {
-        proceso.setTransicion(Estado.listo);
-        this.procesosReanudarSuspLAListo.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-
-    }
-
-    public void suspenderListoDeEjecucion(Proceso proceso) {
-        proceso.setTransicion(Estado.suspendidoListo);
-        this.procesosSuspenderEjeASuspL.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-    }
-
-    public void terminarEBloqueados(Proceso proceso) {
-        proceso.setTransicion(Estado.listo);
-        this.procesosTerminaBloqALis.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-    }
-
-    public void suspenderListoDeListo(Proceso proceso) {
-        proceso.setTransicion(Estado.suspendidoListo);
-        this.procesosSuspenderListosASuspL.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-    }
-
-    public void bloquearProceso(Proceso proceso) {
-        proceso.setTransicion(Estado.bloqueado);
-        this.procesosEsperaEjeABloq.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-        this.procesosBloqueados.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
-        if (proceso.getSuspedidoBloqueado().equals("No")) {
-            this.terminarEBloqueados(proceso);
-        }
-    }
-
-    public void destruirProceso(Proceso proceso) {
-        proceso.setTransicion(Estado.destruido);
-        this.procesosDestruidos.add(proceso.getIdentificador());
-    }
+//
+//    public void suspenderListo(Proceso proceso) {
+//        this.procesosSuspendidosListos.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//        if (proceso.getSuspedidoListo().equals("Listo")) {
+//            System.out.println("Entro A");
+//            this.expirarTiempo(proceso);
+//            this.procesosListos.add(proceso.getIdentificador() + " - Tiempo : " + proceso.getTiempoEjecucion());
+//            this.suspenderListoDeListo(proceso);
+//        } else if (proceso.getSuspedidoListo().equals("Ejecucion")) {
+//            System.out.println("Entro B");
+//            this.suspenderListoDeEjecucion(proceso);
+//        }
+//        this.reanudarSuspendidoListo(proceso);
+//    }
+//
+//    public void reanudarSuspendidoListo(Proceso proceso) {
+//        proceso.setTransicion(Estado.listo);
+//        this.procesosReanudarSuspLAListo.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//
+//    }
+//
+//    public void suspenderListoDeEjecucion(Proceso proceso) {
+//        proceso.setTransicion(Estado.suspendidoListo);
+//        this.procesosSuspenderEjeASuspL.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//    }
+//
+//    public void terminarEBloqueados(Proceso proceso) {
+//        proceso.setTransicion(Estado.listo);
+//        this.procesosTerminaBloqALis.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//    }
+//
+//    public void suspenderListoDeListo(Proceso proceso) {
+//        proceso.setTransicion(Estado.suspendidoListo);
+//        this.procesosSuspenderListosASuspL.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//    }
+//
+//    public void bloquearProceso(Proceso proceso) {
+//        proceso.setTransicion(Estado.bloqueado);
+//        this.procesosEsperaEjeABloq.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//        this.procesosBloqueados.add(new InformacionTransicion(proceso.getIdentificador(), proceso.getTiempoEjecucion()));
+//        if (proceso.getSuspedidoBloqueado().equals("No")) {
+//            this.terminarEBloqueados(proceso);
+//        }
+//    }
+//
+//    public void destruirProceso(Proceso proceso) {
+//        proceso.setTransicion(Estado.destruido);
+//        this.procesosDestruidos.add(proceso.getIdentificador());
+//    }
 
     public boolean existeProceso(String nombre) {
         for (Iterator<Proceso> iterator = procesosCargados.iterator(); iterator.hasNext();) {

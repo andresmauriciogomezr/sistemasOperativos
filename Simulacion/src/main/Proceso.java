@@ -18,6 +18,7 @@ public class Proceso {
     String transiciones;
     private ArrayList<String> procesosComunica;
     private String seComunica;
+    private int tamanio;
 
     //Nombre				priodidad		tiempo 				bloqueo			suspendidoListo				SuspedidoBLoqueado			destruido		seComunica
     public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, String suspendidoListo, String suspendidoBloqueado, boolean destruido, String seComunica, String cambioPrioridad) {
@@ -36,6 +37,12 @@ public class Proceso {
         this.estadoActual = Estado.listo;
     }
 
+    public Proceso(String identificador, int tiempoEjecucion, int tamanio) {
+        this.identificador = identificador;
+        this.tiempoEjecucion = tiempoEjecucion;
+        this.tamanio = tamanio;
+    }
+    
     public Estado getEstadoActual() {
         return estadoActual;
     }
@@ -125,4 +132,7 @@ public class Proceso {
         this.seComunica = seComunica;
     }
 
+    public int getSize() {
+        return tamanio;
+    }
 }
