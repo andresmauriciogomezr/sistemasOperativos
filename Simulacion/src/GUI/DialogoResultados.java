@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,8 +28,7 @@ public class DialogoResultados extends JFrame implements ActionListener{
 		this.procesador = procesador;
 		this.panelListas = panelListas;
 		
-		int WIDTH = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;;
-		int HEIGHT = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
+		Dimension dimension = this.getToolkit().getScreenSize();
 				
 
 		menuBar = new JMenuBar();
@@ -47,7 +47,7 @@ public class DialogoResultados extends JFrame implements ActionListener{
 			//JDialog.setDefaultLookAndFeelDecorated(true);
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 			setTitle("");
-			setSize(WIDTH, HEIGHT);
+			setSize(dimension);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			setLayout(new BorderLayout());
 		}

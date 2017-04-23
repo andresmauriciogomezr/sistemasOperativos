@@ -42,13 +42,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
 
-        menuItem = new JMenuItem("Salir");
-        menuItem.addActionListener(this);
-        menu.add(menuItem);
-
         menuItemManual = new JMenuItem("Ver Manual");
         menuItemManual.addActionListener(this);
         menu.add(menuItemManual);
+
+        menuItem = new JMenuItem("Salir");
+        menuItem.addActionListener(this);
+        menu.add(menuItem);
 
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
