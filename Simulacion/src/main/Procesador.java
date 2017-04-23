@@ -95,7 +95,7 @@ public class Procesador {
     public void empezar() {
         for (Iterator<Particion> iterator = particiones.iterator(); iterator.hasNext();) {
             Particion next = iterator.next();
-            if (next.procesosProcesados()) {
+            if (!next.procesosProcesados()) {
                 next.empezar();
             }
         }
