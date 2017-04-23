@@ -37,7 +37,7 @@ public class PanelTabla extends JPanel {
         int heigth = 300;
 
         this.procesador = procesador;
-        String[] identificadores = {"Identificador", "Tiempo", "Prioridad", "Se bloquea?", "Pasa a Suspendido L.?", "Pasa a Suspendido B.?", "Se destruye?", "Se comunica?"};
+        String[] identificadores = {"Identificador", "Tiempo", "Tamanio", "Particion #"};
         modeloTabla = new DefaultTableModel(0, identificadores.length);
         modeloTabla.setColumnIdentifiers(identificadores);
 
@@ -65,7 +65,7 @@ public class PanelTabla extends JPanel {
     public void listarComunes() {
         ArrayList<Proceso> procesos = this.procesador.getProcesosCargados();
         
-        String[] identificadores = {"Identificador", "Tiempo", "Prioridad", "Se bloquea?", "Pasa a Susp. L.?", "Pasa a Susp. B.?", "Se destruye?", "Se comunica?"};
+        String[] identificadores = {"Identificador", "Tiempo", "Tamanio", "Particion #"};
         modeloTabla = new DefaultTableModel(0, identificadores.length);
         modeloTabla.setColumnIdentifiers(identificadores);
 
@@ -95,12 +95,8 @@ public class PanelTabla extends JPanel {
         modeloTabla.setRowCount(row + 1);
         modeloTabla.setValueAt(proceso.getIdentificador(), row, 0); // Identificador 
         modeloTabla.setValueAt(proceso.getTiempoEjecucion(), row, 1); // Tiempo
-        modeloTabla.setValueAt(proceso.getPrioridad(), row, 2); // Prioridad
-        modeloTabla.setValueAt(cambiarAPalabra(proceso.isBloqueado()), row, 3); // bloqueo?
-        modeloTabla.setValueAt(proceso.getSuspedidoListo(), row, 4); // Paso por suspendido listo
-        modeloTabla.setValueAt(proceso.getSuspedidoBloqueado(), row, 5); // Paso por suspendido bloqueado
-        modeloTabla.setValueAt(cambiarAPalabra(proceso.isDestruido()), row, 6); // destruido?
-        modeloTabla.setValueAt(proceso.getSeComunica(), row, 7); // Comunicacion con
+        modeloTabla.setValueAt(proceso.getTamanio(), row, 2); // Tamanio
+        modeloTabla.setValueAt(proceso.getIndexParticion()+1, row, 3); // Particion
     }
 
     public String cambiarAPalabra(Boolean bool) {

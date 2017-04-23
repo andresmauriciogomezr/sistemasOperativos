@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -13,6 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import main.Particion;
 import main.Procesador;
 import main.Proceso;
 import manual.Manual;
@@ -31,6 +33,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
     private Procesador procesador;
     private Panel panelContendio; // Va a contener tanto la tabla como las listas
+    private DialogoParticiones dialogoParticiones;
 
     private DialogoResultados dialogoResultados;
     JMenuItem menuItemManual;
@@ -55,7 +58,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
         this.procesador = new Procesador();
         this.panelListas = new PanelListas(this.procesador);
-        dialogoResultados = new DialogoResultados(this.procesador, this.panelListas);
+        this.dialogoResultados = new DialogoResultados(this.procesador, this.panelListas);
 
         this.setUndecorated(true);
         try {
@@ -76,8 +79,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         //Agregamos los dos paneles a uno nuevo con otro layout
         panelTabla = new PanelTabla(this.procesador, this);
         this.add(panelTabla, BorderLayout.CENTER);
-
-        ingresarParticiones();
 
     }
 
@@ -109,24 +110,28 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         String totalParticiones = JOptionPane.showInputDialog(this, "¿Cuantas particiones son en total?");
         int total;
         if (totalParticiones != null) {
-            if (validarNumeros(totalParticiones)) {
+            if (validarNumeros(totalParticiones) && !totalParticiones.equals("") && !totalParticiones.equals(" ") ) { // No es vac�o y es un numero
                 total = Integer.parseInt(totalParticiones);
-                for (int i = 0; i < total; i++) {
-                    String tamanioParticion = JOptionPane.showInputDialog(this, "¿Cual es el tamaño de la particion numero: " + (i + 1) + "?");
-                    if (validarNumeros(tamanioParticion)) {
-                        procesador.agregarParticion(Integer.parseInt(tamanioParticion));
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Debe ser un numero entero positivo");
-                        i--;
-                    }
-                }
+                this.dialogoParticiones = new DialogoParticiones(this.procesador, total, this);
+                this.dialogoParticiones.setVisible(true);
+                
+//                for (int i = 0; i < total; i++) {
+//                    String tamanioParticion = JOptionPane.showInputDialog(this, "¿Cual es el tamaño de la particion numero: " + (i + 1) + "?");
+//                    if (validarNumeros(tamanioParticion)) {
+//                        procesador.agregarParticion(Integer.parseInt(tamanioParticion));
+//                    } else {
+//                        JOptionPane.showMessageDialog(this, "Debe ser un numero entero positivo");
+//                        i--;
+//                    }
+//                }
             } else {
                 JOptionPane.showMessageDialog(this, "Debe ser un numero entero positivo");
                 ingresarParticiones();
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe existir por los menos 1 particion");
-            ingresarParticiones();
+        } else { // Preciona el boton cancelar
+            //JOptionPane.showMessageDialog(this, "Debe existir por los menos 1 particion");
+            //ingresarParticiones();
+        	System.exit(0); 
         }
     }
 
@@ -156,13 +161,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         }
         if (evento.getActionCommand().equals("Agregar Proceso")) {
             this.agregarProceso();
-            // Se actualiza la selección de comunicacion
-            String[] opciones = new String[procesador.getProcesosCargados().size() + 1];
-            opciones[0] = "";
-            for (int i = 1; i < opciones.length; i++) {
-                opciones[i] = procesador.getProcesosCargados().get(i - 1).getIdentificador();
-            }
-            panelProceso.getPanelComunicacion().setOpciones(opciones);
             this.panelTabla.listarComunes();
         }
         if (evento.getActionCommand().equals("Procesar")) {
@@ -178,6 +176,22 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         if (evento.getActionCommand().equals("Ver Manual")) {
             Manual manual = new Manual();
             manual.abrir();
+        }
+        
+        if (evento.getActionCommand().equals("Volver")) {
+        	this.dialogoParticiones.setVisible(false);
+        	this.ingresarParticiones();
+        }
+        
+        if (evento.getActionCommand().equals("Agregar Particiones")) {
+        	ArrayList<Particion> lista = this.dialogoParticiones.getParticiones();
+        	if (lista != null) {
+        		this.procesador.setParticiones(lista);
+        		this.dialogoParticiones.setVisible(false);
+        		this.setVisible(true);
+        		// Actualiza la lista de particiones 
+        		this.panelProceso.setParticiones(lista);
+			}
         }
     }
 
@@ -199,14 +213,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
             return;
         }
 
-        // Validamos y agregamos el campo prioridd
-        int prioridadProceso = 5;
-        if (!this.validarNumeros(auxTamanio)) {
-            JOptionPane.showMessageDialog(null, "El campo prioridad debe contener unicamente numeros enteros");
+        // Validamos y agregamos el campo tama�o
+        int tamanoProceso = -1;
+        if (!this.validarNumeros(auxTamanio)||auxTamanio.equals("") || auxTamanio.equals(" ")) {
+            JOptionPane.showMessageDialog(null, "El campo Tamano del proceso debe contener unicamente numeros enteros");
             return;
-        }
-        if (!auxTamanio.equals("")) { // Se asign� ua prioridad			
-            prioridadProceso = Integer.parseInt(auxTamanio);
+        }else { // Se asign� ua prioridad			
+            tamanoProceso = Integer.parseInt(auxTamanio);
         }
 
         // Validamos y agregamos el campo tiempo
@@ -217,25 +230,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         } else {
             tiempo = Integer.parseInt(auxTiempo);
         }
-
-        boolean bloqueo = this.panelProceso.getPanelBloqueo().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
-        boolean destruido = this.panelProceso.getPanelDestruir().getComboBox().getSelectedItem().equals("Si"); // se evala que el campo seleccionado sea Si
-        String seComunica = (String) (this.panelProceso.getPanelComunicacion().getComboBox().getSelectedItem()); // se evala que el campo seleccionado sea Si
-        String suspendidoListo = (String) this.panelProceso.getPanelSuspender().getComboBox().getSelectedItem(); // se evala que el campo seleccionado sea Si
-        String suspendidoBloqueado = (String) this.panelProceso.getPanelSuspenderBloqueado().getComboBox().getSelectedItem(); // se evala que el campo seleccionado sea Si;
-        if (suspendidoListo.equals("No") == false && suspendidoBloqueado.equals("No") == false) {
-            JOptionPane.showMessageDialog(null, "El proceso ya va a pasar a estado de Suspendido listo");
-            return;
-        }
-        if (suspendidoBloqueado.equals("No") == false) {
-            bloqueo = true;
-        }
-        if (suspendidoBloqueado.equals("Suspendido/Listo")) {
-            suspendidoListo = "Si";
-        }
-        System.out.println("SL: " + suspendidoListo);
-        //									Nombre		priodidad		tiempo	bloqueo	suspendido destruido seComunica
-//        this.procesador.agregarProceso(nombreProceso, tiempo, tamanio, particion);
+                
+        int indexParticion = this.panelProceso.getPanelParticion().getComboBox().getSelectedIndex();
+        //								Nombre		tiempo 	tama�o			indexParticion
+        this.procesador.agregarProceso(nombreProceso, tiempo, tamanoProceso, indexParticion);
         this.panelTabla.listarComunes();
         limpiarProceso();
     }

@@ -19,6 +19,7 @@ public class Proceso {
     private ArrayList<String> procesosComunica;
     private String seComunica;
     private int tamanio;
+    private int indexParticion; // Particion a la que pertenece
 
     //Nombre				priodidad		tiempo 				bloqueo			suspendidoListo				SuspedidoBLoqueado			destruido		seComunica
     public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, String suspendidoListo, String suspendidoBloqueado, boolean destruido, String seComunica, String cambioPrioridad) {
@@ -37,10 +38,11 @@ public class Proceso {
         this.estadoActual = Estado.listo;
     }
 
-    public Proceso(String identificador, int tiempoEjecucion, int tamanio) {
+    public Proceso(String identificador, int tiempoEjecucion, int tamanio, int indexParticion) {
         this.identificador = identificador;
         this.tiempoEjecucion = tiempoEjecucion;
         this.tamanio = tamanio;
+        this.indexParticion = indexParticion;
     }
     
     public Estado getEstadoActual() {
@@ -135,4 +137,23 @@ public class Proceso {
     public int getSize() {
         return tamanio;
     }
+
+	public int getTamanio() {
+		return tamanio;
+	}
+
+	public void setTamanio(int tamanio) {
+		this.tamanio = tamanio;
+	}
+
+	public int getIndexParticion() {
+		return indexParticion;
+	}
+
+	public void setIndexParticion(int indexParticion) {
+		this.indexParticion = indexParticion;
+	}
+    
+	
+    
 }

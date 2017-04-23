@@ -1,10 +1,14 @@
 package GUI;
 
 import java.awt.BorderLayout;
+
+import main.Particion;
 import main.Procesador;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -184,5 +188,14 @@ public class PanelProceso extends JPanel {
         panelTamanio.limpiarTexto();
         panelTiempo.limpiarTexto();
     }
+    
+    public void setParticiones(ArrayList<Particion> lista ){
+    	String[] opciones = new String[lista.size()]; 
+    	for (int i = 0; i < lista.size(); i++) {
+			opciones[i] = "Particion " + String.valueOf(lista.get(i).getIndex()+1);
+		}
+    	this.panelParticion.setOpciones(opciones);
+    }
+    
 
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Particion {
 
     private int tamanio;
+    private int index; // Index en la lista de particiones
     private ArrayList<Proceso> procesos;
     private ArrayList<InformacionTransicion> procesosListos;
     private ArrayList<InformacionTransicion> procesosEjecutados;
@@ -25,6 +26,13 @@ public class Particion {
 
     public Particion(int tamanio) {
         this.tamanio = tamanio;
+        this.procesos = new ArrayList<>();
+        this.index = 0;
+    }
+    
+    public Particion(int tamanio, int index) {
+        this.tamanio = tamanio;
+        this.index= index;
         this.procesos = new ArrayList<>();
     }
     
@@ -93,4 +101,16 @@ public class Particion {
     public int obternerTotalProcesos(){
         return procesos.size();
     }
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+    
+    
+    
 }

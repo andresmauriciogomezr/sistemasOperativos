@@ -48,6 +48,7 @@ public class Procesador {
         this.particiones = new ArrayList<>();
         this.count = 0;
         this.procesando = true;
+        this.procesosCargados = new ArrayList<>();
     }
 
     public void agregarParticion(int tamanio) {
@@ -56,7 +57,8 @@ public class Procesador {
     }
 
     public void agregarProceso(String identificador, int tiempoEjecucion, int tamanio, int particion) {
-        Proceso process = new Proceso(identificador, tiempoEjecucion, tamanio);
+        Proceso process = new Proceso(identificador, tiempoEjecucion, tamanio, particion);
+        this.procesosCargados.add(process);
         particiones.get(particion).addProcess(process);
     }
 
@@ -359,4 +361,14 @@ public class Procesador {
     public ArrayList<InformacionTransicion> getProcesosTerminaSuspBASuspL() {
         return procesosTerminaSuspBASuspL;
     }
+
+	public ArrayList<Particion> getParticiones() {
+		return particiones;
+	}
+
+	public void setParticiones(ArrayList<Particion> particiones) {
+		this.particiones = particiones;
+	}
+    
+    
 }

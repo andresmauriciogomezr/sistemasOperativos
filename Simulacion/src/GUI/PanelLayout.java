@@ -123,5 +123,18 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 				new Insets(5, 0, 5, 5), 0, 0);
 		add(comboBox, gbc);
 	}
+
+	public JButton getBotonAceptar() {
+		return botonAceptar;
+	}
+
+	public void setBoton(JButton boton) {
+		this.remove(this.botonAceptar);
+		this.botonAceptar = boton;
+		gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
+				new Insets(5, 0, 5, 5), 0, 0);
+		this.add(this.botonAceptar, gbc);
+	}
+
 	
 }
