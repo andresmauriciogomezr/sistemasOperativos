@@ -66,7 +66,7 @@ public class Procesador {
         verificarProcesando();
         empezar();
         System.out.println(procesando);
-        while (!procesando) {
+        while (procesando) {
             for (int i = 0; i < particiones.size(); i++) {
                 Particion particion = particiones.get(i);
                 if (particion.obternerTotalProcesos() > 0) {
@@ -87,10 +87,12 @@ public class Procesador {
     }
 
     public void verificarProcesando() {
+        boolean procesar = false;
         for (Iterator<Particion> iterator = particiones.iterator(); iterator.hasNext();) {
             Particion next = iterator.next();
-            procesando = procesando && next.procesosProcesados();
+            procesar = procesar || !next.procesosProcesados();
         }
+        this.procesando = procesar;
     }
 
     public void empezar() {
