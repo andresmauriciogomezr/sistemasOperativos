@@ -55,7 +55,7 @@ public class Procesador {
         Particion particion = new Particion(tamanio);
         this.particiones.add(particion);
     }
-
+    //								nombre				tiempo				tamano			indexParticion
     public void agregarProceso(String identificador, int tiempoEjecucion, int tamanio, int particion) {
         Proceso process = new Proceso(identificador, tiempoEjecucion, tamanio, particion);
         this.procesosCargados.add(process);
@@ -65,7 +65,8 @@ public class Procesador {
     public void procesar() {
         verificarProcesando();
         empezar();
-        while (procesando) {
+        System.out.println(procesando);
+        while (!procesando) {
             for (int i = 0; i < particiones.size(); i++) {
                 Particion particion = particiones.get(i);
                 if (particion.obternerTotalProcesos() > 0) {

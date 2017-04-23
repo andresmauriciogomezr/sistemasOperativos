@@ -87,6 +87,7 @@ public class Particion {
     }
     
     public boolean procesosProcesados(){
+    	System.out.println(this.procesos.size());
         return this.procesos.isEmpty();
     }
     
