@@ -103,7 +103,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     }
 
     public void ingresarParticiones() {
-        String totalParticiones = JOptionPane.showInputDialog(this, "Â¿Cuantas particiones son en total?");
+        String totalParticiones = JOptionPane.showInputDialog(this, "¿Cuantas particiones desea crear?");
         int total;
         if (totalParticiones != null) {
             if (validarNumeros(totalParticiones) && !totalParticiones.equals("") && !totalParticiones.equals(" ") ) { // No es vacío y es un numero

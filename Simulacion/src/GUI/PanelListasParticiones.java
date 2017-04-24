@@ -87,7 +87,7 @@ public class PanelListasParticiones extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (this.particion != null) {
+     //   if (this.particion != null) {// listas para las particiones
             // Listos
             String[] identificadoresListos = {"Lista Procesos listos"};
             modeloTablaListos = new DefaultTableModel(0, identificadoresListos.length);
@@ -185,35 +185,36 @@ public class PanelListasParticiones extends JPanel {
             scrollTerminados = new JScrollPane(tablaTerminados);
             scrollTerminados.setPreferredSize(new Dimension(width, heigth));
             this.panelTablas.add(scrollTerminados);
-        } else if (this.procesador != null) {// ----------------------- lista generales
-            // Procesados
-            String[] identificadoresProcesados = {"Lista Procesados"};
-            modeloTablaProcesados = new DefaultTableModel(0, identificadoresProcesados.length);
-            modeloTablaProcesados.setColumnIdentifiers(identificadoresProcesados);
-            tablaProcesados = new JTable(modeloTablaProcesados) {
-                public boolean isCellEditable(int rowIndex, int vColIndex) {
-                    return false;
-                }
-            };
-            tablaProcesados.getTableHeader().setReorderingAllowed(false);
-            scrollProcesados = new JScrollPane(tablaProcesados);
-            scrollProcesados.setPreferredSize(new Dimension(width, heigth));
-            this.panelTablas.add(scrollProcesados);
-
-            // NoProcesados
-            String[] identificadoresNoProcesados = {"Lista NoProcesados"};
-            modeloTablaNoProcesados = new DefaultTableModel(0, identificadoresNoProcesados.length);
-            modeloTablaNoProcesados.setColumnIdentifiers(identificadoresNoProcesados);
-            tablaNoProcesados = new JTable(modeloTablaNoProcesados) {
-                public boolean isCellEditable(int rowIndex, int vColIndex) {
-                    return false;
-                }
-            };
-            tablaNoProcesados.getTableHeader().setReorderingAllowed(false);
-            scrollNoProcesados = new JScrollPane(tablaNoProcesados);
-            scrollNoProcesados.setPreferredSize(new Dimension(width, heigth));
-            this.panelTablas.add(scrollNoProcesados);
-        }
+       // } 
+//        else if (this.procesador != null) {// ----------------------- lista generales
+//            // Procesados
+//            String[] identificadoresProcesados = {"Lista Procesados"};
+//            modeloTablaProcesados = new DefaultTableModel(0, identificadoresProcesados.length);
+//            modeloTablaProcesados.setColumnIdentifiers(identificadoresProcesados);
+//            tablaProcesados = new JTable(modeloTablaProcesados) {
+//                public boolean isCellEditable(int rowIndex, int vColIndex) {
+//                    return false;
+//                }
+//            };
+//            tablaProcesados.getTableHeader().setReorderingAllowed(false);
+//            scrollProcesados = new JScrollPane(tablaProcesados);
+//            scrollProcesados.setPreferredSize(new Dimension(width, heigth));
+//            this.panelTablas.add(scrollProcesados);
+//
+//            // NoProcesados
+//            String[] identificadoresNoProcesados = {"Lista NoProcesados"};
+//            modeloTablaNoProcesados = new DefaultTableModel(0, identificadoresNoProcesados.length);
+//            modeloTablaNoProcesados.setColumnIdentifiers(identificadoresNoProcesados);
+//            tablaNoProcesados = new JTable(modeloTablaNoProcesados) {
+//                public boolean isCellEditable(int rowIndex, int vColIndex) {
+//                    return false;
+//                }
+//            };
+//            tablaNoProcesados.getTableHeader().setReorderingAllowed(false);
+//            scrollNoProcesados = new JScrollPane(tablaNoProcesados);
+//            scrollNoProcesados.setPreferredSize(new Dimension(width, heigth));
+//            this.panelTablas.add(scrollNoProcesados);
+//        }
 
         this.add(panelTablas, BorderLayout.CENTER);
 
@@ -224,6 +225,46 @@ public class PanelListasParticiones extends JPanel {
     public void listarGenerales() {
         ArrayList<String> procesosProcesados = this.procesador.getListaProcesados();
         ArrayList<String> procesosNoProcesados = this.procesador.getListaNoProcesados();
+        //ArrayList<InformacionTransicion> procesosNoProcesados = this.procesador.getProcesosExpirados();
+        
+        ArrayList<String> procesosListos = this.procesador.getProcesosListos();
+        ArrayList<InformacionTransicion> procesosDespachados = this.procesador.getProcesosDespachados();
+        ArrayList<InformacionTransicion> procesosExpirados = this.procesador.getProcesosExpirados();
+        ArrayList<String> procesosTerminados = this.procesador.getProcesosTerminados();
+        ArrayList<String> ejecutados = this.procesador.getListaEjecutados();
+
+        for (int i = 0; i < procesosProcesados.size(); i++) {
+            //Proceso proceso = ;
+            agregarProcesado(procesosProcesados.get(i));
+        }
+
+        for (int i = 0; i < procesosListos.size(); i++) {
+            //Proceso proceso = ;
+            agregarListo(procesosListos.get(i));
+        }
+
+        for (int i = 0; i < procesosDespachados.size(); i++) {
+            InformacionTransicion informacionTransicion = procesosDespachados.get(i);
+            agregarDespachado(informacionTransicion);
+        }
+
+        for (int i = 0; i < ejecutados.size(); i++) {
+            agregarEjecutado(ejecutados.get(i));
+        }
+
+        for (int i = 0; i < procesosExpirados.size(); i++) {
+            InformacionTransicion informacionTransicion = procesosExpirados.get(i);
+            agregarExpirado(informacionTransicion);
+        }
+
+        for (int i = 0; i < procesosTerminados.size(); i++) {
+            agregarTerminado(procesosTerminados.get(i));
+        }
+
+        tablaListos.setModel(modeloTablaListos);
+        tablaDespachados.setModel(modeloTablaDespachados);
+        tablaExpirados.setModel(modeloTablaExpirados);
+        tablaEjecutados.setModel(modeloTablaEjecutados);
 
         for (int i = 0; i < procesosProcesados.size(); i++) {
             //Proceso proceso = ;
@@ -278,7 +319,7 @@ public class PanelListasParticiones extends JPanel {
         }
 
         for (int i = 0; i < ejecutados.size(); i++) {
-            agregarEjecutado(ejecutados.get(i));
+            agregarEjecutado(ejecutados.get(i).getIdentificadorProceso() + " Tiempo : " +ejecutados.get(i).getTiempoLleva() );
         }
 
         for (int i = 0; i < procesosExpirados.size(); i++) {
@@ -326,10 +367,10 @@ public class PanelListasParticiones extends JPanel {
         modeloTablaExpirados.setValueAt(it.getIdentificadorProceso() + "-Tiempo:" + it.getTiempoLleva(), row, 0);
     }
 
-    public void agregarEjecutado(InformacionTransicion it) {
+    public void agregarEjecutado(String it) {
         int row = this.modeloTablaEjecutados.getRowCount();
         modeloTablaEjecutados.setRowCount(row + 1);
-        modeloTablaEjecutados.setValueAt(it.getIdentificadorProceso() + "-Tiempo:" + it.getTiempoLleva(), row, 0);
+        modeloTablaEjecutados.setValueAt(it, row, 0);
     }
 
     public void agregarTerminado(String proceso) {
