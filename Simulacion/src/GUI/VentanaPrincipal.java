@@ -89,7 +89,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     	lista.add(new Particion(25, 2));
     	this.procesador.setParticiones(lista);
         //								nombre	tiempo	  tamano indexParticion
-    	this.procesador.agregarProceso("P1", 		5, 		7	, 0);
+    	this.procesador.agregarProceso("P1", 		5, 		27	, 0);
     	this.procesador.agregarProceso("P2", 		8, 		4	, 0);
     	this.procesador.agregarProceso("P3", 		4, 		10	, 0);
     	this.procesador.agregarProceso("P4", 		5, 		6	, 1);

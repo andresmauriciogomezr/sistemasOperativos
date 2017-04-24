@@ -78,7 +78,7 @@ public class Procesador {
                 if (particion.obternerTotalProcesos() > 0) {
                     Proceso proceso = particion.obtenerProceso(0);
                     if (proceso.getSize() <= particion.getTamanio()) {
-                        particion.agregarProcesado(proceso.getIdentificador());
+                        particion.agregarProcesado(proceso.getIdentificador() + "-- tiempo : " + proceso.getTiempoEjecucion());
                         ejecutarProceso(proceso, i);
                     } else {
                         listarProceso(proceso, i);
