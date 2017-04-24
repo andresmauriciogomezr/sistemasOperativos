@@ -82,7 +82,7 @@ public class DialogoParticiones extends JFrame {
     
     public void inicializarPaneles(int cantidadParticiones){
     	for (int i = 0; i < cantidadParticiones; i++) {
-        	PanelLayout panel = new PanelLayout(null, "Particion # " + String.valueOf(i+1), "Escriba el tamano de memoria de la particion # " + String.valueOf(i +1), TipoPanel.texto);
+        	PanelLayout panel = new PanelLayout(null, "Tamanio para la Particion # " + String.valueOf(i+1), "Escriba el tamano de memoria de la particion # " + String.valueOf(i +1), TipoPanel.texto);
         	this.listaPanelesParticiones.add(panel);
             this.panelPrincipal.add(panel);
 		}
