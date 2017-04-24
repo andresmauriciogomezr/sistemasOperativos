@@ -35,6 +35,9 @@ public class Procesador {
     private ArrayList<String> listaEjecutados;
     private ArrayList<Proceso> listaComunicaciones;
     private ArrayList<Particion> particiones;
+    
+    private ArrayList<String> listaProcesados;
+    private ArrayList<String> listaNoProcesados;
 
     private int count; // Indica en que posicion de las listas de procesos se encuentra ejecutando
     boolean procesando; // Determina si existen procesos listos para ejecutarse
@@ -49,6 +52,9 @@ public class Procesador {
         this.count = 0;
         this.procesando = true;
         this.procesosCargados = new ArrayList<>();
+        
+        this.listaProcesados = new ArrayList<>();
+        this.listaNoProcesados = new ArrayList<>();
     }
 
     public void agregarParticion(int tamanio) {
@@ -64,7 +70,7 @@ public class Procesador {
 
     public void procesar() {
         verificarProcesando();
-        empezar();
+        empezar(); // Inicializa las listas
         System.out.println(procesando);
         while (procesando) {
             for (int i = 0; i < particiones.size(); i++) {
@@ -371,6 +377,26 @@ public class Procesador {
 
 	public void setParticiones(ArrayList<Particion> particiones) {
 		this.particiones = particiones;
+	}
+
+	public ArrayList<String> getListaNoProcesados() {
+		return listaNoProcesados;
+	}
+
+	public void setListaNoProcesados(ArrayList<String> listaNoProcesados) {
+		this.listaNoProcesados = listaNoProcesados;
+	}
+
+	public void setListaEjecutados(ArrayList<String> listaEjecutados) {
+		this.listaEjecutados = listaEjecutados;
+	}
+
+	public ArrayList<String> getListaProcesados() {
+		return listaProcesados;
+	}
+
+	public void setListaProcesados(ArrayList<String> listaProcesados) {
+		this.listaProcesados = listaProcesados;
 	}
     
     

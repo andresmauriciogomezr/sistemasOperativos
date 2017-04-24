@@ -3,8 +3,10 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -13,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 
+import main.Particion;
 import main.Procesador;
 
 public class DialogoResultados extends JFrame implements ActionListener{
@@ -21,15 +24,13 @@ public class DialogoResultados extends JFrame implements ActionListener{
 	JMenu menu;
 	JMenuItem menuItem;
 	private Procesador procesador;	
-	private PanelListas panelListas;
+	private ArrayList<PanelListasParticiones> listaPaneles;
 	
-	
-	public DialogoResultados(Procesador procesador, PanelListas panelListas) {
+	public DialogoResultados(Procesador procesador) {
+		this.listaPaneles = new ArrayList<>();
 		this.procesador = procesador;
-		this.panelListas = panelListas;
-		
 		Dimension dimension = this.getToolkit().getScreenSize();
-				
+	
 
 		menuBar = new JMenuBar();
 		menu = new JMenu("Menu");
@@ -49,13 +50,28 @@ public class DialogoResultados extends JFrame implements ActionListener{
 			setTitle("");
 			setSize(dimension);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
-			setLayout(new BorderLayout());
+			//setLayout(new BorderLayout());			
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		this.add(panelListas, BorderLayout.CENTER);
+		//this.inicializarPaneles(particiones);	
+		//this.add(this.panelListas, BorderLayout.CENTER);
+	}
+	
+	public void inicializarPaneles(ArrayList<Particion> particiones){
+		setLayout(new GridLayout(particiones.size()+1, 1));
+		for (int i = 0; i < particiones.size(); i++) {
+			PanelListasParticiones panel = new PanelListasParticiones(particiones.get(i), "Listas pertenecientes a la Particion " +(i+1), null);
+			panel.listarProcesos();
+			this.listaPaneles.add(panel);
+			this.add(panel);
+		}
+		
+		PanelListasParticiones panel = new PanelListasParticiones(null, "Listas generales", this.procesador);
+		panel.listarGenerales();
+		this.add(panel);
 	}
 
 	@Override

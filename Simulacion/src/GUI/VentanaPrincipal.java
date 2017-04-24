@@ -57,8 +57,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         this.setJMenuBar(menuBar);
 
         this.procesador = new Procesador();
-        this.panelListas = new PanelListas(this.procesador);
-        this.dialogoResultados = new DialogoResultados(this.procesador, this.panelListas);
+        this.dialogoResultados = new DialogoResultados(this.procesador);
 
         this.setUndecorated(true);
         try {
@@ -92,12 +91,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         //								nombre	tiempo	  tamano indexParticion
     	this.procesador.agregarProceso("P1", 		5, 		7	, 0);
     	this.procesador.agregarProceso("P2", 		8, 		4	, 0);
-    	this.procesador.agregarProceso("P1", 		4, 		10	, 0);
-    	this.procesador.agregarProceso("P1", 		5, 		6	, 1);
-    	this.procesador.agregarProceso("P1", 		8, 		4	, 1);
-    	this.procesador.agregarProceso("P1", 		9, 		5	, 1);
-    	this.procesador.agregarProceso("P1", 		11,		10	, 2);
-    	this.procesador.agregarProceso("P1", 		6, 		5	, 2);
+    	this.procesador.agregarProceso("P3", 		4, 		10	, 0);
+    	this.procesador.agregarProceso("P4", 		5, 		6	, 1);
+    	this.procesador.agregarProceso("P5", 		8, 		4	, 1);
+    	this.procesador.agregarProceso("P6", 		9, 		8	, 1);
+    	this.procesador.agregarProceso("P7", 		11,		10	, 2);
+    	this.procesador.agregarProceso("P8", 		6, 		20	, 2);
     	
         this.panelTabla.listarComunes();
         this.setVisible(true);
@@ -165,7 +164,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
                 //this.panelTabla.listarComunes();
                 this.procesador.procesar();
                 //this.panelListas.listarProcesos(); // Muestra como qued� la tabla de procesos cargados 
-                //this.dialogoResultados.setVisible(true); // Muestra la ventana resultados
+                this.dialogoResultados.inicializarPaneles(this.procesador.getParticiones());
+                this.dialogoResultados.setVisible(true); // Muestra la ventana resultados
             } else {
                 JOptionPane.showMessageDialog(this, "Tiene que haber por lo menos 1 proceso");
             }

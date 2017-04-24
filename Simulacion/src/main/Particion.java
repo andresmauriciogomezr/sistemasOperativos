@@ -111,6 +111,73 @@ public class Particion {
 		this.index = index;
 	}
 
+	public ArrayList<Proceso> getProcesos() {
+		return procesos;
+	}
+
+	public void setProcesos(ArrayList<Proceso> procesos) {
+		this.procesos = procesos;
+	}
+
+	public ArrayList<InformacionTransicion> getProcesosListos() {
+		return procesosListos;
+	}
+
+	public void setProcesosListos(ArrayList<InformacionTransicion> procesosListos) {
+		this.procesosListos = procesosListos;
+	}
+
+	public ArrayList<InformacionTransicion> getProcesosEjecutados() {
+		return procesosEjecutados;
+	}
+
+	public void setProcesosEjecutados(
+			ArrayList<InformacionTransicion> procesosEjecutados) {
+		this.procesosEjecutados = procesosEjecutados;
+	}
+
+	public ArrayList<InformacionTransicion> getProcesosExpirados() {
+		return procesosExpirados;
+	}
+
+	public void setProcesosExpirados(
+			ArrayList<InformacionTransicion> procesosExpirados) {
+		this.procesosExpirados = procesosExpirados;
+	}
+
+	public ArrayList<InformacionTransicion> getProcesosDespachados() {
+		return procesosDespachados;
+	}
+
+	public void setProcesosDespachados(
+			ArrayList<InformacionTransicion> procesosDespachados) {
+		this.procesosDespachados = procesosDespachados;
+	}
+
+	public ArrayList<String> getProcesosProcesados() {
+		return procesosProcesados;
+	}
+
+	public void setProcesosProcesados(ArrayList<String> procesosProcesados) {
+		this.procesosProcesados = procesosProcesados;
+	}
+
+	public ArrayList<String> getProcesosNoProcesados() {
+		return procesosNoProcesados;
+	}
+
+	public void setProcesosNoProcesados(ArrayList<String> procesosNoProcesados) {
+		this.procesosNoProcesados = procesosNoProcesados;
+	}
+
+	public ArrayList<String> getProcesosTerminados() {
+		return procesosTerminados;
+	}
+
+	public void setProcesosTerminados(ArrayList<String> procesosTerminados) {
+		this.procesosTerminados = procesosTerminados;
+	}
+
     
     
     
