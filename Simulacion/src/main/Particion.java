@@ -34,12 +34,12 @@ public class Particion {
         this.tamanio = tamanio;
         this.index= index;
         this.procesos = new ArrayList<>();
+        this.procesosProcesados = new ArrayList<>();
+        this.procesosNoProcesados = new ArrayList<>();
     }
     
     public void empezar(){
         this.procesosDespachados = new ArrayList<>();
-        this.procesosNoProcesados = new ArrayList<>();
-        this.procesosProcesados = new ArrayList<>();
         this.procesosListos = new ArrayList<>();
         this.procesosEjecutados = new ArrayList<>();
         this.procesosExpirados = new ArrayList<>();
@@ -103,6 +103,9 @@ public class Particion {
         return procesos.size();
     }
 
+    public boolean estaEnProcesados(Proceso proceso){
+        return procesosProcesados.contains(proceso.getIdentificador());
+    }
 	public int getIndex() {
 		return index;
 	}

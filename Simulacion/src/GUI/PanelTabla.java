@@ -65,7 +65,7 @@ public class PanelTabla extends JPanel {
     public void listarComunes() {
         ArrayList<Proceso> procesos = this.procesador.getProcesosCargados();
         
-        String[] identificadores = {"Identificador", "Tiempo", "Tamanio", "# Particion"};
+        String[] identificadores = {"Identificador", "Tiempo", "Tamaño", "# Particion"};
         modeloTabla = new DefaultTableModel(0, identificadores.length);
         modeloTabla.setColumnIdentifiers(identificadores);
 

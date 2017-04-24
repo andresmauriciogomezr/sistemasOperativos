@@ -35,7 +35,7 @@ public class Procesador {
     private ArrayList<String> listaEjecutados;
     private ArrayList<Proceso> listaComunicaciones;
     private ArrayList<Particion> particiones;
-    
+
     private ArrayList<String> listaProcesados;
     private ArrayList<String> listaNoProcesados;
 
@@ -52,7 +52,7 @@ public class Procesador {
         this.count = 0;
         this.procesando = true;
         this.procesosCargados = new ArrayList<>();
-        
+
         this.listaProcesados = new ArrayList<>();
         this.listaNoProcesados = new ArrayList<>();
     }
@@ -61,7 +61,9 @@ public class Procesador {
         Particion particion = new Particion(tamanio);
         this.particiones.add(particion);
     }
+
     //								nombre				tiempo				tamano			indexParticion
+
     public void agregarProceso(String identificador, int tiempoEjecucion, int tamanio, int particion) {
         Proceso process = new Proceso(identificador, tiempoEjecucion, tamanio, particion);
         this.procesosCargados.add(process);
@@ -78,7 +80,9 @@ public class Procesador {
                 if (particion.obternerTotalProcesos() > 0) {
                     Proceso proceso = particion.obtenerProceso(0);
                     if (proceso.getSize() <= particion.getTamanio()) {
-                        particion.agregarProcesado(proceso.getIdentificador());
+                        if (particion.estaEnProcesados(proceso) == false) {
+                            particion.agregarProcesado(proceso.getIdentificador());
+                        }
                         ejecutarProceso(proceso, i);
                     } else {
                         listarProceso(proceso, i);
@@ -371,33 +375,32 @@ public class Procesador {
         return procesosTerminaSuspBASuspL;
     }
 
-	public ArrayList<Particion> getParticiones() {
-		return particiones;
-	}
+    public ArrayList<Particion> getParticiones() {
+        return particiones;
+    }
 
-	public void setParticiones(ArrayList<Particion> particiones) {
-		this.particiones = particiones;
-	}
+    public void setParticiones(ArrayList<Particion> particiones) {
+        this.particiones = particiones;
+    }
 
-	public ArrayList<String> getListaNoProcesados() {
-		return listaNoProcesados;
-	}
+    public ArrayList<String> getListaNoProcesados() {
+        return listaNoProcesados;
+    }
 
-	public void setListaNoProcesados(ArrayList<String> listaNoProcesados) {
-		this.listaNoProcesados = listaNoProcesados;
-	}
+    public void setListaNoProcesados(ArrayList<String> listaNoProcesados) {
+        this.listaNoProcesados = listaNoProcesados;
+    }
 
-	public void setListaEjecutados(ArrayList<String> listaEjecutados) {
-		this.listaEjecutados = listaEjecutados;
-	}
+    public void setListaEjecutados(ArrayList<String> listaEjecutados) {
+        this.listaEjecutados = listaEjecutados;
+    }
 
-	public ArrayList<String> getListaProcesados() {
-		return listaProcesados;
-	}
+    public ArrayList<String> getListaProcesados() {
+        return listaProcesados;
+    }
 
-	public void setListaProcesados(ArrayList<String> listaProcesados) {
-		this.listaProcesados = listaProcesados;
-	}
-    
-    
+    public void setListaProcesados(ArrayList<String> listaProcesados) {
+        this.listaProcesados = listaProcesados;
+    }
+
 }
