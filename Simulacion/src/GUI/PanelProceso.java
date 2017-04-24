@@ -44,11 +44,11 @@ public class PanelProceso extends JPanel {
         this.add(panelTiempo);
         
         // tamanio del proceso
-        panelTamanio = new PanelLayout(listener, "Tamaño del proceso: ", "Escriba la tamaño del proceso que desea agregar, se aceptan solo numeros", TipoPanel.texto);
+        panelTamanio = new PanelLayout(listener, "Tamanio del proceso: ", "Escriba la tamanioo del proceso que desea agregar, se aceptan solo numeros", TipoPanel.texto);
         this.add(panelTamanio);
         
                 // Suspender Listo 
-        panelParticion = new PanelLayout(listener, "Particion: ", "Selección a que particion pertenece el proceso que se esta ingresando ", TipoPanel.select);
+        panelParticion = new PanelLayout(listener, "Particion: ", "Seleccione a que particion pertenece el proceso que se esta ingresando ", TipoPanel.select);
         String[] opciones = {""};
         panelParticion.setOpciones(opciones);
         this.add(panelParticion);
