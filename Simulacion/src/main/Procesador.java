@@ -62,8 +62,7 @@ public class Procesador {
         this.particiones.add(particion);
     }
 
-    //								nombre				tiempo				tamano			indexParticion
-
+    //	nombre				tiempo				tamano			indexParticion
     public void agregarProceso(String identificador, int tiempoEjecucion, int tamanio, int particion) {
         Proceso process = new Proceso(identificador, tiempoEjecucion, tamanio, particion);
         this.procesosCargados.add(process);
@@ -82,11 +81,13 @@ public class Procesador {
                     if (proceso.getSize() <= particion.getTamanio()) {
                         if (particion.estaEnProcesados(proceso) == false) {
                             particion.agregarProcesado(proceso.getIdentificador());
+                            listaProcesados.add(proceso.getIdentificador());
                         }
                         ejecutarProceso(proceso, i);
                     } else {
                         listarProceso(proceso, i);
                         particion.agregarNoProcesado(proceso.getIdentificador());
+                        listaNoProcesados.add(proceso.getIdentificador());
                         removerProceso(proceso, i);
                     }
                 }
