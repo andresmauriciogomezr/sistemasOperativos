@@ -44,11 +44,11 @@ public class Particion {
     }
     
     public void empezar(){
-        this.procesosDespachados = new ArrayList<>();
-        this.procesosListos = new ArrayList<>();
-        this.procesosEjecutados = new ArrayList<>();
-        this.procesosExpirados = new ArrayList<>();
-        this.procesosTerminados = new ArrayList<>();
+        if (procesosDespachados == null) this.procesosDespachados = new ArrayList<>();
+        if (procesosListos == null) this.procesosListos = new ArrayList<>();
+        if (procesosEjecutados == null) this.procesosEjecutados = new ArrayList<>();
+        if (procesosExpirados == null) this.procesosExpirados = new ArrayList<>();
+        if (procesosTerminados == null) this.procesosTerminados = new ArrayList<>();
     }
 
     public int getTamanio() {

@@ -70,11 +70,11 @@ public class Procesador {
 
     public void procesar() {
         verificarProcesando();
-        empezar(); // Inicializa las listas
         while (procesando) {
             System.out.println("Entro a procesar");
             ubicarProcesos();
             for (int i = 0; i < particiones.size(); i++) {
+                empezar(); // Inicializa las listas
                 Particion particion = particiones.get(i);
                 if (particion.obternerTotalProcesos() > 0) {
                     Proceso proceso = particion.obtenerProceso(0);
@@ -103,11 +103,13 @@ public class Procesador {
                             if (count == procesosCargados.size() - 1) {
                                 count = 0;
                             }
-                        } else if (puedeSerUbicado(i, count) == false) {
+                        } 
+                        if (puedeSerUbicado(i, proceso.getTamanio()) == false) {
                             count++;
                         }
                     }
                 } else {
+                    System.out.println("No pudo ser ubicado: " + proceso.getIdentificador());
                     listaNoProcesados.add(proceso.getIdentificador());
                     count++;
                 }
@@ -118,7 +120,7 @@ public class Procesador {
 
     public boolean puedeSerUbicado(int tamanio) {
         for (int i = 0; i < particiones.size(); i++) {
-            if (particiones.get(i).getTamanio() <= tamanio) {
+            if (particiones.get(i).getTamanio() >= tamanio) {
                 return true;
             }
         }
@@ -128,7 +130,7 @@ public class Procesador {
     public boolean puedeSerUbicado(int posicion, int tamanio) {
         for (int i = 0; i < particiones.size(); i++) {
             if (i != posicion) {
-                if (particiones.get(i).getTamanio() <= tamanio) {
+                if (particiones.get(i).getTamanio() >= tamanio) {
                     return true;
                 }
             }
@@ -228,6 +230,7 @@ public class Procesador {
 
     public void terminarProceso(Proceso proceso, int posicion) {
         particiones.get(posicion).agregarTerminado(proceso.getIdentificador());
+        particiones.get(posicion).setProcesoProcesando(null);
         this.removerProceso(proceso, posicion);
     }
 //
