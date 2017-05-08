@@ -72,7 +72,6 @@ public class PanelTabla extends JPanel {
         for (int i = 0; i < procesos.size(); i++) {
             Proceso proceso = procesos.get(i);
             agregarFila(proceso);
-            System.out.println(proceso.getPrioridad());
         }
         //tabla.setFont(new FontUIResource("Verdana", Font.PLAIN, 20));
         tabla.setModel(modeloTabla);

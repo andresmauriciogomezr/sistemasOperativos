@@ -93,7 +93,6 @@ public class Particion {
     }
     
     public boolean procesosProcesados(){
-    	System.out.println(this.procesos.size());
         return this.procesos.isEmpty();
     }
     
@@ -202,4 +201,10 @@ public class Particion {
     public Proceso getProcesoProcesando() {
         return procesoProcesando;
     }
+
+    public int getTiempo() {
+        return tiempo;
+    }
+    
+    
 }

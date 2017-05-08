@@ -40,6 +40,7 @@ public class Procesador {
     private ArrayList<String> listaNoProcesados;
 
     private int count; // Indica en que posicion de las listas de procesos se encuentra ejecutando
+    private int particion; // Indica la particion que empezo a buscar 
     boolean procesando; // Determina si existen procesos listos para ejecutarse
 
     public Procesador() {
@@ -87,12 +88,17 @@ public class Procesador {
     }
 
     public void ubicarProcesos() {
+        System.out.println();
         for (int i = 0; i < particiones.size(); i++) {
             Particion particion = particiones.get(i);
             if (count < procesosCargados.size() && count > -1) {
                 Proceso proceso = procesosCargados.get(count);
                 System.out.println("El proceso a ubicar es: " + proceso.getIdentificador());
-                if (puedeSerUbicado(proceso.getTamanio())) {
+                if (puedeSerUbicado(proceso.getTamanio()) == false) {
+                    System.out.println("No pudo ser ubicado: " + proceso.getIdentificador());
+                    listaNoProcesados.add(proceso.getIdentificador());
+                    this.procesosCargados.remove(count);
+                } else {
                     if (proceso.getTamanio() <= particion.getTamanio()) {
                         if (particion.getProcesoProcesando() == null) {
                             System.out.println("Proceso: " + proceso.getIdentificador() + " - ubicado en: Particion" + particion.getIndex());
@@ -103,18 +109,20 @@ public class Procesador {
                             if (count == procesosCargados.size() - 1) {
                                 count = 0;
                             }
-                        } 
-                        if (puedeSerUbicado(i, proceso.getTamanio()) == false) {
-                            count++;
+                            this.particion = 0;
+                        } else if (this.particion > 0) {
+                            if (this.particion == particion.getIndex()) {
+                                System.out.println("Llego a la misma particion el proceso: " + proceso.getIdentificador() + " en la particion: " + this.particion);
+                                count++;
+                                this.particion = 0;
+                            }
+                        } else {
+                            System.out.println("Vaya llego en la particion: " + particion.getIndex());
+                            this.particion = particion.getIndex();
                         }
                     }
-                } else {
-                    System.out.println("No pudo ser ubicado: " + proceso.getIdentificador());
-                    listaNoProcesados.add(proceso.getIdentificador());
-                    count++;
                 }
             }
-
         }
     }
 
@@ -174,6 +182,7 @@ public class Procesador {
             proceso.setTiempoEjecucion(tiempo - 5);
             expirarTiempo(proceso, posicion);
         } else {
+            System.out.println("El proceso: " + proceso.getIdentificador() + " termina");
             proceso.setTiempoEjecucion(0);
             terminarProceso(proceso, posicion);
         }
