@@ -58,42 +58,89 @@ public class Procesador {
     }
 
     public void agregarParticion(int tamanio) {
-        Particion particion = new Particion(tamanio);
+        Particion particion = new Particion(tamanio, particiones.size() + 1);
         this.particiones.add(particion);
     }
 
     //	nombre				tiempo				tamano			indexParticion
-    public void agregarProceso(String identificador, int tiempoEjecucion, int tamanio, int particion) {
-        Proceso process = new Proceso(identificador, tiempoEjecucion, tamanio, particion);
+    public void agregarProceso(String identificador, int tiempoEjecucion, int tamanio) {
+        Proceso process = new Proceso(identificador, tiempoEjecucion, tamanio);
         this.procesosCargados.add(process);
-        particiones.get(particion).addProcess(process);
     }
 
     public void procesar() {
         verificarProcesando();
         empezar(); // Inicializa las listas
-        System.out.println(procesando);
         while (procesando) {
+            System.out.println("Entro a procesar");
+            ubicarProcesos();
             for (int i = 0; i < particiones.size(); i++) {
                 Particion particion = particiones.get(i);
                 if (particion.obternerTotalProcesos() > 0) {
                     Proceso proceso = particion.obtenerProceso(0);
-                    if (proceso.getSize() <= particion.getTamanio()) {
-                        if (particion.estaEnProcesados(proceso) == false) {
-                            particion.agregarProcesado(proceso.getIdentificador());
-                            listaProcesados.add(proceso.getIdentificador());
-                        }
-                        ejecutarProceso(proceso, i);
-                    } else {
-                        listarProceso(proceso, i);
-                        particion.agregarNoProcesado(proceso.getIdentificador());
-                        listaNoProcesados.add(proceso.getIdentificador());
-                        removerProceso(proceso, i);
-                    }
+                    ejecutarProceso(proceso, i);
                 }
             }
             verificarProcesando();
-            count++;
+        }
+        terminarParticiones();
+    }
+
+    public void ubicarProcesos() {
+        for (int i = 0; i < particiones.size(); i++) {
+            Particion particion = particiones.get(i);
+            if (count < procesosCargados.size() && count > -1) {
+                Proceso proceso = procesosCargados.get(count);
+                System.out.println("El proceso a ubicar es: " + proceso.getIdentificador());
+                if (puedeSerUbicado(proceso.getTamanio())) {
+                    if (proceso.getTamanio() <= particion.getTamanio()) {
+                        if (particion.getProcesoProcesando() == null) {
+                            System.out.println("Proceso: " + proceso.getIdentificador() + " - ubicado en: Particion" + particion.getIndex());
+                            particion.setProcesoProcesando(proceso);
+                            particion.addProcess(proceso);
+                            procesosCargados.remove(count);
+                            listaProcesados.add(proceso.getIdentificador());
+                            if (count == procesosCargados.size() - 1) {
+                                count = 0;
+                            }
+                        } else if (puedeSerUbicado(i, count) == false) {
+                            count++;
+                        }
+                    }
+                } else {
+                    listaNoProcesados.add(proceso.getIdentificador());
+                    count++;
+                }
+            }
+
+        }
+    }
+
+    public boolean puedeSerUbicado(int tamanio) {
+        for (int i = 0; i < particiones.size(); i++) {
+            if (particiones.get(i).getTamanio() <= tamanio) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean puedeSerUbicado(int posicion, int tamanio) {
+        for (int i = 0; i < particiones.size(); i++) {
+            if (i != posicion) {
+                if (particiones.get(i).getTamanio() <= tamanio) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void terminarParticiones() {
+        Collections.sort(particiones, particiones.get(0).compareTiempo);
+        for (Iterator<Particion> iterator = particiones.iterator(); iterator.hasNext();) {
+            Particion particion = iterator.next();
+            procesosTerminados.add("Particion " + particion.getIndex());
         }
     }
 
@@ -103,7 +150,8 @@ public class Procesador {
             Particion next = iterator.next();
             procesar = procesar || !next.procesosProcesados();
         }
-        this.procesando = procesar;
+        this.procesando = procesar || (procesosCargados.isEmpty() == false);
+        System.out.println("El resultado es: " + procesando);
     }
 
     public void empezar() {
@@ -179,7 +227,6 @@ public class Procesador {
     }
 
     public void terminarProceso(Proceso proceso, int posicion) {
-        procesosTerminados.add(proceso.getIdentificador());
         particiones.get(posicion).agregarTerminado(proceso.getIdentificador());
         this.removerProceso(proceso, posicion);
     }

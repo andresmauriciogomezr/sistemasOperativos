@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 
 import main.Particion;
@@ -25,6 +26,7 @@ public class DialogoResultados extends JFrame implements ActionListener{
 	JMenuItem menuItem;
 	private Procesador procesador;	
 	private ArrayList<PanelListasParticiones> listaPaneles;
+        private JScrollPane scrollPane;
 	
 	public DialogoResultados(Procesador procesador) {
 		this.listaPaneles = new ArrayList<>();

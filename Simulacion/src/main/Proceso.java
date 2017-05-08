@@ -44,7 +44,13 @@ public class Proceso {
         this.tamanio = tamanio;
         this.indexParticion = indexParticion;
     }
-    
+
+    public Proceso(String identificador, int tiempoEjecucion, int tamanio) {
+        this.identificador = identificador;
+        this.tiempoEjecucion = tiempoEjecucion;
+        this.tamanio = tamanio;
+    }
+
     public Estado getEstadoActual() {
         return estadoActual;
     }

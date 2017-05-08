@@ -6,6 +6,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  *
@@ -15,6 +16,8 @@ public class Particion {
 
     private int tamanio;
     private int index; // Index en la lista de particiones
+    private int tiempo; // Tiempo en total de procesamiento de la particion
+    private Proceso procesoProcesando;
     private ArrayList<Proceso> procesos;
     private ArrayList<InformacionTransicion> procesosListos;
     private ArrayList<InformacionTransicion> procesosEjecutados;
@@ -36,6 +39,8 @@ public class Particion {
         this.procesos = new ArrayList<>();
         this.procesosProcesados = new ArrayList<>();
         this.procesosNoProcesados = new ArrayList<>();
+        this.procesoProcesando = null;
+        this.tiempo = 0;
     }
     
     public void empezar(){
@@ -56,6 +61,7 @@ public class Particion {
     
     public void addProcess(Proceso process){
         this.procesos.add(process);
+        this.tiempo += process.getTiempoEjecucion();
     }
     
     public void agregarProcesado(String proceso){
@@ -181,7 +187,19 @@ public class Particion {
 		this.procesosTerminados = procesosTerminados;
 	}
 
-    
-    
-    
+    Comparator<Particion> compareTiempo = new Comparator<Particion>() {
+
+        @Override
+        public int compare(Particion o1, Particion o2) {
+            return o1.tiempo - o2.tiempo;
+        }
+    };
+
+    public void setProcesoProcesando(Proceso procesoProcesando) {
+        this.procesoProcesando = procesoProcesando;
+    }
+
+    public Proceso getProcesoProcesando() {
+        return procesoProcesando;
+    }
 }

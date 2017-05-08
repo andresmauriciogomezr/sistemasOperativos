@@ -84,29 +84,35 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     public void probar() {
     	
     	ArrayList<Particion> lista = new ArrayList<>();
-    	lista.add(new Particion(20, 0));
-    	lista.add(new Particion(15, 1));
-    	lista.add(new Particion(25, 2));
+    	lista.add(new Particion(30, 1));
+    	lista.add(new Particion(40, 2));
+    	lista.add(new Particion(60, 3));
+    	lista.add(new Particion(20, 4));
+    	lista.add(new Particion(10, 5));
+    	lista.add(new Particion(50, 6));
     	this.procesador.setParticiones(lista);
         //								nombre	tiempo	  tamano indexParticion
-    	this.procesador.agregarProceso("P1", 		5, 		27	, 0);
-    	this.procesador.agregarProceso("P2", 		8, 		4	, 0);
-    	this.procesador.agregarProceso("P3", 		4, 		10	, 0);
-    	this.procesador.agregarProceso("P4", 		5, 		6	, 1);
-    	this.procesador.agregarProceso("P5", 		8, 		4	, 1);
-    	this.procesador.agregarProceso("P6", 		9, 		8	, 1);
-    	this.procesador.agregarProceso("P7", 		11,		10	, 2);
-    	this.procesador.agregarProceso("P8", 		6, 		20	, 2);
+    	this.procesador.agregarProceso("P5", 		10, 		5	);
+    	this.procesador.agregarProceso("P45", 		5, 		45	);
+    	this.procesador.agregarProceso("P65", 		6, 		65	);
+    	this.procesador.agregarProceso("P28", 		12, 		28	);
+    	this.procesador.agregarProceso("P46", 		15, 		46	);
+    	this.procesador.agregarProceso("P18", 		20, 		18	);
+    	this.procesador.agregarProceso("P58", 		18,		58	);
+    	this.procesador.agregarProceso("P37", 		19, 		37	);
+    	this.procesador.agregarProceso("P56", 		17, 		56	);
+    	this.procesador.agregarProceso("P25", 		22, 		25	);
+    	this.procesador.agregarProceso("P12", 		9, 		12	);
     	
         this.panelTabla.listarComunes();
         this.setVisible(true);
     }
 
     public void ingresarParticiones() {
-        String totalParticiones = JOptionPane.showInputDialog(this, "¿Cuantas particiones desea crear?");
+        String totalParticiones = JOptionPane.showInputDialog(this, "Cuantas particiones desea crear?");
         int total;
         if (totalParticiones != null) {
-            if (validarNumeros(totalParticiones) && !totalParticiones.equals("") && !totalParticiones.equals(" ") ) { // No es vacío y es un numero
+            if (validarNumeros(totalParticiones) && !totalParticiones.equals("") && !totalParticiones.equals(" ") ) { // No es vacio y es un numero
                 total = Integer.parseInt(totalParticiones);
                 this.dialogoParticiones = new DialogoParticiones(this.procesador, total, this);
                 this.dialogoParticiones.setVisible(true);
@@ -161,6 +167,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         }
         if (evento.getActionCommand().equals("Procesar")) {
             if (this.procesador.getProcesosCargados().isEmpty() == false) {
+                System.out.println("Si algo");
                 //this.panelTabla.listarComunes();
                 this.procesador.procesar();
                 //this.panelListas.listarProcesos(); // Muestra como quedï¿½ la tabla de procesos cargados 
@@ -210,7 +217,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
             return;
         }
 
-        // Validamos y agregamos el campo tamaño
+        // Validamos y agregamos el campo tamanioo
         int tamanoProceso = -1;
         if (!this.validarNumeros(auxTamanio)||auxTamanio.equals("") || auxTamanio.equals(" ")) {
             JOptionPane.showMessageDialog(null, "El campo Tamano del proceso debe contener unicamente numeros enteros");
@@ -229,8 +236,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         }
                 
         int indexParticion = this.panelProceso.getPanelParticion().getComboBox().getSelectedIndex();
-        //								Nombre		tiempo 	tamaño			indexParticion
-        this.procesador.agregarProceso(nombreProceso, tiempo, tamanoProceso, indexParticion);
+        //								Nombre		tiempo 	tamanio			indexParticion
+        this.procesador.agregarProceso(nombreProceso, tiempo, tamanoProceso);
         this.panelTabla.listarComunes();
         limpiarProceso();
     }
