@@ -17,10 +17,11 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 
 import main.Estado;
+import main.Particion;
 import main.Procesador;
 import main.Proceso;
 
-public class PanelTabla extends JPanel {
+public class PanelTablaParticiones extends JPanel {
 
     private DefaultTableModel modeloTabla;
     private JTable tabla;
@@ -31,15 +32,13 @@ public class PanelTabla extends JPanel {
     private JMenuItem itemCrearProceso;
 
     private Procesador procesador;
-    
-    private PanelBotonesResultados panelBotonResultados;
 
-    public PanelTabla(Procesador procesador, ActionListener listener) {
+    public PanelTablaParticiones(Procesador procesador, ActionListener listener) {
         int width = 900;
         int heigth = 300;
 
         this.procesador = procesador;
-        String[] identificadores = {"Identificador", "Tiempo", "Tamanio", "# Particion"};
+        String[] identificadores = {"Identificador", "Tamanio"};
         modeloTabla = new DefaultTableModel(0, identificadores.length);
         modeloTabla.setColumnIdentifiers(identificadores);
 
@@ -55,35 +54,25 @@ public class PanelTabla extends JPanel {
         scroll.setPreferredSize(new Dimension(width, heigth));
         this.add(scroll);
 
-        botonProcesar = new JButton("Procesar");
+        botonProcesar = new JButton("Agregar particiones");
         botonProcesar.addActionListener(listener);
         this.add(botonProcesar);
-        
-        panelBotonResultados = new PanelBotonesResultados(procesador);
-    	panelBotonResultados.setPreferredSize(new Dimension(300, 300));
-        this.add(panelBotonResultados);
 
-    }
-    
-    public void agregarPanelBotonesResultados(){
-    	panelBotonResultados = new PanelBotonesResultados(procesador);
-    	panelBotonResultados.setPreferredSize(new Dimension(300, 300));
-        this.add(panelBotonResultados);
-        
-        System.out.println("Agregado");
+        menuEmergente = new JPopupMenu();
+        itemCrearProceso = new JMenuItem("Crear Proceso");
+        menuEmergente.add(itemCrearProceso);
     }
 
-    public void listarComunes() {
-        ArrayList<Proceso> procesos = this.procesador.getProcesosCargados();
+    public void listarParticiones() {
+        ArrayList<Particion> particiones = this.procesador.getParticiones();
         
-        String[] identificadores = {"Identificador", "Tiempo", "Tamaño", "# Particion"};
+        String[] identificadores = {"Identificador", "Tamanio"};
         modeloTabla = new DefaultTableModel(0, identificadores.length);
         modeloTabla.setColumnIdentifiers(identificadores);
 
-        for (int i = 0; i < procesos.size(); i++) {
-            Proceso proceso = procesos.get(i);
-            agregarFila(proceso);
-            //System.out.println(proceso.getPrioridad());
+        for (int i = 0; i < particiones.size(); i++) {
+            Particion particion  = particiones.get(i);
+            agregarFila(particion);
         }
         //tabla.setFont(new FontUIResource("Verdana", Font.PLAIN, 20));
         tabla.setModel(modeloTabla);
@@ -95,19 +84,17 @@ public class PanelTabla extends JPanel {
 
         for (int i = 0; i < procesosCargados.size(); i++) {
             Proceso proceso = procesosCargados.get(i);
-            agregarFila(proceso);
+            //agregarFila(proceso);
         }
         //tabla.setFont(new FontUIResource("Verdana", Font.PLAIN, 20));
         tabla.setModel(modeloTabla);
     }
 
-    public void agregarFila(Proceso proceso) {
+    public void agregarFila(Particion particion) {
         int row = this.modeloTabla.getRowCount();
         modeloTabla.setRowCount(row + 1);
-        modeloTabla.setValueAt(proceso.getIdentificador(), row, 0); // Identificador 
-        modeloTabla.setValueAt(proceso.getTiempoEjecucion(), row, 1); // Tiempo
-        modeloTabla.setValueAt(proceso.getTamanio(), row, 2); // Tamanio
-        modeloTabla.setValueAt(proceso.getIndexParticion()+1, row, 3); // Particion
+        modeloTabla.setValueAt("Particion " + (particion.getIndex()+1), row, 0); // Identificador 
+        modeloTabla.setValueAt(particion.getTamanio(), row, 1); // Tiempo
     }
 
     public String cambiarAPalabra(Boolean bool) {

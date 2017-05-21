@@ -16,6 +16,7 @@ public class Particion {
 
     private int tamanio;
     private int index; // Index en la lista de particiones
+    private int total;
     private int tiempo; // Tiempo en total de procesamiento de la particion
     private Proceso procesoProcesando;
     private ArrayList<Proceso> procesos;
@@ -26,11 +27,15 @@ public class Particion {
     private ArrayList<String> procesosProcesados;
     private ArrayList<String> procesosNoProcesados;
     private ArrayList<String> procesosTerminados;
+    
+    
+    boolean esperarSiguienteIteracion = false; // No se procesa durante esa iteración
 
     public Particion(int tamanio) {
         this.tamanio = tamanio;
         this.procesos = new ArrayList<>();
         this.index = 0;
+        this.total = 0;
     }
     
     public Particion(int tamanio, int index) {
@@ -40,15 +45,22 @@ public class Particion {
         this.procesosProcesados = new ArrayList<>();
         this.procesosNoProcesados = new ArrayList<>();
         this.procesoProcesando = null;
+        this.procesosEjecutados = new ArrayList<>();
+        this.procesosListos = new ArrayList<>();
         this.tiempo = 0;
+        
+        
+        this.procesosDespachados = new ArrayList<>();
+        this.procesosExpirados = new ArrayList<>();
+        this.procesosTerminados = new ArrayList<>();
     }
     
-    public void empezar(){
-        if (procesosDespachados == null) this.procesosDespachados = new ArrayList<>();
-        if (procesosListos == null) this.procesosListos = new ArrayList<>();
-        if (procesosEjecutados == null) this.procesosEjecutados = new ArrayList<>();
-        if (procesosExpirados == null) this.procesosExpirados = new ArrayList<>();
-        if (procesosTerminados == null) this.procesosTerminados = new ArrayList<>();
+    public void empezar(){ // Creo que no sirve
+        this.procesosDespachados = new ArrayList<>();
+        this.procesosListos = new ArrayList<>();
+        this.procesosEjecutados = new ArrayList<>();
+        this.procesosExpirados = new ArrayList<>();
+        this.procesosTerminados = new ArrayList<>();
     }
 
     public int getTamanio() {
@@ -61,7 +73,8 @@ public class Particion {
     
     public void addProcess(Proceso process){
         this.procesos.add(process);
-        this.tiempo += process.getTiempoEjecucion();
+//        this.total += process.getTiempoEjecucion();
+//        this.tamanio -= process.getTamanio();
     }
     
     public void agregarProcesado(String proceso){
@@ -88,8 +101,9 @@ public class Particion {
         this.procesosExpirados.add(it);
     }
     
-    public void agregarTerminado(String  proceso){
-        this.procesosTerminados.add(proceso);
+    public void agregarTerminado(Proceso proceso){
+        this.procesosTerminados.add(proceso.getIdentificador());
+        this.tamanio += proceso.getTamanio();
     }
     
     public boolean procesosProcesados(){
@@ -186,6 +200,21 @@ public class Particion {
 		this.procesosTerminados = procesosTerminados;
 	}
 
+	public void setTamanio(int tamanio) {
+		this.tamanio = tamanio;
+	}
+	
+	Comparator<Particion> comparatorTotal = new Comparator<Particion>() {
+		
+		@Override
+		public int compare(Particion p0, Particion p1) {
+			// TODO Auto-generated method stub
+			return p0.total - p1.total;
+		}
+	};
+    
+    
+    
     Comparator<Particion> compareTiempo = new Comparator<Particion>() {
 
         @Override
@@ -201,10 +230,4 @@ public class Particion {
     public Proceso getProcesoProcesando() {
         return procesoProcesando;
     }
-
-    public int getTiempo() {
-        return tiempo;
-    }
-    
-    
 }

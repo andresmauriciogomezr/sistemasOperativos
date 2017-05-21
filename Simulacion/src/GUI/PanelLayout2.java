@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 
-public class PanelLayout extends JPanel{ // Funciona como layout para los diferentes paneles que reciben datos
+public class PanelLayout2 extends JPanel{ // Funciona como layout para los diferentes paneles que reciben datos
 
 	private static final long serialVersionUID = 735523904991087453L;
 
@@ -32,7 +32,6 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 
 
 	private JTextField campoTexto;
-	private JTextField campoTamano;
 	private JButton botonAceptar;
 	private JComboBox<String> comboBox;
 
@@ -45,7 +44,7 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 	public static final int HEIGHT = 100;
 
 
-	public PanelLayout(ActionListener listener, String titulo, String ayuda, TipoPanel tipoPanel) {
+	public PanelLayout2(ActionListener listener, String titulo, String ayuda, TipoPanel tipoPanel) {
 
 		gridbag = new GridBagLayout();
 
@@ -97,23 +96,9 @@ public class PanelLayout extends JPanel{ // Funciona como layout para los difere
 					new Insets(5, 0, 5, 5), 0, 0);
 			add(comboBox, gbc);
 		}
-		
-		if (tipoPanel == TipoPanel.particion) {
-			campoTexto = new JTextField(12);
-			gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(5, 0, 5, 5), 0, 0);
-			add(campoTexto, gbc);
-			
-			campoTamano = new JTextField(12);
-			gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(5, 0, 5, 5), 0, 0);
-			add(campoTamano, gbc);
-		}
 
 
 	}
-	
-	
 
 	public String getText(){
 		return this.campoTexto.getText();

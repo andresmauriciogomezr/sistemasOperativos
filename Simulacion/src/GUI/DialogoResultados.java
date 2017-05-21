@@ -63,7 +63,8 @@ public class DialogoResultados extends JFrame implements ActionListener{
 	}
 	
 	public void inicializarPaneles(ArrayList<Particion> particiones){
-		setLayout(new GridLayout(particiones.size()+1, 1));
+		int x = particiones.size() / 2; 
+		setLayout(new GridLayout(x +1, x+1));
 		for (int i = 0; i < particiones.size(); i++) {
 			PanelListasParticiones panel = new PanelListasParticiones(particiones.get(i), "Listas pertenecientes a la Particion " +(i+1), null);
 			panel.listarProcesos();
@@ -72,9 +73,17 @@ public class DialogoResultados extends JFrame implements ActionListener{
 		}
 		
 		PanelListasParticiones panel = new PanelListasParticiones(null, "Listas generales", this.procesador);
-		panel.listarGenerales();
-		this.add(panel);
+		//panel.listarGenerales();
+		//this.add(panel);
 	}
+	
+	public void inicializarPaneles(Particion particion){
+		setLayout(new GridLayout());
+		PanelListasParticiones panel = new PanelListasParticiones(particion, "Listas pertenecientes a la Particion " +(particion.getIndex()+1), null);
+		panel.listarProcesos();
+		this.listaPaneles.add(panel);
+		this.add(panel);
+		}
 
 	@Override
 	public void actionPerformed(ActionEvent evento) {

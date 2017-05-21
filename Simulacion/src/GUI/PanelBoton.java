@@ -36,7 +36,7 @@ public class PanelBoton extends JPanel{
 	public static final int HEIGHT = 100;
 	
 
-	public PanelBoton(ActionListener listener) {
+	public PanelBoton(ActionListener listener, String nombre) {
 		
 
 		gridbag = new GridBagLayout();
@@ -52,7 +52,7 @@ public class PanelBoton extends JPanel{
 		
 		add(labelTitulo, gbc);
 
-		botonAceptar = new JButton("Agregar Proceso");
+		botonAceptar = new JButton(nombre);
 		botonAceptar.addActionListener(listener);
 		gbc = new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE,
 				new Insets(5, 0, 5, 5), 0, 0);

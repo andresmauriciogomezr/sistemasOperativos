@@ -370,109 +370,19 @@ public class PanelListas extends JPanel {
     }
 
     public void listarProcesos() {
-        ArrayList<String> procesosListos = this.procesador.getProcesosListos();
         ArrayList<InformacionTransicion> procesosDespachados = this.procesador.getProcesosDespachados();
         ArrayList<InformacionTransicion> procesosExpirados = this.procesador.getProcesosExpirados();
-        ArrayList<InformacionTransicion> procesosEsperaES = this.procesador.getProcesosEsperaEjeABloq();
-        ArrayList<InformacionTransicion> procesosTermESSuspB = this.procesador.getProcesosTerminaSuspBASuspL();
-        ArrayList<InformacionTransicion> procesosBloqueados = this.procesador.getProcesosBloqueados();
-        ArrayList<InformacionTransicion> procesosTermEBloqueados = this.procesador.getProcesosTerminaBloqALis();
-        ArrayList<InformacionTransicion> procesosSuspendidosListos = this.procesador.getProcesosSuspendidos();
-        ArrayList<InformacionTransicion> procesosReaSuspendidosListos = this.procesador.getProcesosReanudarSuspLAListo();
-        ArrayList<InformacionTransicion> procesosSusESuspendidosListos = this.procesador.getProcesosSuspenderEjeASuspL();
-        ArrayList<InformacionTransicion> procesosSusLSuspendidosListos = this.procesador.getProcesosSuspenderListosASuspL();
-        ArrayList<String> procesosSuspendidosBloqueados = this.procesador.getListaSuspendidosBloqueados();
-        ArrayList<InformacionTransicion> procesosSuspSuspendidosBloqueados = this.procesador.getProcesosSuspenderBloqASuspBloq();
-        ArrayList<InformacionTransicion> procesosReaSuspendidosBloqueados = this.procesador.getProcesosReanudarSBloqABloq();
-        ArrayList<String> procesosDestruidos = this.procesador.getProcesosDestruidos();
-        ArrayList<String> procesosTerminados = this.procesador.getProcesosTerminados();
-        ArrayList<String> ejecutados = this.procesador.getListaEjecutados();
-        ArrayList<Proceso> listaComunicaciones = this.procesador.getListaComunicaciones();
 
-        for (int i = 0; i < procesosListos.size(); i++) {
-            //Proceso proceso = ;
-            agregarListo(procesosListos.get(i));
-        }
         
         for (int i = 0; i < procesosDespachados.size(); i++) {
             InformacionTransicion informacionTransicion = procesosDespachados.get(i);
             agregarDespachado(informacionTransicion);
         }
         
-        for (int i = 0; i < procesosTermESSuspB.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosTermESSuspB.get(i);
-            agregarTermESSListos(informacionTransicion);
-        }
-        
-        for (int i = 0; i < procesosBloqueados.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosBloqueados.get(i);
-            agregarBloqueado(informacionTransicion);
-        }
-
-        for (int i = 0; i < procesosEsperaES.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosEsperaES.get(i);
-            agregarEnEsperaES(informacionTransicion);
-        }
-        
-        for (int i = 0; i < procesosTermEBloqueados.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosTermEBloqueados.get(i);
-            agregarTermESBloqueado(informacionTransicion);
-        }
-
-        for (int i = 0; i < procesosSuspendidosListos.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosSuspendidosListos.get(i);
-            agregarSuspendido(informacionTransicion);
-        }
-        
-        for (int i = 0; i < procesosSuspSuspendidosBloqueados.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosSuspSuspendidosBloqueados.get(i);
-            agregarSusSuspendidoB(informacionTransicion);
-        }
-        
-        for (int i = 0; i < procesosReaSuspendidosBloqueados.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosReaSuspendidosBloqueados.get(i);
-            agregarReaSuspendidoB(informacionTransicion);
-        }
-        
-        for (int i = 0; i < procesosSusESuspendidosListos.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosSusESuspendidosListos.get(i);
-            agregarSusESuspendidoL(informacionTransicion);
-        }
-        
-        for (int i = 0; i < procesosSusLSuspendidosListos.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosSusLSuspendidosListos.get(i);
-            agregarSusLSuspendidoL(informacionTransicion);
-        }
-        
-        for (int i = 0; i < procesosReaSuspendidosListos.size(); i++) {
-            InformacionTransicion informacionTransicion = procesosReaSuspendidosListos.get(i);
-            agregarReaSuspendidoL(informacionTransicion);
-        }
-        
-        for (int i = 0; i < procesosSuspendidosBloqueados.size(); i++) {
-            agregarSuspendidoBloqueado(procesosSuspendidosBloqueados.get(i));
-        }
-        
-        for (int i = 0; i < procesosDestruidos.size(); i++) {
-            String proceso = procesosDestruidos.get(i);
-            agregarDestruido(proceso);
-        }
-        
-        for (int i = 0; i < listaComunicaciones.size(); i++) {
-            agregarComunicado(listaComunicaciones.get(i));
-        }
-
-        for (int i = 0; i < ejecutados.size(); i++) {
-            agregarEjecutado(ejecutados.get(i));
-        }
 
         for (int i = 0; i < procesosExpirados.size(); i++) {
             InformacionTransicion informacionTransicion = procesosExpirados.get(i);
             agregarExpirado(informacionTransicion);
-        }
-
-        for (int i = 0; i < procesosTerminados.size(); i++) {
-            agregarTerminado(procesosTerminados.get(i));
         }
         //tabla.setFont(new FontUIResource("Verdana", Font.PLAIN, 20));
         tablaListos.setModel(modeloTablaListos);

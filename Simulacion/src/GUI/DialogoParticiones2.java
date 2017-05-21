@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-public class DialogoParticiones extends JFrame {
+public class DialogoParticiones2 extends JFrame {
 
     private ArrayList<PanelLayout> listaPanelesParticiones;    
     private Procesador procesador;
@@ -29,7 +29,7 @@ public class DialogoParticiones extends JFrame {
     private PanelLayout panelAceptar;
     private PanelLayout panelCancelar;
 
-    public DialogoParticiones(Procesador procesador, int cantidadParticiones, ActionListener listener) {
+    public DialogoParticiones2(Procesador procesador, int cantidadParticiones, ActionListener listener) {
         this.procesador = procesador;
         this.listaPanelesParticiones = new ArrayList<>();
       

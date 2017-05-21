@@ -20,35 +20,15 @@ public class Proceso {
     private String seComunica;
     private int tamanio;
     private int indexParticion; // Particion a la que pertenece
+    
+    int index;
 
-    //Nombre				priodidad		tiempo 				bloqueo			suspendidoListo				SuspedidoBLoqueado			destruido		seComunica
-    public Proceso(String identificador, int prioridad, int tiempoEjecucion, boolean bloqueado, String suspendidoListo, String suspendidoBloqueado, boolean destruido, String seComunica, String cambioPrioridad) {
-        this.transicion = "";
-        this.identificador = identificador;
-        this.procesosComunica = new ArrayList<>();
-        this.prioridad = prioridad;
-        this.tiempoEjecucion = tiempoEjecucion;
-        this.bloqueado = bloqueado;
-        this.suspedidoListo = suspendidoListo;
-        this.suspedidoBloqueado = suspendidoBloqueado;
-        this.destruido = destruido;
-        transiciones = identificador + " ";
-        this.cambioPrioridad = cambioPrioridad;
-        this.seComunica = seComunica;
-        this.estadoActual = Estado.listo;
-    }
 
-    public Proceso(String identificador, int tiempoEjecucion, int tamanio, int indexParticion) {
+    public Proceso(String identificador, int tiempoEjecucion, int tamanio, int index) {
         this.identificador = identificador;
         this.tiempoEjecucion = tiempoEjecucion;
         this.tamanio = tamanio;
-        this.indexParticion = indexParticion;
-    }
-
-    public Proceso(String identificador, int tiempoEjecucion, int tamanio) {
-        this.identificador = identificador;
-        this.tiempoEjecucion = tiempoEjecucion;
-        this.tamanio = tamanio;
+        this.index = index ;
     }
 
     public Estado getEstadoActual() {
