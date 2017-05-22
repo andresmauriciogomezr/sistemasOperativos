@@ -25,11 +25,11 @@ public class DialogoResultados extends JFrame implements ActionListener{
 	JMenu menu;
 	JMenuItem menuItem;
 	private Procesador procesador;	
-	private ArrayList<PanelListasParticiones> listaPaneles;
+        private PanelListasProcesos panelListasProcesos;
+        private PanelListasParticiones panelListasParticiones;
         private JScrollPane scrollPane;
 	
 	public DialogoResultados(Procesador procesador) {
-		this.listaPaneles = new ArrayList<>();
 		this.procesador = procesador;
 		Dimension dimension = this.getToolkit().getScreenSize();
 	
@@ -58,33 +58,18 @@ public class DialogoResultados extends JFrame implements ActionListener{
 		{
 			e.printStackTrace();
 		}
+                
+                panelListasProcesos = new PanelListasProcesos(procesador);
+                panelListasProcesos.listarProcesos();
+                this.add(panelListasProcesos, BorderLayout.PAGE_START);
+                
+                panelListasParticiones = new PanelListasParticiones(procesador);
+                panelListasParticiones.listarProcesos();
+                this.add(panelListasParticiones, BorderLayout.CENTER);
 		//this.inicializarPaneles(particiones);	
 		//this.add(this.panelListas, BorderLayout.CENTER);
 	}
 	
-	public void inicializarPaneles(ArrayList<Particion> particiones){
-		int x = particiones.size() / 2; 
-		setLayout(new GridLayout(x +1, x+1));
-		for (int i = 0; i < particiones.size(); i++) {
-			PanelListasParticiones panel = new PanelListasParticiones(particiones.get(i), "Listas pertenecientes a la Particion " +(i+1), null);
-			panel.listarProcesos();
-			this.listaPaneles.add(panel);
-			this.add(panel);
-		}
-		
-		PanelListasParticiones panel = new PanelListasParticiones(null, "Listas generales", this.procesador);
-		//panel.listarGenerales();
-		//this.add(panel);
-	}
-	
-	public void inicializarPaneles(Particion particion){
-		setLayout(new GridLayout());
-		PanelListasParticiones panel = new PanelListasParticiones(particion, "Listas pertenecientes a la Particion " +(particion.getIndex()+1), null);
-		panel.listarProcesos();
-		this.listaPaneles.add(panel);
-		this.add(panel);
-		}
-
 	@Override
 	public void actionPerformed(ActionEvent evento) {
 		// TODO Auto-generated method stub

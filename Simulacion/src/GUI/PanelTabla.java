@@ -26,6 +26,7 @@ public class PanelTabla extends JPanel {
     private JTable tabla;
     private JScrollPane scroll;
     private JButton botonProcesar;
+    private PanelLayout panelMemoria;
 
     private JPopupMenu menuEmergente;
     private JMenuItem itemCrearProceso;
@@ -39,7 +40,7 @@ public class PanelTabla extends JPanel {
         int heigth = 300;
 
         this.procesador = procesador;
-        String[] identificadores = {"Identificador", "Tiempo", "Tamanio", "# Particion"};
+        String[] identificadores = {"Identificador", "Tiempo", "Tamanio"};
         modeloTabla = new DefaultTableModel(0, identificadores.length);
         modeloTabla.setColumnIdentifiers(identificadores);
 
@@ -55,6 +56,9 @@ public class PanelTabla extends JPanel {
         scroll.setPreferredSize(new Dimension(width, heigth));
         this.add(scroll);
 
+        panelMemoria = new PanelLayout(listener, "Memoria total: ", "Escriba el tamanio total de la memoria", TipoPanel.texto);
+        this.add(panelMemoria);
+        
         botonProcesar = new JButton("Procesar");
         botonProcesar.addActionListener(listener);
         this.add(botonProcesar);
@@ -63,6 +67,10 @@ public class PanelTabla extends JPanel {
     	panelBotonResultados.setPreferredSize(new Dimension(300, 300));
         this.add(panelBotonResultados);
 
+    }
+    
+    public String getMemoria(){
+        return panelMemoria.getText();
     }
     
     public void agregarPanelBotonesResultados(){
@@ -76,7 +84,7 @@ public class PanelTabla extends JPanel {
     public void listarComunes() {
         ArrayList<Proceso> procesos = this.procesador.getProcesosCargados();
         
-        String[] identificadores = {"Identificador", "Tiempo", "Tamaño", "# Particion"};
+        String[] identificadores = {"Identificador", "Tiempo", "Tamaño"};
         modeloTabla = new DefaultTableModel(0, identificadores.length);
         modeloTabla.setColumnIdentifiers(identificadores);
 
@@ -107,7 +115,6 @@ public class PanelTabla extends JPanel {
         modeloTabla.setValueAt(proceso.getIdentificador(), row, 0); // Identificador 
         modeloTabla.setValueAt(proceso.getTiempoEjecucion(), row, 1); // Tiempo
         modeloTabla.setValueAt(proceso.getTamanio(), row, 2); // Tamanio
-        modeloTabla.setValueAt(proceso.getIndexParticion()+1, row, 3); // Particion
     }
 
     public String cambiarAPalabra(Boolean bool) {

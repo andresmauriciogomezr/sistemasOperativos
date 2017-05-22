@@ -33,7 +33,7 @@ public class PanelProceso extends JPanel {
 
     public PanelProceso(Procesador procesador, ActionListener listener) {
         this.procesador = procesador;
-        setLayout(new GridLayout(5, 1)); // El numero de filas, el numero de columnas
+        setLayout(new GridLayout(4, 1)); // El numero de filas, el numero de columnas
 
         // Nombre del proceso
         panelNombre = new PanelLayout(listener, "Nombre del proceso:", "Escriba el nombre del proceso que desea agregar, recuerde que el nombre ser� el identificador", TipoPanel.texto);
@@ -48,11 +48,11 @@ public class PanelProceso extends JPanel {
         this.add(panelTamanio);
         
                 // Suspender Listo 
-        panelParticion = new PanelLayout(listener, "Particion: ", "Seleccione a que particion pertenece el proceso que se esta ingresando ", TipoPanel.select);
-        String[] opciones = {""};
-        panelParticion.setOpciones(opciones);
-        this.add(panelParticion);
-
+//        panelParticion = new PanelLayout(listener, "Particion: ", "Seleccione a que particion pertenece el proceso que se esta ingresando ", TipoPanel.select);
+//        String[] opciones = {""};
+//        panelParticion.setOpciones(opciones);
+//        this.add(panelParticion);
+//
 
 //        // prioridad del proceso
 //        panelPrioridad = new PanelLayout(listener, "Prioridad del proceso: ", "Escriba la prioridad del proceso que desea agregar, se aceptan n�meros en un rango [1,10], donde 10 es la priodidad m�s alta y 1 la m�s baja", TipoPanel.texto);

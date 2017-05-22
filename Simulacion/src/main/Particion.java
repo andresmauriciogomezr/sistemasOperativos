@@ -29,7 +29,7 @@ public class Particion {
     private ArrayList<String> procesosTerminados;
     
     
-    boolean esperarSiguienteIteracion = false; // No se procesa durante esa iteración
+    boolean esperarSiguienteIteracion = false; // No se procesa durante esa iteraciï¿½n
 
     public Particion(int tamanio) {
         this.tamanio = tamanio;
@@ -210,6 +210,14 @@ public class Particion {
 		public int compare(Particion p0, Particion p1) {
 			// TODO Auto-generated method stub
 			return p0.total - p1.total;
+		}
+	};
+	
+        Comparator<Particion> comparatorIndex = new Comparator<Particion>() {
+		
+		@Override
+		public int compare(Particion p0, Particion p1) {
+			return p0.index - p1.index;
 		}
 	};
     
